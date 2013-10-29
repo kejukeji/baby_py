@@ -10,6 +10,7 @@ TRACKING_TABLE = 'tracking'
 ACADEMIC_ABSTRACT_TABLE = 'academic_abstract'
 COLLECT_TABLE = 'collect'
 TYPE_OF_MILK_TABLE = 'type_of_milk'
+SEARCH_HISTORY = 'search_history'
 
 
 class SystemMessage(Base):
@@ -106,5 +107,19 @@ class Collect(Base):
     doctor_id = Column(Integer, ForeignKey(Doctor.id, ondelete='cascade', onupdate='cascade'), nullable=False)
     type_id = Column(Integer, nullable=False)
     type = Column(String(10), nullable=True)
+
+
+class SearchHistory(Base):
+    """
+        搜索历史记录
+        id: 主键
+        keyword: 搜索关键字
+    """
+    __tablename__ = SEARCH_HISTORY
+    id = Column(Integer, primary_key=True)
+    keyword = Column(String(50), nullable=True)
+
+    def __init__(self, **kwargs):
+        self.keyword = kwargs.pop('keyword')
 
 
