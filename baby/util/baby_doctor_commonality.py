@@ -18,3 +18,11 @@ def doctor_pickler(doctor, resp_suc):
     doctor_pic = pickler.flatten(doctor)
     doctor_pic['picture_path'] = doctor.rel_path + doctor.picture_name
     resp_suc['doctor_list'].append(doctor_pic)
+
+
+def search_pickler(search_history, resp_suc):
+    """
+        转换json
+    """
+    search_pic = pickler.flatten(search_history)
+    resp_suc['search_list'].append(search_pic)

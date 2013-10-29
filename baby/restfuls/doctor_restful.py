@@ -6,7 +6,7 @@ from flask.ext.restful import reqparse
 from baby.util.others import success_dic, fail_dic
 from ..util.baby_doctor_commonality import format_baby, doctor_pickler
 
-from ..services.baby_service import baby_collect_list, baby_list
+from ..services.baby_service import baby_collect_list, baby_list, search_by_keyword_time
 from ..services.doctor_service import doctor_info
 
 
@@ -101,3 +101,33 @@ class DoctorInfo(restful.Resource):
         else:
             return resp_fail
 
+
+class Search(restful.Resource):
+    """
+        医生搜索婴儿
+    """
+    @staticmethod
+    def get():
+        """
+            参数
+                keyword：关键字搜索
+                birthday_time：出生日期搜索
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('keyword', type=str, required=True, help=u'keyword关键字必须。')
+        parser.add_argument('birthday_time', type=str, required=False)
+
+        args = parser.parse_args()
+
+        resp_suc = success_dic().dic
+        resp_fail = fail_dic().dic
+        resp_suc['baby_list'] = []
+
+        keyword = args['keyword']
+        birthday_time = args['birthday_time']
+        baby = search_by_keyword_time(keyword, birthday_time)
+        if baby:
+            format_baby(baby, resp_suc)
+            return resp_suc
+        else:
+            return resp_fail

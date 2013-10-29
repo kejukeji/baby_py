@@ -1,7 +1,8 @@
 # coding: UTF-8
 
 from ..models.baby_model import Baby
-from ..models.feature_model import Collect
+from ..models import db
+from ..models.feature_model import Collect, SearchHistory
 from ..util.seesion_query import *
 from ..util.others import page_utils
 
@@ -37,3 +38,19 @@ def baby_collect_list(page, doctor_id):
         result = session.query(Baby).\
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
         return result
+
+
+def search_by_keyword_time(keyword, time):
+    """
+        根据关键字或者时间来搜索
+        关键字时间一起搜索
+    """
+    if keyword:
+        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%')).first()
+        search_history = SearchHistory(keyword=keyword)
+        db.add(search_history)
+        db.commit()
+        return baby
+    if time:
+        baby = Baby.quer.filter().first()
+        return baby
