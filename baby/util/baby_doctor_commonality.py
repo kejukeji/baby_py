@@ -25,4 +25,4 @@ def search_pickler(search_history, resp_suc):
         转换json
     """
     search_pic = pickler.flatten(search_history)
-    resp_suc['search_list'].append(search_pic)
+    resp_suc['search_history_list'].append(search_pic)

@@ -2,7 +2,7 @@
 
 from baby import app
 from flask.ext import restful
-from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search
+from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search, Search_View
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -22,3 +22,4 @@ api.add_resource(BabyList, '/restful/baby/list')
 api.add_resource(BabyCollect, '/restful/baby/collect/list')
 api.add_resource(DoctorInfo, '/restful/doctor/info')
 api.add_resource(Search, '/restful/doctor/search')
+api.add_resource(Search_View, '/restful/doctor/search/history')

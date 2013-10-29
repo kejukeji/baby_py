@@ -4,10 +4,11 @@ from flask.ext import restful
 from flask.ext.restful import reqparse
 
 from baby.util.others import success_dic, fail_dic
-from ..util.baby_doctor_commonality import format_baby, doctor_pickler
+from ..util.baby_doctor_commonality import format_baby, doctor_pickler, search_pickler
 
 from ..services.baby_service import baby_collect_list, baby_list, search_by_keyword_time
 from ..services.doctor_service import doctor_info
+from ..services.search_history_service import search_history_list
 
 
 class BabyList(restful.Resource):
@@ -128,6 +129,29 @@ class Search(restful.Resource):
         baby = search_by_keyword_time(keyword, birthday_time)
         if baby:
             format_baby(baby, resp_suc)
+            return resp_suc
+        else:
+            return resp_fail
+
+
+class Search_View(restful.Resource):
+    """
+        搜索界面需要的历史记录
+    """
+    @staticmethod
+    def get():
+        """
+
+        """
+        resp_suc = success_dic().dic
+        resp_fail = fail_dic().dic
+        resp_suc['search_history_list'] = []
+
+        search_history = search_history_list()
+        if search_history:
+            if type(search_history) is list:
+                for search in search_history:
+                    search_pickler(search, resp_suc)
             return resp_suc
         else:
             return resp_fail
