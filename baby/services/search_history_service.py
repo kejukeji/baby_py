@@ -1,6 +1,7 @@
 # coding: UTF-8
 
 from ..models.feature_model import SearchHistory
+from ..models import db
 
 
 def search_history_list():
@@ -15,3 +16,21 @@ def search_history_list():
     else:
         search_history = SearchHistory.query.filter().first()
         return search_history
+
+
+def delete_all_search():
+    """
+        清楚历史记录
+    """
+    search_history_count = SearchHistory.query.filter().count()
+    if search_history_count > 1:
+        search_historys = SearchHistory.query.filter().all()
+        for search in search_historys:
+            db.delete(search)
+            db.commit()
+        return 0
+    else:
+        search_history = SearchHistory.query.filter().first()
+        db.delete(search_history)
+        db.commit()
+        return 1
