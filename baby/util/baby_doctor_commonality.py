@@ -26,3 +26,11 @@ def search_pickler(search_history, resp_suc):
     """
     search_pic = pickler.flatten(search_history)
     resp_suc['search_history_list'].append(search_pic)
+
+
+def system_message_pickler(system_message, resp_suc):
+    """
+        转换json
+    """
+    search_pic = pickler.flatten(system_message)
+    resp_suc['system_message_list'].append(search_pic)
