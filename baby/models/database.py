@@ -10,6 +10,5 @@ from baby.ex_var import *
 engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=SQLALCHEMY_ECHO)
 # 创建事物，手动提交事物
 db = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
-# 这个Base应该就相当于BaseDao了吧，封装了基本的增删改
 Base = declarative_base()
 Base.query = db.query_property()

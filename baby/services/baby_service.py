@@ -46,7 +46,7 @@ def search_by_keyword_time(keyword, time):
         关键字时间一起搜索
     """
     if keyword:
-        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%')).first()
+        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%') or Baby.complication.like('%' + keyword + '%')).first()
         search_history = SearchHistory(keyword=keyword)
         db.add(search_history)
         db.commit()

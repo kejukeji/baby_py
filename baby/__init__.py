@@ -1,7 +1,5 @@
 # coding: UTF-8
 
-# coding: UTF-8
-
 # 设置python运行环境的编码
 import sys
 reload(sys)
