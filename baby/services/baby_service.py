@@ -2,7 +2,7 @@
 
 from ..models.baby_model import Baby
 from ..models import db
-from ..models.feature_model import Collect, SearchHistory
+from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
 from ..util.others import page_utils
 
@@ -54,3 +54,28 @@ def search_by_keyword_time(keyword, time):
     if time:
         baby = Baby.quer.filter().first()
         return baby
+
+
+def get_baby_info(baby_id):
+    """
+        得到婴儿信息
+            baby_id：婴儿登录id
+    """
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    return baby
+
+
+def get_parenting_guide(baby_id):
+    """
+        得到育儿指南
+            baby_id: 婴儿登录id
+    """
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    if baby:
+        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'baby').count()
+        if system_message_count > 1:
+            system_messages = SystemMessage.query.filter(SystemMessage.type == 'baby')[:3]
+            return system_messages
+        else:
+            system_message = SystemMessage.query.filter(SystemMessage.type == 'baby').first()
+            return system_message

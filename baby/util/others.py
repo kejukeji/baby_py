@@ -49,6 +49,16 @@ def page_utils(count, page, per_page=6):
     return page, per_page
 
 
+def isNotNull(object):
+    if object:
+        if type(object) is list:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 #取得一个正确的返回字典
 class success_dic(object):
     def __init__(self):
