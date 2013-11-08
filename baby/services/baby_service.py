@@ -1,6 +1,6 @@
 # coding: UTF-8
 
-from ..models.baby_model import Baby
+from ..models.baby_model import Baby, BabyPicture
 from ..models import db
 from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
@@ -46,14 +46,23 @@ def search_by_keyword_time(keyword, time):
         关键字时间一起搜索
     """
     if keyword:
-        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%') or Baby.complication.like('%' + keyword + '%')).first()
+        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%')).first()
         search_history = SearchHistory(keyword=keyword)
         db.add(search_history)
         db.commit()
         return baby
-    if time:
-        baby = Baby.quer.filter().first()
-        return baby
+    #if time:
+    #    baby = Baby.quer.filter().first()
+    #    return baby
+
+
+def is_null(obj):
+    '''判断是否为空'''
+    if obj:
+        if obj.rel_path and obj.picture_name:
+            return True
+    else:
+        return False
 
 
 def get_baby_info(baby_id):
@@ -62,6 +71,10 @@ def get_baby_info(baby_id):
             baby_id：婴儿登录id
     """
     baby = Baby.query.filter(Baby.id == baby_id).first()
+    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby_id).first()
+    bool = is_null(baby_picture)
+    if bool:
+        baby.picture_path = baby_picture.rel_path + '/' + baby_picture.picture_name
     return baby
 
 
@@ -72,10 +85,10 @@ def get_parenting_guide(baby_id):
     """
     baby = Baby.query.filter(Baby.id == baby_id).first()
     if baby:
-        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'baby').count()
+        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'guide').count()
         if system_message_count > 1:
-            system_messages = SystemMessage.query.filter(SystemMessage.type == 'baby')[:3]
+            system_messages = SystemMessage.query.filter(SystemMessage.type == 'guide')[:3]
             return system_messages
         else:
-            system_message = SystemMessage.query.filter(SystemMessage.type == 'baby').first()
+            system_message = SystemMessage.query.filter(SystemMessage.type == 'guide').first()
             return system_message

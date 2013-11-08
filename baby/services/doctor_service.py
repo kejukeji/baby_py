@@ -20,12 +20,12 @@ def get_meeting_message(id):
     """
     doctor = Doctor.query.filter(Doctor.id == id, Doctor.login_type == 'doctor').first()
     if doctor:
-        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'doctor').count()
+        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'abstract').count()
         if system_message_count > 1:
-            system_messages = SystemMessage.query.filter(SystemMessage.type == 'doctor').\
+            system_messages = SystemMessage.query.filter(SystemMessage.type == 'abstract').\
                 order_by(SystemMessage.message_date.desc())[:3]
             return system_messages
         else:
-            system_message = SystemMessage.query.filter(SystemMessage.type == 'doctor').first()
+            system_message = SystemMessage.query.filter(SystemMessage.type == 'abstract').first()
             return system_message
 

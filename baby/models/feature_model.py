@@ -25,7 +25,7 @@ class SystemMessage(Base):
     id = Column(Integer, primary_key=True)
     message_content = Column(String(255), nullable=True)
     message_date = Column(DATETIME, nullable=True)
-    type = Column(String(20), nullable=True)
+    type = Column(String(20), nullable=False)
 
 
 class TypeOfMilk(Base):
