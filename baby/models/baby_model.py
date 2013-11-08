@@ -83,3 +83,8 @@ class Baby(Base):
         self.rel_path = kwargs.pop('rel_path')
         self.picture_name = kwargs.pop('picture_name')
 
+
+class BabyPicture(Base):
+    '''婴儿图片表'''
+    
+
