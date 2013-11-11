@@ -58,9 +58,9 @@ class ParentingGuide(restful.Resource):
         if parenting_guide:
             if type(parenting_guide) is list:
                 for parenting in parenting_guide:
-                    system_message_pic = system_message_pickler(parenting, resp_suc)
+                    system_message_pickler(parenting, resp_suc)
             else:
-                system_message_pic = system_message_pickler(parenting_guide, resp_suc)
+                system_message_pickler(parenting_guide, resp_suc)
             return resp_suc
         else:
             return resp_fail

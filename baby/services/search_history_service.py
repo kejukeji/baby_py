@@ -27,10 +27,16 @@ def delete_all_search():
         search_historys = SearchHistory.query.filter().all()
         for search in search_historys:
             db.delete(search)
-            db.commit()
+            try:
+                db.commit()
+            except:
+                return 1
         return 0
     else:
         search_history = SearchHistory.query.filter().first()
         db.delete(search_history)
-        db.commit()
-        return 1
+        try:
+            db.commit()
+        except:
+            return 1
+        return 0

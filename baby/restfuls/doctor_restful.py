@@ -152,6 +152,8 @@ class Search_View(restful.Resource):
             if type(search_history) is list:
                 for search in search_history:
                     search_pickler(search, resp_suc)
+            else:
+                search_pickler(search_history, resp_suc)
             return resp_suc
         else:
             return resp_fail

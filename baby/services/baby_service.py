@@ -27,16 +27,19 @@ def baby_collect_list(page, doctor_id):
             page: 分页，当前页
             doctor_id: 医生的id
     """
-    result_count = session.query(Baby). \
+    result_count = db.query(Baby). \
         filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
     page, per_page = page_utils(result_count, page)
     if result_count > 1:
-        results = session.query(Baby).\
+        results = db.query(Baby).\
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(page-1):per_page*page]
+        for result in results:
+            get_picture_by_id(result.id, result)
         return results
     else:
-        result = session.query(Baby).\
+        result = db.query(Baby).\
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
+        get_picture_by_id(result.id, result)
         return result
 
 
@@ -65,16 +68,21 @@ def is_null(obj):
         return False
 
 
+def get_picture_by_id(baby_id, baby):
+    '''通过baby_id来得到图片'''
+    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby_id).first()
+    bool = is_null(baby_picture)
+    if bool:
+        baby.picture_path = baby_picture.rel_path + '/' + baby_picture.picture_name
+
+
 def get_baby_info(baby_id):
     """
         得到婴儿信息
             baby_id：婴儿登录id
     """
     baby = Baby.query.filter(Baby.id == baby_id).first()
-    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby_id).first()
-    bool = is_null(baby_picture)
-    if bool:
-        baby.picture_path = baby_picture.rel_path + '/' + baby_picture.picture_name
+    get_picture_by_id(baby_id, baby)
     return baby
 
 
