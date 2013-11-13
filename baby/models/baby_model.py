@@ -14,6 +14,7 @@ class Baby(Base):
         婴儿
         id	:主键id
         baby_name	    婴儿名
+        login_name      婴儿登陆
         gender		    性别
         due_date	    预产期
         born_birthday	出生日期
@@ -32,6 +33,7 @@ class Baby(Base):
     patriarch_tel = Column(String(11), nullable=False, server_default=None)
     baby_name = Column(String(20), nullable=True)
     baby_pass = Column(String(20), nullable=False, server_default=None)
+    login_name = Column(String(20), nullable=False, server_default=None)
     gender = Column(String(2), nullable=False, server_default=None)
     due_date = Column(DATETIME, nullable=False, server_default=None)
     born_birthday = Column(DATETIME, nullable=False, server_default=None)
