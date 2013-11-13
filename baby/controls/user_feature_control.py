@@ -6,7 +6,7 @@ from baby.models.baby_model import Baby
 from baby.models.hospital_model import Doctor
 
 
-@app.route('/login/', methods={'GET', 'POST'})
+@app.route('/html/login.html/', methods={'GET', 'POST'})
 def login_control():
     """
        to login
@@ -26,7 +26,7 @@ def do_login_control():
     baby = Baby.query.filter()
 
 
-@app.route('/update/password/', methods={'GET', 'POST'})
+@app.route('/html/password.html/', methods={'GET', 'POST'})
 def update_password_control():
     """
        to update password
