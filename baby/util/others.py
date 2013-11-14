@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from wtforms import BooleanField
+from flask import session
 import jsonpickle
 import datetime
 
@@ -88,3 +89,18 @@ class fail_dic(object):
 
     def set(self, k, v):
         self.dic[k] = v
+
+
+def get_session_user():
+    if session.has_key('user') and session['user']:
+        #这里只能传递一个字符串，不然会报没有序列化的错
+        return session['user']
+    return None
+
+
+def set_session_user(user_name, user_id):
+    """
+       登陆成功保存到session当中
+    """
+    session['user'] = user_name
+    session['user_id'] = user_id
