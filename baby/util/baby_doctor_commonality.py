@@ -1,16 +1,21 @@
 # coding: UTF-8
 
 from .others import pickler, time_diff, flatten
+from baby.models.baby_model import BabyPicture
 
 
 def format_baby(baby, resp_suc):
     """
         格式化baby对象
     """
+    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
     baby_pic = flatten(baby)
     if baby.born_birthday:
         baby_birthday = baby.born_birthday
         baby_pic['time'] = time_diff(baby_birthday)
+    if baby_picture:
+        if baby_picture.rel_path and baby_picture.picture_name:
+            baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
     resp_suc['baby_list'].append(baby_pic)
 
 
