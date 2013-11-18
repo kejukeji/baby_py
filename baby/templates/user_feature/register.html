@@ -11,18 +11,18 @@
 </head>
 <body class="bg-gray">
 	<section class="huge-box">
-		<form>
+		<form action="/html/do/register/">
 			<ul class="form-list mt0">
 				<li class="clearfix">
 					<label class="f-l">用户名：</label>
 					<div class="input-wrap f-r">
-						<input type="text" />
+						<input type="text" name="login_name"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">密码：</label>
 					<div class="input-wrap f-r">
-						<input type="password" />
+						<input type="password" name="login_pass"/>
 					</div>
 				</li>
 				<li class="clearfix">
@@ -34,16 +34,20 @@
 				<li class="clearfix">
 					<label class="f-l">真实姓名：</label>
 					<div class="input-wrap f-r">
-						<input type="text" />
+						<input type="text" name="real_name"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">地区：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="region" id="">
-								<option value="1">北京</option>
-								<option value="2">上海</option>
+							<select name="region" id="" name="area">
+								{% if province_count > 1 %}
+                                     {% for pro in province %}
+                                        <option value="{{ pro.id }}">{{ pro.name }}</option>
+                                     {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -52,11 +56,13 @@
 					<label class="f-l">所属医院：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="hospital" id="">
-								<option value="1">骨科医院</option>
-								<option value="2">婴儿医院</option>
-								<option value="3">第八中医院</option>
-								<option value="4">交大医院</option>
+							<select name="hospital" id="" name="hospital">
+                                {% if hospital_count > 1 %}
+                                     {% for h in hospital %}
+                                        <option value="{{ h.id }}">{{ h.name }}</option>
+                                     {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -65,11 +71,13 @@
 					<label class="f-l">所属科室：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="class" id="">
-								<option value="1">科室1</option>
-								<option value="2">科室2</option>
-								<option value="3">科室3</option>
-								<option value="4">科室4</option>
+							<select name="class" id="" name="class">
+								{% if department_count > 1 %}
+                                     {% for d in department %}
+                                        <option value="{{ d.id }}">{{ d.name }}</option>
+                                     {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -78,11 +86,13 @@
 					<label class="f-l">职称：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="profile" id="">
-								<option value="1">职称1</option>
-								<option value="2">职称2</option>
-								<option value="3">职称3</option>
-								<option value="4">职称4</option>
+							<select name="profile" id="" name="profile">
+								{% if position_count > 1 %}
+                                     {% for p in position %}
+                                        <option value="{{ p.id }}">{{ p.name }}</option>
+                                     {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -90,13 +100,13 @@
 				<li class="clearfix">
 					<label class="f-l">邮箱：</label>
 					<div class="input-wrap f-r">
-						<input type="email" />
+						<input type="email" name="email"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">手机号：</label>
 					<div class="input-wrap f-r">
-						<input type="number" />
+						<input type="number" name="number"/>
 					</div>
 				</li>
 				<li class="last-agree">

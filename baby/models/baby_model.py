@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, String, Integer, DATETIME, Float, Sequence, ForeignKey
 from baby.models.database import Base
-from baby.util.others import *
+from baby.util.ex_time import todayfstr
 
 
 BABY_TABLE = 'baby'
@@ -26,6 +26,7 @@ class Baby(Base):
         restore_day		恢复出生体重天数
         apgar_score		Apgar评分
         growth_standard		生长参考标准
+        system_message_time 系统信息时间
         login_type		登录类型(doctor,baby)
     """
     __tablename__ = BABY_TABLE
@@ -45,6 +46,7 @@ class Baby(Base):
     restore_day = Column(Integer, nullable=False, server_default=None)
     apgar_score = Column(Integer, nullable=False, server_default=None)
     growth_standard = Column(String(100), nullable=True)
+    system_message_time = Column(DATETIME, nullable=False, server_default=None)
     login_type = Column(String(10), nullable=False)
 
     def __init__(self, **kwargs):
@@ -62,6 +64,7 @@ class Baby(Base):
         self.restore_day = kwargs.pop('restore_day')
         self.apgar_score = kwargs.pop('apgar_score')
         self.growth_standard = kwargs.pop('growth_standard')
+        self.system_message_time = kwargs.pop('system_message_time', todayfstr())
         self.login_type = kwargs.pop('login_type', 'baby')
 
     def update(self, **kwargs):
