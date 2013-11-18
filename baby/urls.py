@@ -5,6 +5,7 @@ from flask.ext import restful
 from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search,\
     Search_View, DeleteSearchHistoryAll, MeetingNotice
 from restfuls.baby_restful import BabyInfo, ParentingGuide
+from restfuls.login_register import DoLogin
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -29,3 +30,4 @@ api.add_resource(DeleteSearchHistoryAll, '/restful/doctor/delete/search_history'
 api.add_resource(MeetingNotice, '/restful/doctor/meeting/notice')
 api.add_resource(BabyInfo, '/restful/baby/info')
 api.add_resource(ParentingGuide, '/restful/baby/parenting/guide')
+api.add_resource(DoLogin, '/restful/html/do/login')
