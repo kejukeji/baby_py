@@ -87,3 +87,9 @@ def do_register():
     else:
         return render_template('user_feature/login.html')
 
+
+
+@app.route('/standard/')
+def standard():
+    #entering_who()
+    return render_template('user_feature/index.html')

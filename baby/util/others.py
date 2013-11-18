@@ -71,7 +71,7 @@ def isNotNull(object):
 class success_dic(object):
     def __init__(self):
         self.dic = {}
-        self.dic['status'] = 0
+        self.dic['code'] = 200
         self.dic['message'] = 'success'
         #self.dic['test'] = 'test success'
 
@@ -83,8 +83,8 @@ class success_dic(object):
 class fail_dic(object):
     def __init__(self):
         self.dic = {}
-        self.dic['status'] = 1
-        self.dic['message'] = '没有查询到相应数据！'
+        self.dic['code'] = 500
+        self.dic['message'] = 'error！'
         #self.dic['test'] = 'test fail'
 
     def set(self, k, v):

@@ -20,6 +20,7 @@ def check_login(login_name, login_pass):
         if doctor != None:
             set_session_user(doctor.doctor_name, doctor.id)
             return doctor
+    return None
 
 
 def register_doctor(login_name, login_pass, real_name, area, hospital, belong_class, profile, email, tel):
@@ -90,3 +91,35 @@ def get_position():
     else:
         position = Position.query.filter().first()
     return position, position_count
+
+
+#def entering_who():
+#    """
+#       录入who标准数据
+#    """
+#    read_file = open('/Users/K/Documents/User Data/baby Data/lhfa_girls_p_exp.txt')
+#    result = {}
+#    count = 0
+#    for line in read_file:
+#        ''''''
+#        result[str(count)] = []
+#        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+#        count = count + 1
+#    count = 1
+#    length = result.__len__() - 1
+#    result.pop('0')
+#    for keys in result.keys():
+#        #print result[str(count)][0].__len__()
+#        weight_boy_standard = HeadSurroundGirlStandard(age=result[str(count)][0][0], L=result[str(count)][0][1],
+#                                                M=result[str(count)][0][2], S=result[str(count)][0][3],
+#                                                P01=result[str(count)][0][4], P1=result[str(count)][0][5],
+#                                                P3=result[str(count)][0][6], P5=result[str(count)][0][7],
+#                                                P10=result[str(count)][0][8], P15=result[str(count)][0][9],
+#                                                P25=result[str(count)][0][10], P50=result[str(count)][0][11],
+#                                                P75=result[str(count)][0][12], P85=result[str(count)][0][13],
+#                                                P90=result[str(count)][0][14], P95=result[str(count)][0][15],
+#                                                P97=result[str(count)][0][16], P99=result[str(count)][0][17],
+#                                                P999=result[str(count)][0][18])
+#        db.add(weight_boy_standard)
+#        db.commit()
+#        count = count + 1
