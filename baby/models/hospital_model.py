@@ -44,6 +44,7 @@ class Position(Base):
      __tablename__ = POSITION
      id = Column(Integer, primary_key=True)
      name = Column(String(255), nullable=True)
+     belong_department = Column(Integer, ForeignKey(Department.id, ondelete='cascade', onupdate='cascade'), nullable=False)
 
 
 class Doctor(Base):

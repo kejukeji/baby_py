@@ -385,7 +385,7 @@ MZ.app = {
 					setTimeout(function() {
 						var doctorList = json.doctor_list
 						// 调用java方法
-						window.webviewLogin(doctorList[0].id)
+						window.webviewLogin(doctorList[0].id, json.remeber)
 					}, 2000)
 				}
 			})

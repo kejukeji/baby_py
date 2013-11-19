@@ -14,7 +14,7 @@ class DoLogin(restful.Resource):
        参数：
           1.login_name
           2.login_pass
-          3.remember
+          3.remember (1.代表记住）
     """
     @staticmethod
     def post():
