@@ -2,9 +2,10 @@
 
 from flask.ext import restful
 from flask.ext.restful import reqparse
-from baby.services.more_service import check_login
+from baby.services.more_service import check_login, get_position, get_province, get_department, get_hospital
 from baby.util.others import success_dic, fail_dic
-from baby.util.baby_doctor_commonality import format_baby, doctor_pickler
+from baby.util.baby_doctor_commonality import format_baby, doctor_pickler, register_data_department\
+    , register_data_hospital, register_data_position, register_data_province
 from baby.models.baby_model import Baby
 
 
@@ -35,6 +36,36 @@ class DoLogin(restful.Resource):
             else:
                 return_success['doctor_list'] = []
                 doctor_pickler(result, return_success)
+            return return_success
+        else:
+            return return_fail
+
+
+class DoRegister(restful.Resource):
+    """
+       注册:
+    """
+
+
+class RegisterData(restful.Resource):
+    """
+       注册下拉列表数据
+    """
+    @staticmethod
+    def get():
+        province, province_count = get_province()
+        hospital, hospital_count = get_hospital()
+        department, department_count = get_department()
+        position, position_count = get_position()
+
+        return_success = success_dic().dic
+        return_fail = fail_dic().dic
+
+        if province and hospital and department and position:
+            register_data_province(province, return_success)
+            register_data_position(position, return_success)
+            register_data_hospital(hospital, return_success)
+            register_data_department(department, return_success)
             return return_success
         else:
             return return_fail

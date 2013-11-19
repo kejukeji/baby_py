@@ -40,3 +40,59 @@ def system_message_pickler(system_message, resp_suc):
     """
     search_pic = flatten(system_message)
     resp_suc['system_message_list'].append(search_pic)
+
+
+def register_data_province(province, return_success):
+    """
+       下拉列表省份数据
+    """
+    return_success['province_list'] = []
+    if type(province) is list:
+        for p in province:
+            province_pic = flatten(p)
+            return_success['province_list'].append(province_pic)
+    else:
+        province_pic = flatten(province)
+        return_success['province_list'].append(province_pic)
+
+
+def register_data_hospital(hospital, return_success):
+    """
+       下拉列表医院数据
+    """
+    return_success['hospital_list'] = []
+    if type(hospital) is list:
+        for h in hospital:
+            hospital_pic = flatten(h)
+            return_success['hospital_list'].append(hospital_pic)
+    else:
+        hospital_pic = flatten(hospital)
+        return_success['hospital_list'].append(hospital_pic)
+
+
+def register_data_department(department, return_success):
+    """
+       下拉列表部门数据
+    """
+    return_success['department_list'] = []
+    if type(department) is list:
+        for d in department:
+            department_pic = flatten(d)
+            return_success['department_list'].append(department_pic)
+    else:
+        department_pic = flatten(department)
+        return_success['department_list'].append(department_pic)
+
+
+def register_data_position(position, return_success):
+    """
+       下拉列表职位数据
+    """
+    return_success['position_list'] = []
+    if type(position) is list:
+        for p in position:
+            position_pic = flatten(p)
+            return_success['position_list'].append(position_pic)
+    else:
+        position_pic = flatten(position)
+        return_success['position_list'].append(position_pic)
