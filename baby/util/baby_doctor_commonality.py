@@ -22,7 +22,9 @@ def format_baby(baby, resp_suc):
 def pickler_baby_only(baby, remember):
     baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
     baby_pic = flatten(baby)
-    baby_pic['remember'] = int(remember)
+    baby_pic['is_remember'] = int(remember)
+    baby_pic.pop('id')
+    baby_pic['user_id'] = baby.id
     if baby.born_birthday:
         baby_birthday = baby.born_birthday
         baby_pic['time'] = time_diff(baby_birthday)
@@ -41,7 +43,9 @@ def doctor_pickler(doctor, resp_suc):
 
 def doctor_pickler_only(doctor, remember):
     doctor_pic = flatten(doctor)
-    doctor_pic['remember'] = int(remember)
+    doctor_pic['is_remember'] = int(remember)
+    doctor_pic.pop('id')
+    doctor_pic['user_id'] = doctor.id
     if doctor.rel_path and doctor.picture_name:
         doctor_pic['picture_path'] = doctor.rel_path + '/' + doctor.picture_name
     return doctor_pic
