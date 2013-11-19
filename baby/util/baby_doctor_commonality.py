@@ -19,11 +19,32 @@ def format_baby(baby, resp_suc):
     resp_suc['baby_list'].append(baby_pic)
 
 
+def pickler_baby_only(baby, remember):
+    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
+    baby_pic = flatten(baby)
+    baby_pic['remember'] = int(remember)
+    if baby.born_birthday:
+        baby_birthday = baby.born_birthday
+        baby_pic['time'] = time_diff(baby_birthday)
+    if baby_picture:
+        if baby_picture.rel_path and baby_picture.picture_name:
+            baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
+    return baby_pic
+
+
 def doctor_pickler(doctor, resp_suc):
     doctor_pic = flatten(doctor)
     if doctor.rel_path and doctor.picture_name:
         doctor_pic['picture_path'] = doctor.rel_path + '/' + doctor.picture_name
     resp_suc['doctor_list'].append(doctor_pic)
+
+
+def doctor_pickler_only(doctor, remember):
+    doctor_pic = flatten(doctor)
+    doctor_pic['remember'] = int(remember)
+    if doctor.rel_path and doctor.picture_name:
+        doctor_pic['picture_path'] = doctor.rel_path + '/' + doctor.picture_name
+    return doctor_pic
 
 
 def search_pickler(search_history, resp_suc):

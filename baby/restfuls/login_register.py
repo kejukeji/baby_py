@@ -4,7 +4,7 @@ from flask.ext import restful
 from flask.ext.restful import reqparse
 from baby.services.more_service import check_login, get_position, get_province, get_department, get_hospital
 from baby.util.others import success_dic, fail_dic
-from baby.util.baby_doctor_commonality import format_baby, doctor_pickler, register_data_department\
+from baby.util.baby_doctor_commonality import pickler_baby_only, doctor_pickler_only, register_data_department\
     , register_data_hospital, register_data_position, register_data_province
 from baby.models.baby_model import Baby
 
@@ -34,12 +34,11 @@ class DoLogin(restful.Resource):
         result = check_login(login_name, login_pass)
         if result:
             if type(result) is Baby:
-                return_success['baby_list'] = []
-                format_baby(result, return_success)
+                result_baby = pickler_baby_only(result, remember)
+                return_success['doctor_list'] = result_baby
             else:
-                return_success['doctor_list'] = []
-                doctor_pickler(result, return_success)
-            return_success['remember'] = remember
+                result_doctor = doctor_pickler_only(result, remember)
+                return_success['doctor_list'] = result_doctor
             return return_success
         else:
             return return_fail
