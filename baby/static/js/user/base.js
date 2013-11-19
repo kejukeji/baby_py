@@ -16,8 +16,8 @@ MZ.namespace = function() {
 	}
 	return o;
 };
-
 MZ.namespace('util');
+MZ.namespace('constant');
 MZ.namespace('Cookie');
 /*-------------------------------------------------
      MZ Utils
@@ -54,7 +54,7 @@ MZ.util = {
 	},
 	Request: function(options, cb) {
 		var defaults = {
-			type: 'GET',
+			type: 'POST',
 			url: '',
 			async: true,
 			data: {},
@@ -92,9 +92,7 @@ MZ.Cookie = {
 /*-------------------------------------------------
      MZ.app Namespace (for Business Code)
 -------------------------------------------------*/
-
 MZ.namespace('app');
-
 /*------------------------------------------------
  * lazyload , extend Zepto, based on unveil.js
  * --------------------------------------------*/
@@ -111,7 +109,6 @@ MZ.namespace('app');
 			loaded,
 			inview,
 			source;
-
 		this.one("unveil", function() {
 			source = this.getAttribute(attrib);
 			source = source || this.getAttribute("data-src");
@@ -127,85 +124,352 @@ MZ.namespace('app');
 					wb = wt + $w.height(),
 					et = $e.offset().top,
 					eb = et + $e.height();
-
 				return eb >= wt - th && et <= wb + th;
 			});
-
 			loaded = inview.trigger("unveil");
 			images = images.not(loaded);
 		}
-
 		$w.scroll(unveil);
 		$w.resize(unveil);
 		unveil();
-
 		return this;
 	};
-
 })(window.Zepto);
+(function($) {
+	var win = $(window);
+	var T_float = ['<div class="c-float-popWrap msgMode hide">', '<div class="c-float-modePop">', '<div class="warnMsg"></div>', '<div class="content"></div>', '<div class="doBtn hide">', '<button class="ok">确定</button>', '<button class="cancel">取消</button>', '</div>', '</div>', '</div>'].join('');
+	var E_float = $(T_float);
+	var E_floatMsg = E_float.find('.warnMsg');
+	var E_floatContent = E_float.find('.content');
+	var E_floatOk = E_float.find('.doBtn .ok');
+	var E_floatCancel = E_float.find('.doBtn .cancel');
+	var initDom = false;
+	var domContainer = 'body';
+	var flashTimeoutId;
+
+	function ModePop(options) {
+		this._options = $.extend({
+			mode: 'msg',
+			text: '网页提示',
+		}, options || {});
+		this._init();
+	}
+	$.extend(ModePop.prototype, {
+		_init: function() {
+			var that = this,
+				opt = that._options,
+				mode = opt.mode,
+				text = opt.text,
+				content = opt.content,
+				callback = opt.callback,
+				background = opt.background;
+			// set mode
+			var classTxt = E_float.attr('class');
+			classTxt = classTxt.replace(/(msg|alert|confirm)Mode/i, mode + 'Mode');
+			E_float.attr('class', classTxt);
+			// set background
+			background && E_float.css('background', background);
+			// set text & content
+			text && E_floatMsg.html(text);
+			content && E_floatContent.html(content);
+			// click event
+			/*
+                                 E_float.off('click')
+                                 .on('click', '.doBtn .ok', function(e) {
+                                 callback.call(that, e, true);
+                                 })
+                                 .on('click', '.doBtn .cancel', function(e) {
+                                 callback.call(that, e, false);
+                                 });
+                                 */
+			E_floatOk.off('click').on('click', function(e) {
+				callback.call(that, e, true);
+			});
+			E_floatCancel.off('click').on('click', function(e) {
+				callback.call(that, e, false);
+			});
+			if (!initDom) {
+				initDom = true;
+				$(domContainer).append(E_float);
+				win.on('resize', function() {
+					setTimeout(function() {
+						that._pos();
+					}, 500);
+				});
+			}
+		},
+		_pos: function() {
+			var that = this,
+				doc = document,
+				docEl = doc.documentElement,
+				body = doc.body,
+				top, left, cW, cH, eW, eH;
+			if (!that.isHide()) {
+				top = body.scrollTop;
+				left = body.scrollLeft;
+				cW = docEl.clientWidth;
+				cH = docEl.clientHeight;
+				eW = E_float.width();
+				eH = E_float.height();
+				E_float.css({
+					top: top + (cH - eH) / 2,
+					left: left + (cW - eW) / 2
+				});
+			}
+		},
+		isShow: function() {
+			return E_float.hasClass('show');
+		},
+		isHide: function() {
+			return E_float.hasClass('hide');
+		},
+		_cbShow: function() {
+			var that = this,
+				opt = that._options,
+				onShow = opt.onShow;
+			E_float.addClass('show');
+			// 特殊处理
+			var overlayEle = $('.pop-main-wrap');
+			if (overlayEle.size() > 0) {
+				overlayEle.removeClass('hide');
+			} else {
+				$(domContainer).append('<div class="pop-main-wrap"></div>');
+			}
+			onShow && onShow.call(that);
+		},
+		show: function() {
+			var that = this;
+			if (flashTimeoutId) {
+				clearTimeout(flashTimeoutId);
+				flashTimeoutId = undefined;
+			}
+			if (!that.isShow()) {
+				E_float.css('opacity', '0').removeClass('hide');
+				that._pos();
+				E_float.animate({
+					'opacity': '1'
+				}, 300, 'linear', function() {
+					that._cbShow();
+				});
+			} else {
+				that._cbShow();
+			}
+		},
+		_cbHide: function() {
+			var that = this,
+				opt = that._options,
+				onHide = opt.onHide;
+			E_float.addClass('hide');
+			$('.pop-main-wrap').addClass('hide');
+			onHide && onHide.call(that);
+		},
+		hide: function() {
+			var that = this;
+			if (!that.isHide()) {
+				E_float.css('opacity', 1).removeClass('show');
+				E_float.animate({
+					'opacity': 0
+				}, 300, 'linear', function() {
+					that._cbHide();
+				});
+			} else {
+				that._cbHide();
+			}
+		},
+		flash: function(timeout) {
+			var that = this
+			opt = that._options;
+			opt.onShow = function() {
+				flashTimeoutId = setTimeout(function() {
+					if (flashTimeoutId) {
+						that.hide();
+					}
+				}, timeout);
+			}
+			that.show();
+		}
+	});
+	window.Notification = new function() {
+		this.simple = function(text, bg, timeout) {
+			if (arguments.length == 2) {
+				if (typeof arguments[1] == 'number') {
+					timeout = arguments[1];
+					bg = undefined;
+				}
+			}
+			var pop = new ModePop({
+				mode: 'msg',
+				text: text,
+				background: bg
+			});
+			pop.flash(timeout || 2000);
+			return pop;
+		}
+		this.msg = function(text, options) {
+			return new ModePop($.extend({
+				mode: 'msg',
+				text: text
+			}, options || {}));
+		}
+		this.alert = function(text, callback, options) {
+			return new ModePop($.extend({
+				mode: 'alert',
+				text: text,
+				callback: callback
+			}, options || {}));
+		}
+		this.confirm = function(text, content, callback, options) {
+			return new ModePop($.extend({
+				mode: 'confirm',
+				text: text,
+				content: content,
+				callback: callback,
+			}, options || {}));
+		}
+		this.pop = function(options) {
+			return new ModePop(options);
+		}
+	};
+})(window.Zepto);
+MZ.constant = {
+	'USERNAME_EMPTY': '用户名不能为空',
+	'PASSWORD_EMPTY': '密码不能为空',
+	'OLDPWD_EMPTY': '旧密码不能为空',
+	'NEWPWD_EMPTY': '新密码不能为空',
+	'REPWD_EMPTY': '确认密码不能为空',
+	'PWD_EQUEL': '两次新密码不一致',
+	// 'LOGIN_URL': 'json/login.json',
+	'LOGIN_URL': '/restful/html/do/login',
+	'FORGET_PWD': 'json/password.json'
+}
 
 MZ.app = {
-
-	initIndex: function() {
-
-		function initSlider() {
-			var bullets = document.getElementById('featuredMobileInd').getElementsByTagName('a');
-			window.mySwipe = new Swipe(document.getElementById('slider'), {
-				// startSlide: 2,
-				// speed: 400,
-				auto: 3000,
-				continuous: false
-				// disableScroll: false,
-				// stopPropagation: false,
-				// callback: function(index, elem) {},
-				// transitionEnd: function(index, elem) {}
-				,
-				callback: function(pos) {
-					var i = bullets.length;
-					while (i--) {
-						bullets[i].className = '';
-					}
-					bullets[pos].className = 'active';
-				}
-			});
+	checkField: function(elem) {
+		var elemStr = $.trim($(elem).val())
+		if (!elemStr.length) {
+			return false
 		}
+		return true
+	},
+	login: function() {
+		var login_btn = $('#L-login-btn')
+		var username = $('#L-username')
+		var password = $('#L-password')
+		var rememberCheckbox = $('#L-remember')
 
-		// 初始化滑动
-		initSlider();
+		login_btn.bind('click', function() {
+			var checkUsername = MZ.app.checkField(username)
+			var checkPassword = MZ.app.checkField(password)
+			if (!checkUsername) {
+				window.Notification.simple(MZ.constant.USERNAME_EMPTY, 2000)
+				return
+			}
+			if (!checkPassword) {
+				window.Notification.simple(MZ.constant.PASSWORD_EMPTY, 2000)
+				return
+			}
+			var params = {
+				'login_name': $.trim(username.val()),
+				'login_pass': $.trim(password.val()),
+				'remember': rememberCheckbox.attr('checked') ? 1 : 0
+			}
+			MZ.util.Request({
+				url: MZ.constant.LOGIN_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						var doctorList = json.doctor_list
+						// 调用java方法
+						window.webviewLogin(doctorList[0].id)
+					}, 2000)
+				}
+			})
 
-		// 初始化图片懒加载
-		$('.index-list img').unveil();
+		})
+	},
+	password: function() {
+		var oldPassword = $('#L-old-password')
+		var newPassword = $('#L-new-password')
+		var rePassword = $('#L-re-password')
+		var saveBtn = $('#L-save')
+
+		saveBtn.bind('click', function() {
+			var checkOldPwd = MZ.app.checkField(oldPassword)
+			var checkNewPwd = MZ.app.checkField(newPassword)
+			var checkRePwd = MZ.app.checkField(rePassword)
+			if (!checkOldPwd) {
+				window.Notification.simple(MZ.constant.OLDPWD_EMPTY, 2000)
+				return
+			}
+			if (!checkNewPwd) {
+				window.Notification.simple(MZ.constant.NEWPWD_EMPTY, 2000)
+				return
+			}
+			if (!checkRePwd) {
+				window.Notification.simple(MZ.constant.REPWD_EMPTY, 2000)
+				return
+			}
+			var oldPwdValue = $.trim(oldPassword.val())
+			var newPwdValue = $.trim(newPassword.val())
+			var rePwdValue = $.trim(rePassword.val())
+
+			if (newPwdValue != rePwdValue) {
+				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
+				return
+			}
+			var params = {
+				'oldPassword': oldPwdValue,
+				'newPassword': newPwdValue
+			}
+			MZ.util.Request({
+				url: MZ.constant.FORGET_PWD,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						// 调用java方法
+						// window.webviewPassword(json.userId)
+						// where to go ?
+					}, 2000)
+				}
+			})
+
+		})
 
 	},
-	detailInit: function() {
-		var contTemplete = '<div class="panel panel-default" style="margin-bottom:0;">\
-			<div class="panel-heading">分享<a id="J-close" href="javascript:void(0);" class="close">关闭</a></div>\
-		        	<div class="list-group">\
-		        		<a href="#" class="list-group-item"><i class="icon-weibo"></i>新浪微博</a>\
-		        		<a href="#" class="list-group-item"><i class="icon-weixin"></i>微信</a>\
-		        		<a href="#" class="list-group-item"><i class="icon-qq-weibo"></i>腾讯微博</a>\
-		        		<a href="#" class="list-group-item"><i class="icon-renren"></i>人人网</a>\
-		        		<a href="#" class="list-group-item"><i class="icon-qq-zone"></i>QQ空间</a>\
-			</div>\
-		</div>';
-		var shareBtn = $('#J-share');
-		shareBtn.bind('click', function(e) {
-			e.preventDefault();
-			var mBox = Notification.confirm('分享', contTemplete, function(e) {
-				var target = e.target;
-				var _self = this;
-				var targetClassName = target.className;
-				if (targetClassName === 'cancel') {
-					_self.hide();
-				}
-				if (targetClassName === 'ok') {
-					_self.hide();
-				}
-			});
-			mBox.show();
-			$('#J-close').on('click', function() {
-				mBox.hide();
-			});
-		});
+	slideNavigator: function() {
+		var bar = $('#L-nav span.bar')
+		var left = $('#L-nav ul').offset().left
+		var navElem = $('#L-nav')
+		var arrowLeftElem = $('#L-arrow-left')
+		var arrowRightElem = $('#L-arrow-right')
+		navElem.navigator({
+			select: function(e, index, li) {
+				bar.css({
+					left: li.offsetLeft - left,
+					width: li.childNodes[0].offsetWidth
+				})
+			},
+			ready: function() {
+				bar.appendTo(navElem.find('.ui-scroller'));
+			}
+		})
+
+		arrowLeftElem.on('click', function() {
+			navElem.iScroll('scrollTo', -100, 0, 400, true)
+		})
+
+		arrowRightElem.on('click', function() {
+			navElem.iScroll('scrollTo', 100, 0, 400, true)
+		})
 	}
-};
+}

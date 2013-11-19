@@ -6,7 +6,6 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="format-detection" content="email=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-
 <title>登录</title>
 <link rel="stylesheet" href="/static/css/user/m.min.css" type="text/css">
 </head>
@@ -17,29 +16,34 @@
 				<li class="clearfix">
 					<label class="f-l">用户名：</label>
 					<div class="input-wrap f-r">
-						<input type="text" />
+						<input id="L-username" name="username" type="text" />
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">密码：</label>
 					<div class="input-wrap f-r">
-						<input type="password" />
+						<input id="L-password" name="password" type="password" />
 					</div>
 				</li>
 				<li class="last clearfix">
-					<input type="checkbox" id="login-remember"/>
-					<label for="login-remember" class="remember-me">记住我</label><a href="#">忘记密码</a>
+					<input type="checkbox" name="remeber" id="L-remember"/>
+					<label for="L-remember" class="remember-me">记住我</label><a href="./password.html">忘记密码</a>
 				</li>
 			</ul>
 			<div class="form-btns clearfix">
 				<div class="btn-l f-l">
-					<a href="#" class="btn">注册</a>
+					<a href="./register.html" class="btn">注册</a>
 				</div>
 				<div class="btn-r f-r">
-					<button type="submit" class="btn">登录</button>
+					<a href="javascript:void(0)" id="L-login-btn" class="btn">登录</a>
 				</div>
 			</div>
 		</form>
 	</section>
+	<script type="text/javascript" src="/staitc/js/user/zepto.min.js"></script>
+	<script type="text/javascript" src="/static/js/user/base.js"></script>
+	<script type="text/javascript">
+		MZ.app.login()
+	</script>
 </body>
 </html>

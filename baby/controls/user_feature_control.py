@@ -92,4 +92,4 @@ def do_register():
 @app.route('/standard/')
 def standard():
     #entering_who()
-    return render_template('user_feature/index.html')
+    return render_template('index.html')
