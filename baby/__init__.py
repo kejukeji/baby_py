@@ -24,4 +24,3 @@ def close_data_base(exception=None):
     db.remove()
 
 import urls
-import controls.user_feature_control

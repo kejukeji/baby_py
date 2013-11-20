@@ -6,6 +6,7 @@ from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search,\
     Search_View, DeleteSearchHistoryAll, MeetingNotice
 from restfuls.baby_restful import BabyInfo, ParentingGuide
 from restfuls.login_register import DoLogin, RegisterData
+from baby.controls.user_feature_control import to_login, to_update_password, to_register
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -17,6 +18,11 @@ from restfuls.login_register import DoLogin, RegisterData
 # admin.add_view(Yu_File(file_path, '/static/', name='文件'))
 # yu_picture_path = os.path.join(os.path.dirname(__file__), 'static/system/baby_picture')
 # admin.add_view(Yu_Picture_File(yu_picture_path, 'baby/static/system/baby_picture/', name='YuImage', category=u'Yu'))
+
+# html页面访问路劲
+app.add_url_rule('/html/login.html/', 'to_login', to_login, methods={ 'GET', 'POST'})
+app.add_url_rule('/html/password.html/', 'to_update_password', to_update_password, methods={'GET', 'POST'})
+app.add_url_rule('/html/register.html', 'to_register', to_register, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)

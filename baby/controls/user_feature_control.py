@@ -7,7 +7,7 @@ from baby.services.more_service import check_login, register_doctor, get_departm
     , get_position, get_province
 
 
-@app.route('/html/login.html/', methods={'GET', 'POST'})
+
 def to_login():
     """
        to login
@@ -15,7 +15,7 @@ def to_login():
     return render_template('user_feature/login.html')
 
 
-@app.route('/do/login', methods={'GET', 'POST'})
+
 def do_login():
     """
        所属参数
@@ -32,7 +32,7 @@ def do_login():
 
 
 
-@app.route('/html/password.html/', methods={'GET', 'POST'})
+
 def to_update_password():
     """
        to update password
@@ -40,7 +40,7 @@ def to_update_password():
     return render_template('user_feature/password.html')
 
 
-@app.route('/update/password/', methods={'GET', 'POST'})
+
 def update_password():
     """
        参数：
@@ -51,7 +51,7 @@ def update_password():
     return 'True'
 
 
-@app.route('/html/register.html')
+
 def to_register():
     '''到注册界面'''
     province, province_count = get_province()
@@ -69,7 +69,7 @@ def to_register():
                            position_count = position_count)
 
 
-@app.route('/html/do/register/')
+
 def do_register():
     ''''''
     login_name = request.form.get('login_name','')
@@ -89,7 +89,7 @@ def do_register():
 
 
 
-@app.route('/standard/')
+
 def standard():
     #entering_who()
     return render_template('index.html')
