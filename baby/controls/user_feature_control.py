@@ -1,7 +1,6 @@
 # coding: UTF-8
 
 from flask import render_template, request
-from baby import app
 from baby.util.others import get_session_user
 from baby.services.more_service import check_login, register_doctor, get_department, get_hospital\
     , get_position, get_province
