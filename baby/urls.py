@@ -5,7 +5,7 @@ from flask.ext import restful
 from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search,\
     Search_View, DeleteSearchHistoryAll, MeetingNotice
 from restfuls.baby_restful import BabyInfo, ParentingGuide
-from restfuls.login_register import DoLogin, RegisterData
+from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegisterDoctor
 from baby.controls.user_feature_control import to_login, to_update_password, to_register
 from baby.controls.baby_control import to_grow_line, to_raise
 from baby.controls.doctor_control import to_meeting
@@ -43,3 +43,5 @@ api.add_resource(BabyInfo, '/restful/baby/info')
 api.add_resource(ParentingGuide, '/restful/baby/parenting/guide')
 api.add_resource(DoLogin, '/restful/html/do/login')
 api.add_resource(RegisterData, '/restful/html/register/data')
+api.add_resource(AlterPassword, '/restful/html/alter/password')
+api.add_resource(DoRegisterDoctor, '/restful/html/do/register')

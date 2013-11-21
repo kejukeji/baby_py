@@ -150,7 +150,7 @@ MZ.namespace('app');
 	function ModePop(options) {
 		this._options = $.extend({
 			mode: 'msg',
-			text: '网页提示',
+			text: '登陆成功',
 		}, options || {});
 		this._init();
 	}
@@ -340,7 +340,7 @@ MZ.constant = {
 	'PWD_EQUEL': '两次新密码不一致',
 	// 'LOGIN_URL': 'json/login.json',
 	'LOGIN_URL': '/restful/html/do/login',
-	'FORGET_PWD': 'json/password.json'
+	'FORGET_PWD': '/restful/html/alter/password'
 }
 
 MZ.app = {
@@ -437,7 +437,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						// window.webviewPassword(json.userId)
+						window.app.webviewPassword(json.is_code)
 						// where to go ?
 					}, 2000)
 				}

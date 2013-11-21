@@ -1,8 +1,8 @@
 # coding: UTF-8
 
-from baby.models.baby_model import Baby
+from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
-from baby.util.others import set_session_user
+from baby.util.others import set_session_user, time_diff, flatten
 from baby.models.database import db
 
 
@@ -21,18 +21,6 @@ def check_login(login_name, login_pass):
             set_session_user(doctor.doctor_name, doctor.id)
             return doctor
     return None
-
-
-def register_doctor(login_name, login_pass, real_name, area, hospital, belong_class, profile, email, tel):
-    doctor = Doctor(doctor_name=login_name, doctor_pass=login_pass, real_name=real_name, province=area,
-                    belong_hospital=hospital, belong_department=belong_class, position=profile, email=email,
-                    tel=tel)
-    try:
-        db.add(doctor)
-        db.commit()
-        return 0
-    except:
-        return 1
 
 
 def is_null(model):
@@ -92,6 +80,65 @@ def get_position():
         position = Position.query.filter().first()
     return position, position_count
 
+
+def by_id_alter_password(user_id, old_password, new_password):
+    """
+       通过user_id来获取信息
+          判断old_password是否正确
+             修改密码
+    """
+    baby = Baby.query.filter(Baby.id == user_id).first()
+    if baby:
+        if baby.baby_pass == old_password:
+            baby.baby_pass = new_password
+            return True
+        else:
+            return False
+    doctor = Doctor.query.filter(Doctor.id == user_id).first()
+    if doctor:
+        if doctor.doctor_pass == old_password:
+            doctor.doctor_pass = new_password
+            return True
+        else:
+            return False
+
+
+def json_append(return_success, obj_pic):
+    return_success['doctor_list'] = obj_pic
+
+
+def check_is_type(result, remember, return_success):
+    """
+       判断登陆是baby还是doctor
+    """
+    if result:
+        if type(result) is Baby:
+            baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == result.id).first()
+            baby_pic = flatten(result)
+            baby_pic['is_remember'] = int(remember)
+            baby_pic.pop('id')
+            baby_pic['user_id'] = result.id
+            if result.born_birthday:
+                baby_birthday = result.born_birthday
+                baby_pic['time'] = time_diff(baby_birthday)
+            if baby_picture:
+                if baby_picture.rel_path and baby_picture.picture_name:
+                    baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
+            json_append(return_success, baby_pic)
+            return True
+        elif type(result) is Doctor:
+            doctor_pic = flatten(result)
+            doctor_pic['is_remember'] = int(remember)
+            doctor_pic.pop('id')
+            doctor_pic['user_id'] = result.id
+            if result.rel_path and result.picture_name:
+                doctor_pic['picture_path'] = result.rel_path + '/' + result.picture_name
+            json_append(return_success, doctor_pic)
+            return True
+        else:
+            return False
+    else:
+        return False
 
 #def entering_who():
 #    """

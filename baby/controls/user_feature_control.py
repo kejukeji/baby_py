@@ -2,7 +2,7 @@
 
 from flask import render_template, request
 from baby.util.others import get_session_user
-from baby.services.more_service import check_login, register_doctor, get_department, get_hospital\
+from baby.services.more_service import check_login, get_department, get_hospital\
     , get_position, get_province
 
 
@@ -66,27 +66,6 @@ def to_register():
                            hospital_count = hospital_count,
                            department_count = department_count,
                            position_count = position_count)
-
-
-
-def do_register():
-    ''''''
-    login_name = request.form.get('login_name','')
-    login_pass = request.form.get('login_pass','')
-    real_name = request.form.get('real_name','')
-    area = request.form.get('area','')
-    hospital = request.form.get('hospital','')
-    belong_class = request.form.get('class','')
-    profile = request.form.get('profile','')
-    email = request.form.get('email','')
-    tel = request.form.get('number','')
-    result = register_doctor(login_name, login_pass, real_name, area, hospital, belong_class, profile, email, tel)
-    if result == 1:
-        return render_template('user_feature/register.html')
-    else:
-        return render_template('user_feature/login.html')
-
-
 
 
 def standard():
