@@ -24,16 +24,16 @@ def baby_list(page, doctor_id):
             for baby in babys:
                 for baby_collect in baby_collects:
                     if baby.id == baby_collect.type_id:
-                        baby.is_collect = '已收藏'
+                        baby.is_collect = 0
                     else:
-                        baby.is_collect = '未收藏'
+                        baby.is_collect = 1
         else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
             for baby in babys:
                 if baby.id == baby_collect.type_id:
-                    baby.is_collect = '已收藏'
+                    baby.is_collect = 0
                 else:
-                    baby.is_collect = '未收藏'
+                    baby.is_collect = 1
         return babys
     else:
         baby = Baby.query.filter().first()
@@ -41,9 +41,9 @@ def baby_list(page, doctor_id):
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
             for baby_collect in baby_collects:
                 if baby.id == baby_collect.type_id:
-                    baby.is_collect = '已收藏'
+                    baby.is_collect = 0
                 else:
-                    baby.is_collect = '未收藏'
+                    baby.is_collect = 1
         else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
             if baby.id == baby_collect.type_id:
@@ -68,13 +68,13 @@ def baby_collect_list(page, doctor_id):
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(temp_page-1):per_page*temp_page]
         for result in results:
             get_picture_by_id(result.id, result)
-            result.is_collect = '已收藏'
+            result.is_collect = 0
         return results
     else:
         result = db.query(Baby).\
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
         get_picture_by_id(result.id, result)
-        result.is_collect = '已收藏'
+        result.is_collect = 0
         return result
 
 
