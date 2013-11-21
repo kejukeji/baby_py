@@ -5,19 +5,51 @@ from ..models import db
 from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
 from ..util.others import page_utils
+from ..models.feature_model import Collect
 
 
-def baby_list(page):
+def baby_list(page, doctor_id):
     """
         全部婴儿列表
     """
     baby_count = Baby.query.filter().count()
+    temp_page = page
     page, per_page = page_utils(baby_count, page)
+    baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
-        babys = Baby.query.filter()[per_page*(page-1):per_page*page]
+        babys = Baby.query.filter()[per_page*(temp_page-1):per_page*temp_page]
+        baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
+        if baby_collect_count > 1:
+            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
+            for baby in babys:
+                for baby_collect in baby_collects:
+                    if baby.id == baby_collect.type_id:
+                        baby.is_collect = '已收藏'
+                    else:
+                        baby.is_collect = '未收藏'
+        else:
+            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
+            for baby in babys:
+                if baby.id == baby_collect.type_id:
+                    baby.is_collect = '已收藏'
+                else:
+                    baby.is_collect = '未收藏'
         return babys
     else:
         baby = Baby.query.filter().first()
+        if baby_collect_count > 1:
+            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
+            for baby_collect in baby_collects:
+                if baby.id == baby_collect.type_id:
+                    baby.is_collect = '已收藏'
+                else:
+                    baby.is_collect = '未收藏'
+        else:
+            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
+            if baby.id == baby_collect.type_id:
+                baby.is_collect = '已收藏'
+            else:
+                baby.is_collect = '未收藏'
         return baby
 
 
@@ -29,17 +61,20 @@ def baby_collect_list(page, doctor_id):
     """
     result_count = db.query(Baby). \
         filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
+    temp_page = page
     page, per_page = page_utils(result_count, page)
     if result_count > 1:
         results = db.query(Baby).\
-            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(page-1):per_page*page]
+            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(temp_page-1):per_page*temp_page]
         for result in results:
             get_picture_by_id(result.id, result)
+            result.is_collect = '已收藏'
         return results
     else:
         result = db.query(Baby).\
             filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
         get_picture_by_id(result.id, result)
+        result.is_collect = '已收藏'
         return result
 
 

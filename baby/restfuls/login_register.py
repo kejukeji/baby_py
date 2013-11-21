@@ -74,8 +74,12 @@ class DoRegisterDoctor(restful.Resource):
                                   position, email, tel)
         if is_true:
             success['doctor_id'] = 1
+            success.pop('code')
+            success['is_code'] = 200
             return success
         else:
+            fail.pop('code')
+            fail['is_code'] = 500
             return fail
 
 

@@ -338,9 +338,13 @@ MZ.constant = {
 	'NEWPWD_EMPTY': '新密码不能为空',
 	'REPWD_EMPTY': '确认密码不能为空',
 	'PWD_EQUEL': '两次新密码不一致',
+    'REAL_NAME_EMPTY': '真实姓名不能为空',
+    'EMAIL_EMPTY' : '邮箱不能为空',
+    'TEL_EMPTY': '手机号不能为空',
 	// 'LOGIN_URL': 'json/login.json',
 	'LOGIN_URL': '/restful/html/do/login',
-	'FORGET_PWD': '/restful/html/alter/password'
+	'FORGET_PWD': '/restful/html/alter/password',
+    'REGISTER_URL': '/restful/html/do/register'
 }
 
 MZ.app = {
@@ -438,6 +442,96 @@ MZ.app = {
 					setTimeout(function() {
 						// 调用java方法
 						window.app.webviewPassword(json.is_code)
+						// where to go ?
+					}, 2000)
+				}
+			})
+
+		})
+
+	},
+    register: function() {
+		var user_name = $('#login_name')
+		var user_pass = $('#login_pass')
+        var confirm_pass = $('#confirm_pass')
+		var real_name = $('#real_name')
+        var province = $('#province')
+        var hospital = $('#hospital')
+        var department = $('#department')
+        var position = $('#position')
+        var email = $('#email')
+        var tel = $('#tel')
+		var registerBtn = $('#register-btn')
+
+		registerBtn.bind('click', function() {
+			var checkUserName = MZ.app.checkField(user_name)
+			var checkNewPwd = MZ.app.checkField(user_pass)
+			var checkConfirm = MZ.app.checkField(confirm_pass)
+            var checkRealName= MZ.app.checkField(real_name)
+            var checkEmail = MZ.app.checkField(email)
+            var checkTel = MZ.app.checkField(tel)
+			if (!checkUserName) {
+				window.Notification.simple(MZ.constant.OLDPWD_EMPTY, 2000)
+				return
+			}
+			if (!checkNewPwd) {
+				window.Notification.simple(MZ.constant.NEWPWD_EMPTY, 2000)
+				return
+			}
+			if (!checkConfirm) {
+				window.Notification.simple(MZ.constant.REPWD_EMPTY, 2000)
+				return
+			}
+            if (!checkRealName){
+                window.Notification.simple(MZ.constant.REAL_NAME_EMPTY, 2000)
+                return
+            }
+            if (!checkEmail){
+                window.Notification.simple(MZ.constant.EMAIL_EMPTY, 2000)
+                return
+            }
+            if (!checkTel){
+                window.Notification.simple(MZ.constant.TEL_EMPTY, 2000)
+                return
+            }
+			var userNameValue = $.trim(user_name.val())
+			var userPassValue = $.trim(user_pass.val())
+			var rePwdValue = $.trim(confirm_pass.val())
+            var realNameValue = $.trim(real_name.val())
+            var provinceValue = $.trim(province.val())
+            var hospitalValue = $.trim(hospital.val())
+            var departmentValue = $.trim(department.val())
+            var positionValue = $.trim(position.val())
+            var emailValue = $.trim(email.val())
+            var telValue = $.trim(tel.val())
+
+			if (userPassValue != rePwdValue) {
+				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
+				return
+			}
+			var params = {
+				'userName': userNameValue,
+				'userPass': userPassValue,
+                'realName': realNameValue,
+                'province': provinceValue,
+                'hospital': hospitalValue,
+                'department': departmentValue,
+                'position': positionValue,
+                'email': emailValue,
+                'tel': telValue
+			}
+			MZ.util.Request({
+				url: MZ.constant.REGISTER_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						// 调用java方法
+						window.app.webviewRegister(json.is_code)
 						// where to go ?
 					}, 2000)
 				}

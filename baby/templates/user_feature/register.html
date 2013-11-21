@@ -16,32 +16,32 @@
 				<li class="clearfix">
 					<label class="f-l">用户名：</label>
 					<div class="input-wrap f-r">
-						<input type="text" name="login_name"/>
+						<input type="text" name="login_name" id="login_name"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">密码：</label>
 					<div class="input-wrap f-r">
-						<input type="password" name="login_pass"/>
+						<input type="password" name="login_pass" id="login_pass"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">确认密码：</label>
 					<div class="input-wrap f-r">
-						<input type="password" />
+						<input type="password" id="confirm"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">真实姓名：</label>
 					<div class="input-wrap f-r">
-						<input type="text" name="real_name"/>
+						<input type="text" name="real_name" id="real_name"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">地区：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="region" id="" name="area">
+							<select name="region" id="" name="area" id="province">
 								{% if province_count > 1 %}
                                      {% for pro in province %}
                                         <option value="{{ pro.id }}">{{ pro.name }}</option>
@@ -56,7 +56,7 @@
 					<label class="f-l">所属医院：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="hospital" id="" name="hospital">
+							<select name="hospital" id="" name="hospital" id="belong-hospital">
                                 {% if hospital_count > 1 %}
                                      {% for h in hospital %}
                                         <option value="{{ h.id }}">{{ h.name }}</option>
@@ -71,7 +71,7 @@
 					<label class="f-l">所属科室：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="class" id="" name="class">
+							<select name="class" id="belong-department" name="class">
 								{% if department_count > 1 %}
                                      {% for d in department %}
                                         <option value="{{ d.id }}">{{ d.name }}</option>
@@ -86,7 +86,7 @@
 					<label class="f-l">职称：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="profile" id="" name="profile">
+							<select name="profile" id="position" name="profile">
 								{% if position_count > 1 %}
                                      {% for p in position %}
                                         <option value="{{ p.id }}">{{ p.name }}</option>
@@ -100,24 +100,28 @@
 				<li class="clearfix">
 					<label class="f-l">邮箱：</label>
 					<div class="input-wrap f-r">
-						<input type="email" name="email"/>
+						<input type="email" name="email" id="email"/>
 					</div>
 				</li>
 				<li class="clearfix">
 					<label class="f-l">手机号：</label>
 					<div class="input-wrap f-r">
-						<input type="number" name="number"/>
+						<input type="number" name="number" id="tel"/>
 					</div>
 				</li>
 				<li class="last-agree">
 					<input type="checkbox" id="register-agree"/>
-					<label for="register-agree">确认阅读并同意协议（</label><a href="#">阅读协议</a>）
 				</li>
 			</ul>
 			<div class="text-ct">
-				<a href="#" class="btn green-btn">注     册</a>
+				<a href="javascript:void(0)" class="btn green-btn" id="register-btn">注     册</a>
 			</div>
 		</form>
 	</section>
+    <script type="text/javascript" src="/static/js/user/zepto.min.js"></script>
+	<script type="text/javascript" src="/static/js/user/base.js"></script>
+	<script type="text/javascript">
+		MZ.app.register()
+	</script>
 </body>
 </html>

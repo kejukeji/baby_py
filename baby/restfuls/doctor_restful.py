@@ -24,14 +24,16 @@ class BabyList(restful.Resource):
         """
         parser = reqparse.RequestParser()
         parser.add_argument('page', type=str, required=True, help=u'分页page，传入当前页')
+        parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
 
         args = parser.parse_args()
         page = args['page']
+        doctor_id = args['doctor_id']
 
         resp_suc = success_dic().dic
         resp_fail = fail_dic().dic
         resp_suc['baby_list'] = []
-        baby = baby_list(page)
+        baby = baby_list(page, doctor_id)
         if baby:
             if type(baby) is list:
                 for bb in baby:
