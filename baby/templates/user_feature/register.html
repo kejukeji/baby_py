@@ -11,7 +11,7 @@
 </head>
 <body class="bg-gray">
 	<section class="huge-box">
-		<form action="/html/do/register/">
+		<form>
 			<ul class="form-list mt0">
 				<li class="clearfix">
 					<label class="f-l">用户名：</label>
@@ -41,7 +41,7 @@
 					<label class="f-l">地区：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="region" id="" name="area" id="province">
+							<select name="region" name="area" id="province">
 								{% if province_count > 1 %}
                                      {% for pro in province %}
                                         <option value="{{ pro.id }}">{{ pro.name }}</option>
@@ -56,7 +56,7 @@
 					<label class="f-l">所属医院：</label>
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
-							<select name="hospital" id="" name="hospital" id="belong-hospital">
+							<select name="hospital" name="hospital" id="belong-hospital">
                                 {% if hospital_count > 1 %}
                                      {% for h in hospital %}
                                         <option value="{{ h.id }}">{{ h.name }}</option>

@@ -453,11 +453,11 @@ MZ.app = {
     register: function() {
 		var user_name = $('#login_name')
 		var user_pass = $('#login_pass')
-        var confirm_pass = $('#confirm_pass')
+        var confirm_pass = $('#confirm')
 		var real_name = $('#real_name')
         var province = $('#province')
-        var hospital = $('#hospital')
-        var department = $('#department')
+        var hospital = $('#belong-hospital')
+        var department = $('#belong-department')
         var position = $('#position')
         var email = $('#email')
         var tel = $('#tel')
@@ -471,11 +471,11 @@ MZ.app = {
             var checkEmail = MZ.app.checkField(email)
             var checkTel = MZ.app.checkField(tel)
 			if (!checkUserName) {
-				window.Notification.simple(MZ.constant.OLDPWD_EMPTY, 2000)
+				window.Notification.simple(MZ.constant.USERNAME_EMPTY, 2000)
 				return
 			}
 			if (!checkNewPwd) {
-				window.Notification.simple(MZ.constant.NEWPWD_EMPTY, 2000)
+				window.Notification.simple(MZ.constant.PASSWORD_EMPTY, 2000)
 				return
 			}
 			if (!checkConfirm) {
@@ -510,12 +510,12 @@ MZ.app = {
 				return
 			}
 			var params = {
-				'userName': userNameValue,
-				'userPass': userPassValue,
-                'realName': realNameValue,
-                'province': provinceValue,
-                'hospital': hospitalValue,
-                'department': departmentValue,
+				'login_name': userNameValue,
+				'login_pass': userPassValue,
+                'real_name': realNameValue,
+                'province_id': provinceValue,
+                'belong_hospital': hospitalValue,
+                'belong_department': departmentValue,
                 'position': positionValue,
                 'email': emailValue,
                 'tel': telValue
