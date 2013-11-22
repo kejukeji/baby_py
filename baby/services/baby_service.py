@@ -47,9 +47,9 @@ def baby_list(page, doctor_id):
         else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
             if baby.id == baby_collect.type_id:
-                baby.is_collect = '已收藏'
+                baby.is_collect = 0
             else:
-                baby.is_collect = '未收藏'
+                baby.is_collect = 1
         return baby
 
 

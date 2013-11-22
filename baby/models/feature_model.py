@@ -50,6 +50,11 @@ class TypeOfMilk(Base):
     name = Column(String(50), nullable=True)
 
     def __init__(self, **kwargs):
+        self.brand = kwargs.pop('bran', None)
+        self.energy = kwargs.pop('energy', None)
+        self.protein = kwargs.pop('protein', None)
+        self.carbon_compound = kwargs.pop('carbon_compound', None)
+        self.axunge = kwargs.pop('axunge', None)
         self.type = kwargs.pop('type')
         self.name = kwargs.pop('name')
 

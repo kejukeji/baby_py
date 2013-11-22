@@ -9,6 +9,7 @@ from ..util.baby_doctor_commonality import format_baby, doctor_pickler, search_p
 from ..services.baby_service import baby_collect_list, baby_list, search_by_keyword_time
 from ..services.doctor_service import doctor_info, get_meeting_message
 from ..services.search_history_service import search_history_list, delete_all_search
+from ..services.academic_abstract_service import get_academic_abstract
 
 
 class BabyList(restful.Resource):
@@ -215,3 +216,25 @@ class AcademicAbstract(restful.Resource):
     """
        学术文摘
     """
+    @staticmethod
+    def get():
+        """
+        page: 分页
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('page', type=str, required=True, help=u'page 必须')
+
+        args = parser.parse_args()
+
+        page = args['page']
+
+        success = success_dic().dic
+        fail = fail_dic().dic
+        # 调用service中方法获取model数据
+        # 根据返回的boolean值来判断是否有数据
+        is_true = get_academic_abstract(page, success)
+
+        if is_true:
+            return success
+        else:
+            return fail
