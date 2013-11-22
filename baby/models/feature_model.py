@@ -32,11 +32,20 @@ class TypeOfMilk(Base):
     """
         配方奶种类
         id : 主键
+        brand: 品牌
+        energy: 能量
+        carbon_compound: 碳化合物
+        axunge: 脂肪
         type : 类型
         name : 配方奶名称
     """
     __tablename__ = TYPE_OF_MILK_TABLE
     id = Column(Integer, primary_key=True)
+    brand = Column(String(20), nullable=True)
+    energy = Column(String(20), nullable=True)
+    protein = Column(String(20), nullable=True)
+    carbon_compound = Column(String(20), nullable=True)
+    axunge = Column(String(20), nullable=True)
     type = Column(String(20), nullable=True)
     name = Column(String(50), nullable=True)
 

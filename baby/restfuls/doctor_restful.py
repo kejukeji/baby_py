@@ -211,3 +211,7 @@ class MeetingNotice(restful.Resource):
             return resp_fail
 
 
+class AcademicAbstract(restful.Resource):
+    """
+       学术文摘
+    """
