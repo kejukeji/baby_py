@@ -341,9 +341,11 @@ MZ.constant = {
     'REAL_NAME_EMPTY': '真实姓名不能为空',
     'EMAIL_EMPTY' : '邮箱不能为空',
     'TEL_EMPTY': '手机号不能为空',
+    'ACCOUNT_EXIST': '账号已存在',
+    'REGISTER_SUCCESS': '注册成功',
 	// 'LOGIN_URL': 'json/login.json',
 	'LOGIN_URL': '/restful/html/do/login',
-	'FORGET_PWD': '/restful/html/alter/password',
+	'FORGET_PWD': '/restful/html/forget/password',
     'REGISTER_URL': '/restful/html/do/register'
 }
 
@@ -531,10 +533,14 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.app.webviewRegister(json.is_code)
+						window.app.webviewRegister(json.code)
 						// where to go ?
 					}, 2000)
-				}
+                    window.Notification.simple(MZ.constant.REGISTER_SUCCESS, 2000)
+				}else{
+                    window.Notification.simple(MZ.constant.ACCOUNT_EXIST, 2000)
+                    return
+                }
 			})
 
 		})
