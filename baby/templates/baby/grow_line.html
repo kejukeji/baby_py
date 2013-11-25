@@ -7,6 +7,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>生长曲线</title>
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
+<script type="text/javascript">
+    window.weightObj = {
+        'xAxis': ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],  // 横坐标的范围（月份建议01...12）
+        'yStart': 0, // 这个数值是y轴最小值
+        'yEnd': 100, // 这个数值是y轴最大值,
+        'ySpace': 20, // y值刻度差范围
+        'data': [5, 8, 10, 18, 24, 36, 44, 60, 78, 83, 88, 96] // 数据（先试下一条线，如果ok，我这边开放多条线）
+    }
+</script>
 </head>
 <body>
     <section>

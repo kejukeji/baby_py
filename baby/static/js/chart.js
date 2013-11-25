@@ -1,21 +1,14 @@
 $(function() {
-
-	var w1 = [5, 8, 10, 18, 24, 36, 44, 60, 78, 83, 88, 96],
-		w2 = [8, 10, 13, 22, 28, 40, 48, 67, 82, 85, 90, 100],
-		t;
+	var w2 = weightObj.data;
+	var t;
 	var data = [{
-		name: 'SH',
-		value: w1,
-		color: '#0d8ecf',
-		line_width: 1
-	}, {
 		name: 'WHO',
 		value: w2,
-		color: '#6db284',
+		color: '#0d8ecf',
 		line_width: 1
 	}];
 
-	var labels = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+	var labels = weightObj.xAxis;
 
 	var chart = new iChart.LineBasic2D({
 		render: 'canvasDiv',
@@ -53,9 +46,9 @@ $(function() {
 			},
 			scale: [{
 				position: 'left',
-				start_scale: 0,
-				end_scale: 100,
-				scale_space: 20,
+				start_scale: weightObj.yStart,
+				end_scale: weightObj.yEnd.,
+				scale_space: weightObj.ySpace,
 				scale_size: 1,
 				scale_enable: false,
 				label: {
