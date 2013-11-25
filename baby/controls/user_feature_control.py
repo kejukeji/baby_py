@@ -71,3 +71,10 @@ def to_register():
 def standard():
     #entering_who()
     return render_template('index.html')
+
+
+def to_formula():
+    return render_template('user_feature/formula.html')
+
+def to_additional_follow_up():
+    return render_template('user_feature/add_follow-up.html')

@@ -3,8 +3,9 @@
 from flask.ext import restful
 from flask.ext.restful import reqparse
 from ..util.others import success_dic, fail_dic
-from ..services.baby_service import get_baby_info, get_parenting_guide
-from ..util.baby_doctor_commonality import format_baby, system_message_pickler
+from ..services.baby_service import get_baby_info, get_parenting_guide, update_baby
+from ..util.baby_doctor_commonality import system_message_pickler
+import werkzeug
 
 
 class BabyInfo(restful.Resource):
@@ -12,27 +13,61 @@ class BabyInfo(restful.Resource):
         婴儿个人资料
     """
     @staticmethod
-    def get():
+    def post():
         """
             参数:
                 baby_id：婴儿登录id
         """
         parser = reqparse.RequestParser()
         parser.add_argument('baby_id', type=str, required=True, help=u'婴儿baby_id必须。')
+        parser.add_argument('type', type=str, required=False)
+        parser.add_argument('patriarch_tel', type=str, required=False)
+        parser.add_argument('baby_name', type=str, required=False)
+        parser.add_argument('due_date', type=str, required=False)
+        parser.add_argument('born_weight', type=str, required=False)
+        parser.add_argument('born_height', type=str, required=False)
+        parser.add_argument('born_head', type=str, required=False)
+        parser.add_argument('childbirth_style_id', type=str, required=False)
+        parser.add_argument('complication_id', type=str, required=False)
+        parser.add_argument('apagar_score', type=str, required=False)
+        parser.add_argument('upload_image', type=werkzeug.datastructures.FileStorage, location='files')
+
+
 
         args = parser.parse_args()
 
         baby_id = args['baby_id']
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
+        type_way = args['type']
 
-        resp_suc['baby_list'] = []
-        baby = get_baby_info(baby_id)
-        if baby:
-            format_baby(baby, resp_suc)
-            return resp_suc
+        success = success_dic().dic
+        fail = fail_dic().dic
+        success['baby_list'] = []
+
+
+
+        if type_way:
+            patriarch_tel = args['patriarch_tel']
+            baby_name = args['baby_name']
+            due_date = args['due_date']
+            born_weight = args['born_weight']
+            born_height = args['born_height']
+            born_head = args['born_head']
+            childbirth_style_id = args['childbirth_style_id']
+            complication_id = args['complication_id']
+            apagar_score = args['apagar_score']
+            upload_image = args['upload_image']
+            is_ture = update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+                        complication_id, apagar_score, upload_image, success)
+            if is_ture:
+                return success
+            else:
+                return fail
         else:
-            return resp_fail
+            baby = get_baby_info(baby_id, success)
+            if baby:
+                return success
+            else:
+                return fail
 
 
 class ParentingGuide(restful.Resource):
