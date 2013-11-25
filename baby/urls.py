@@ -25,7 +25,7 @@ from baby.restfuls.feature_restful import AddFormula
 app.add_url_rule('/html/login.html', 'to_login', to_login, methods={ 'GET', 'POST'})
 app.add_url_rule('/html/password.html', 'to_update_password', to_update_password, methods={'GET', 'POST'})
 app.add_url_rule('/html/register.html', 'to_register', to_register, methods={'GET', 'POST'})
-app.add_url_rule('/html/grow_line.html', 'to_grow_line', to_grow_line, methods={ 'GET', 'POST'})
+app.add_url_rule('/html/grow_line.html/<int:id>', 'to_grow_line', to_grow_line, methods={ 'GET', 'POST'})
 app.add_url_rule('/html/raise.html', 'to_raise', to_raise, methods={'GET', 'POST'})
 app.add_url_rule('/html/meeting.html', 'to_meeting', to_meeting, methods={'GET', 'POST'})
 app.add_url_rule('/html/academic.html', 'to_academic', to_academic, methods={'GET', 'POST'})

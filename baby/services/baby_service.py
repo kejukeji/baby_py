@@ -219,3 +219,8 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
         return True
     else:
         return False
+
+
+def insert_baby(patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+                complication_id, apagar_score):
+    pass

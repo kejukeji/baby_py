@@ -142,8 +142,20 @@ def check_is_type(result, remember, return_success):
         return False
 
 
-def get_tracking():
-    pass
+def get_tracking(id):
+    """
+    获得随访记录
+    """
+    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    if tracking_count > 1:
+        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        return tracking_result
+    elif tracking_count == 1:
+        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        return tracking
+
+
+
 
 #def entering_who():
 #    """
