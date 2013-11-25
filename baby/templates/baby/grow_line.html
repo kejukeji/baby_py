@@ -1,13 +1,12 @@
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
 <meta name="format-detection" content="email=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>生长曲线</title>
-<link rel="stylesheet" href="/static/css/user/m.min.css" type="text/css">
+<link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
 </head>
 <body>
     <section>
@@ -26,37 +25,50 @@
     
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a href="#">体     重</a>
-                    <a class="current" href="#">身     长</a>
+                    <a class="current" href="#">体     重</a>
+                    <a href="#">身     长</a>
                     <a href="#">头     围</a>
                 </div>
                 <h3 class="chart-y">体              重</h3>
 
-                <div class="chart-stage">
-                    
+                <div class="chart-stage" id="linechart">
+                        <div id="canvasDiv"></div>
                 </div>
 
                 <h3 class="chart-x">月龄</h3>
-
             </div>
 
+            <ul class="select-block clearfix">
+                     <ul>
+                               <li>
+                                    <div class="iradio checked"><input type="radio" name="place" value="0" checked></div>  
+                                    <label for="y-in">WHO</label>
+                                </li>
+                                <li>
+                                    <div class="iradio"><input type="radio" name="place" value="1" checked></div>  
+                                    <label for="y-in">上海</label>
+                                </li>
+                     </ul>
+            </ul>
+
     </section>
-    <script type="text/javascript" src="/static/js/user/zepto.min.js"></script>
+    <script type="text/javascript" src="/static/js/zepto.min.js"></script>
     <script type="text/javascript" src="/static/js/extend/touch.js"></script>
     <script type="text/javascript" src="/static/js/extend/iscroll.js"></script>
     <script type="text/javascript" src="/static/js/extend/highlight.js"></script>
     <script type="text/javascript" src="/static/js/extend/parseTpl.js"></script>
     <script type="text/javascript" src="/static/js/core/gmu.js"></script>
     <script type="text/javascript" src="/static/js/core/event.js"></script>
-    <script type="text/javascript" src="/static/js/core/widget.js"></script>
+     <script type="text/javascript" src="/static/js/core/widget.js"></script>
     <script type="text/javascript" src="/static/js/widget/navigator/navigator.js"></script>
     <script type="text/javascript" src="/static/js/widget/navigator/scrolltonext.js"></script>
     <script type="text/javascript" src="/static/js/widget/navigator/$scrollable.js"></script>
-    <script type="text/javascript" src="/static/js/user/zepto.icheck.js"></script>
-    <script type="text/javascript" src="/static/js/user/base.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/chart.min.js"></script>
+    <script type="text/javascript" src="/static/js/chart.js"></script>
     <script type="text/javascript">
         MZ.app.slideNavigator()
-        // $('input').iCheck('check');
+        MZ.app.checkRadio('.iradio');
     </script>
 </body>
 </html>

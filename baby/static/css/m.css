@@ -99,7 +99,7 @@ input.fixAKeyboard:focus {
   float: right;
 }
 .icon-select {
-  background-image: url(/static/img/user/select-down.png);
+  background-image: url(img/select-down.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 90% auto;
@@ -330,7 +330,7 @@ input.fixAKeyboard:focus {
   float: left;
 }
 body {
-  background: url(/static/img/user/bg.png);
+  background: url(img/bg.png);
 }
 .form-list {
   margin-top: 30px;
@@ -345,6 +345,7 @@ body {
   text-align: right;
   font-size: 14px;
   color: #8a8a8a;
+  white-space: nowrap;
 }
 .form-list li .input-wrap {
   width: 72%;
@@ -359,6 +360,43 @@ body {
   font-size: 14px;
   box-shadow: 0px 0px 3px #CCC inset;
 }
+.form-list li .input-wrap .input-date {
+  border: none;
+  background: none;
+  outline: none;
+  vertical-align: top;
+  width: 97%;
+}
+.form-list li .input-wrap .iradio {
+  background: url(img/sprite.png) no-repeat -178px -22px;
+  width: 23px;
+  height: 22px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  left: 0;
+}
+.form-list li .input-wrap .iradio input {
+  visibility: hidden;
+}
+.form-list li .input-wrap .iradio.checked {
+  background-position: -178px 0;
+}
+.form-list li .input-wrap .radio-wrap ul {
+  overflow: hidden;
+}
+.form-list li .input-wrap .radio-wrap li {
+  position: relative;
+  padding-left: 30px;
+  line-height: 10px;
+  float: left;
+  width: 35.8%;
+}
+.form-list li .input-wrap .radio-wrap label {
+  width: auto;
+  padding-top: 11px;
+}
 .form-list li .input-wrap .select-wrap {
   background-color: #FFF;
   height: 28px;
@@ -366,7 +404,7 @@ body {
   border-radius: 3px;
   width: 90%;
   box-shadow: 0px 0px 3px #CCC inset;
-  background-image: url(/static/img/user/select-down.png);
+  background-image: url(img/select-down.png);
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 28px 28px;
@@ -382,6 +420,9 @@ body {
   padding: 0 0 0 5px;
   font-size: 14px;
   box-sizing: border-box;
+}
+.form-list li .input-wrap .select-wrap.nobg {
+  background: none;
 }
 .form-list li.last {
   margin-top: 20px;
@@ -408,6 +449,10 @@ body {
 .form-list li.last-agree a {
   color: #0db6e1;
 }
+.form-list li.line {
+  border: 1px solid #ccbf93;
+  margin: 20px;
+}
 .form-btns {
   margin-top: 20px;
 }
@@ -427,6 +472,9 @@ body {
   text-align: left;
   padding-left: 30px;
 }
+.form-btns .btn {
+  width: 90%;
+}
 .form-list.mt0 {
   margin-top: 0;
 }
@@ -440,6 +488,23 @@ body {
 .green-btn {
   background: -webkit-gradient(linear, 0 0, 0 63%, from(#66ca4b), to(#15b007));
   width: 85%;
+}
+.btn-wrap {
+  display: -webkit-box;
+}
+.green-btn2 {
+  display: inline-block;
+  padding: 0 5px;
+  margin-right: 5px;
+  -webkit-box-flex: 1;
+  text-shadow: 0 -1px 1px #807148;
+  background: -webkit-gradient(linear, 0 0, 0 63%, from(#cdbe97), to(#b4a166));
+  box-shadow: 0px 1px 0px #e1dbcf;
+  line-height: 36px;
+  height: 36px;
+  text-align: center;
+  color: #FFF;
+  border-radius: 3px;
 }
 .date-bar {
   margin: 20px auto;
@@ -534,6 +599,7 @@ body {
   color: #a58e49;
   font-size: 16px;
   font-weight: normal;
+  border-bottom: 1px solid #eee;
 }
 .chart-x {
   line-height: 44px;
@@ -544,9 +610,87 @@ body {
   font-size: 16px;
   font-weight: normal;
   border-radius: 0 0 3px 3px;
+  border-top: 1px solid #eee;
+}
+.select-block {
+  padding: 10px;
+  margin-top: 20px;
+  height: 40px;
+}
+.select-block label {
+  float: left;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 24px;
+  margin-right: 30px;
+}
+.iradio {
+  background: url(img/sprite.png) no-repeat -178px -22px;
+  display: block;
+  margin-right: 5px;
+  width: 23px;
+  height: 22px;
+  border: none;
+  float: left;
+  cursor: pointer;
+}
+.iradio input {
+  visibility: hidden;
+}
+.iradio.checked {
+  background-position: -178px 0;
 }
 .chart-stage {
   width: 100%;
   height: 300px;
   background: #0391d5;
+  overflow: hidden;
+}
+#canvasDiv {
+  width: 100%;
+}
+.ichartjs_btn {
+  padding: 2px 5px;
+  line-height: 25px;
+  color: #0b2946;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid #98adc1;
+  -webkit-box-shadow: 0px 0px 2px #375073;
+  -moz-box-shadow: 0px 0px 2px #375073;
+  box-shadow: 0px 0px 2px #375073;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 1px;
+}
+.ichartjs_author {
+  position: absolute;
+  font-size: 12px;
+  right: 20px;
+  top: 0px;
+}
+.ichartjs_author a {
+  color: #113659;
+}
+.ichartjs_info {
+  position: relative;
+  margin: 10px;
+  padding: 5px;
+  color: #1b4267;
+}
+.ichartjs_sm {
+  margin: 10px 0px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ichartjs_details {
+  padding: 0px;
+  text-indent: 2em;
+  font-size: 12px;
+  line-height: 20px;
+}
+#ichartjs_code {
+  display: none;
 }

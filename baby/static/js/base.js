@@ -150,7 +150,7 @@ MZ.namespace('app');
 	function ModePop(options) {
 		this._options = $.extend({
 			mode: 'msg',
-			text: '登陆成功',
+			text: '网页提示',
 		}, options || {});
 		this._init();
 	}
@@ -341,7 +341,6 @@ MZ.constant = {
 	'REAL_NAME_EMPTY': '真实姓名不能为空',
 	'EMAIL_EMPTY': '邮箱不能为空',
 	'TEL_EMPTY': '手机号不能为空',
-	// 'LOGIN_URL': 'json/login.json',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/alter/password',
 	'REGISTER_URL': '/restful/html/do/register'
@@ -389,7 +388,7 @@ MZ.app = {
 					setTimeout(function() {
 						var doctorList = json.doctor_list
 						// 调用java方法
-						window.app.webviewLogin(json.doctor_list.user_id, json.doctor_list.is_remember)
+						window.webviewLogin(doctorList[0].id)
 					}, 2000)
 				}
 			})
@@ -441,7 +440,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.app.webviewPassword(json.is_code)
+						// window.webviewPassword(json.userId)
 						// where to go ?
 					}, 2000)
 				}
@@ -536,9 +535,7 @@ MZ.app = {
 					}, 2000)
 				}
 			})
-
 		})
-
 	},
 	slideNavigator: function() {
 		var bar = $('#L-nav span.bar')
@@ -564,6 +561,146 @@ MZ.app = {
 
 		arrowRightElem.on('click', function() {
 			navElem.iScroll('scrollTo', 100, 0, 400, true)
+		})
+	},
+	checkRadio: function(ele) {
+		var radio = $(ele);
+		radio.on('click', function() {
+			$(this).addClass('checked').find('input[type="radio"]').attr('checked', 'checked');
+			$(this).parent().siblings('li').find('.iradio').removeClass('checked').find('input[type="radio"]')
+				.attr('checked', null);
+		});
+	},
+	formulaSubmit: function(ele) {
+		var subBtn = $(ele).find('.submit');
+		var kind = $(ele).find('#l-kind');
+		var energy = $(ele).find('#l-energy');
+		var protein = $(ele).find('#l-protein');
+		var carbohydrates = $(ele).find('#l-carbohydrates');
+		var fat = $(ele).find('#l-fat');
+
+		subBtn.bind('click', function() {
+			var location = $(ele).find('input[type="radio"][name="location"]:checked').val();
+			var brand = $(ele).find('input[type="radio"][name="brand"]:checked').val();
+			var checkKind = MZ.app.checkField(kind)
+			var checkEnergy = MZ.app.checkField(energy)
+			var checkProtein = MZ.app.checkField(protein)
+			var checkTshhw = MZ.app.checkField(carbohydrates)
+			var checkFat = MZ.app.checkField(fat)
+			if (!checkKind) {
+				window.Notification.simple(MZ.constant.KIND_EMPTY, 2000)
+				return
+			}
+			if (!checkEnergy) {
+				window.Notification.simple(MZ.constant.ENERGY_EMPTY, 2000)
+				return
+			}
+			if (!checkProtein) {
+				window.Notification.simple(MZ.constant.PROTEIN_EMPTY, 2000)
+				return
+			}
+			if (!checkTshhw) {
+				window.Notification.simple(MZ.constant.TSHHEW_EMPTY, 2000)
+				return
+			}
+			if (!checkFat) {
+				window.Notification.simple(MZ.constant.FAT_EMPTY, 2000)
+				return
+			}
+			var params = {
+				'location': location,
+				'brand': brand,
+				'kind': $.trim(kind.val()),
+				'energy': $.trim(energy.val()),
+				'protein': $.trim(protein.val()),
+				'carbohydrates': $.trim(carbohydrates.val()),
+				'fat': $.trim(fat.val())
+			}
+			MZ.util.Request({
+				url: MZ.constant.MILK_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						// 调用java方法
+						// window.webviewPassword(json.userId)
+						// where to go ?
+					}, 2000)
+				}
+			})
+		})
+	},
+
+	addVisitSubmit: function(ele) {
+		var subBtn = $(ele).find('.submit');
+		var cdate = $(ele).find('#l-checkdate');
+		var weight = $(ele).find('#l-weight');
+		var height = $(ele).find('#l-height');
+		var head = $(ele).find('#l-head');
+		var feeding = $(ele).find('#l-breastfeeding');
+
+		subBtn.bind('click', function() {
+			var location = $(ele).find('#l-location').val();
+			var brand = $(ele).find('#l-brand').val();
+			var kind = $(ele).find('#l-kind').val();
+			var nutrition = $(ele).find('#l-nutrition').val();
+			var checkDate = MZ.app.checkField(cdate);
+			var checkWeight = MZ.app.checkField(weight);
+			var checkHeight = MZ.app.checkField(height);
+			var checkHead = MZ.app.checkField(head);
+			var checkFeeding = MZ.app.checkField(feeding);
+
+			if (!checkDate) {
+				window.Notification.simple(MZ.constant.DATE_EMPTY, 2000)
+				return
+			}
+			if (!checkWeight) {
+				window.Notification.simple(MZ.constant.WEIGHT_EMPTY, 2000)
+				return
+			}
+			if (!checkHeight) {
+				window.Notification.simple(MZ.constant.HEIGHT_EMPTY, 2000)
+				return
+			}
+			if (!checkHead) {
+				window.Notification.simple(MZ.constant.HEAD_EMPTY, 2000)
+				return
+			}
+			if (!checkFeeding) {
+				window.Notification.simple(MZ.constant.FEEDING_EMPTY, 2000)
+				return
+			}
+			var params = {
+				'date': cdate.val(),
+				'weight': $.trim(weight.val()),
+				'height': $.trim(height.val()),
+				'head': $.trim(head.val()),
+				'feeding': $.trim(feeding.val()),
+				'nutrition': nutrition,
+				'location': location,
+				'brand': brand,
+				'kind': kind
+			};
+			MZ.util.Request({
+				url: MZ.constant.ADD_VISIT_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						// 调用java方法
+						// window.webviewPassword(json.userId)
+						// where to go ?
+					}, 2000)
+				}
+			})
 		})
 	}
 }
