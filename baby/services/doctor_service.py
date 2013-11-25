@@ -76,8 +76,8 @@ def update_doctor(doctor_id, real_name, province_id, belong_hospital_id, belong_
                 os.remove(old_picture)
             except:
                 pass
-        db.commit()
         doctor_pickler(doctor, success)
+        db.commit()
         return True
     else:
         return False
