@@ -11,6 +11,8 @@ ACADEMIC_ABSTRACT_TABLE = 'academic_abstract'
 COLLECT_TABLE = 'collect'
 TYPE_OF_MILK_TABLE = 'type_of_milk'
 SEARCH_HISTORY = 'search_history'
+COURT = 'court'
+BRAND = 'brand'
 
 
 class SystemMessage(Base):
@@ -28,21 +30,65 @@ class SystemMessage(Base):
     type = Column(String(20), nullable=False)
 
 
+class Court(Base):
+    """
+    院内/外
+       id: 主键
+       type： 是院内，还是院外
+    """
+    __tablename__ = COURT
+    id = Column(Integer, primary_key=True)
+    type = Column(String(20), nullable=False)
+
+
+class Brand(Base):
+    """
+       品牌
+          id : 主键
+          name： 品牌名
+          court_id： 属于院内还是院外
+    """
+    __tablename__ = BRAND
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    court_id = Column(Integer, ForeignKey(Court.id, ondelete='cascade', onupdate='cascade'),
+                             nullable=False)
+
+
 class TypeOfMilk(Base):
     """
         配方奶种类
         id : 主键
+        brand: 品牌
+        energy: 能量
+        protein: 蛋白质
+        carbon_compound: 碳化合物
+        axunge: 脂肪
         type : 类型
         name : 配方奶名称
     """
     __tablename__ = TYPE_OF_MILK_TABLE
     id = Column(Integer, primary_key=True)
+    court_id = Column(Integer, ForeignKey(Court.id, ondelete='cascade', onupdate='cascade'),
+                             nullable=False)
+    brand_id = Column(Integer, ForeignKey(Brand.id, ondelete='cascade', onupdate='cascade'),
+                             nullable=False)
+    energy = Column(String(20), nullable=True)
+    protein = Column(String(20), nullable=True)
+    carbon_compound = Column(String(20), nullable=True)
+    axunge = Column(String(20), nullable=True)
     type = Column(String(20), nullable=True)
     name = Column(String(50), nullable=True)
 
     def __init__(self, **kwargs):
+        self.court_id = kwargs.pop('court_id', None)
+        self.brand_id = kwargs.pop('bran_id', None)
+        self.energy = kwargs.pop('energy', None)
+        self.protein = kwargs.pop('protein', None)
+        self.carbon_compound = kwargs.pop('carbon_compound', None)
+        self.axunge = kwargs.pop('axunge', None)
         self.type = kwargs.pop('type')
-        self.name = kwargs.pop('name')
+        self.name = kwargs.pop('name', None)
 
 
 class Tracking(Base):
@@ -66,9 +112,13 @@ class Tracking(Base):
     height = Column(Float(2), nullable=True)
     head_wai = Column(Float(2), nullable=True)
     breast_milk_amount = Column(Float(2), nullable=True)
+    court_id = Column(Integer, ForeignKey(Court.id, ondelete='cascade', onupdate='cascade'),
+                             nullable=False)
+    brand_id = Column(Integer, ForeignKey(Brand.id, ondelete='cascade', onupdate='cascade'),
+                             nullable=False)
     type_of_milk_id = Column(Integer, ForeignKey(TypeOfMilk.id, ondelete='cascade', onupdate='cascade'),
                              nullable=False)
-    formula_feed_measure = Column(Float(2), nullable=True)
+    formula_feed_measure = Column(String(20), nullable=True)
 
     def __init__(self, **kwargs):
         self.baby_id = kwargs.pop('baby_id')
@@ -76,6 +126,8 @@ class Tracking(Base):
         self.weight = kwargs.pop('weight')
         self.height = kwargs.pop('height')
         self.head_wai = kwargs.pop('head_wai')
+        self.court_id = kwargs.pop('court_id')
+        self.brand_id = kwargs.pop('brand_id')
         self.breast_milk_amount = kwargs.pop('breast_milk_amount')
         self.type_of_milk_id = kwargs.pop('type_of_milk_id')
         self.formula_feed_measure = kwargs.pop('formula_feed_measure')

@@ -338,6 +338,9 @@ MZ.constant = {
 	'NEWPWD_EMPTY': '新密码不能为空',
 	'REPWD_EMPTY': '确认密码不能为空',
 	'PWD_EQUEL': '两次新密码不一致',
+	'ACCOUNT_EXIST': '账号已存在',
+	'REGISTER_SUCCESS': '注册成功',
+	'ACCOUNT_PASSWORD_ERROR': '用户名或密码错误',
 	'REAL_NAME_EMPTY': '真实姓名不能为空',
 	'EMAIL_EMPTY': '邮箱不能为空',
 	'TEL_EMPTY': '手机号不能为空',
@@ -390,6 +393,9 @@ MZ.app = {
 						// 调用java方法
 						window.webviewLogin(doctorList[0].id)
 					}, 2000)
+				} else {
+					window.Notification.simple(MZ.constant.ACCOUNT_PASSWORD_ERROR, 2000)
+					return
 				}
 			})
 
@@ -530,9 +536,13 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.app.webviewRegister(json.is_code)
+						window.app.webviewRegister(json.code)
 						// where to go ?
 					}, 2000)
+					window.Notification.simple(MZ.constant.REGISTER_SUCCESS, 2000)
+				} else {
+					window.Notification.simple(MZ.constant.ACCOUNT_EXIST, 2000)
+					return
 				}
 			})
 		})

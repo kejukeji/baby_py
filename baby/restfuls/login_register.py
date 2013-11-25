@@ -74,12 +74,8 @@ class DoRegisterDoctor(restful.Resource):
                                   position, email, tel)
         if is_true:
             success['doctor_id'] = 1
-            success.pop('code')
-            success['is_code'] = 200
             return success
         else:
-            fail.pop('code')
-            fail['is_code'] = 500
             return fail
 
 
@@ -129,10 +125,6 @@ class AlterPassword(restful.Resource):
 
         is_true = by_id_alter_password(user_id, old_password, new_password)
         if is_true:
-            return_success.pop('code')
-            return_success['is_code'] = 200
             return return_success
         else:
-            return_fail.pop('code')
-            return_fail['is_code'] = 500
             return return_fail
