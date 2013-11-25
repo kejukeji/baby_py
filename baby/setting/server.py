@@ -17,5 +17,5 @@ SQLALCHEMY_ECHO = False  # 是否显示SQL语句
 # ===============================================================
 # 用户头像
 HEAD_PICTURE_UPLOAD_FOLDER = '/static/img/system/head_picture'  # 运行目录的相对目录，URL获取图片的路径
-HEAD_PICTURE_BASE_PATH = '/www/baby_py/baby'
+HEAD_PICTURE_BASE_PATH = '/var/www/baby_py/baby'
 HEAD_PICTURE_ALLOWED_EXTENSION = ('png', 'jpg', 'jpeg', 'gif')  # 允许的拓展名

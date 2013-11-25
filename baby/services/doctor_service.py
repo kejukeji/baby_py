@@ -4,7 +4,7 @@ from ..models.hospital_model import Doctor, Province, Hospital, Department, Posi
 from ..models.feature_model import SystemMessage
 from baby import db
 from baby.util.ex_file import *
-from baby.setting.xq import *
+from baby.setting.server import *
 from werkzeug import secure_filename
 from baby.util.others import flatten
 import os

@@ -7,7 +7,7 @@ from ..util.seesion_query import *
 from ..util.others import page_utils, flatten, time_diff
 from ..models.feature_model import Collect
 from werkzeug import secure_filename
-from baby.setting.xq import *
+from baby.setting.server import *
 from baby.util.ex_file import *
 import os
 
