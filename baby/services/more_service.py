@@ -3,6 +3,7 @@
 from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
 from baby.util.others import set_session_user, time_diff, flatten
+from baby.models.feature_model import Tracking
 from baby.models.database import db
 
 
@@ -139,6 +140,22 @@ def check_is_type(result, remember, return_success):
             return False
     else:
         return False
+
+
+def get_tracking(id):
+    """
+    获得随访记录
+    """
+    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    if tracking_count > 1:
+        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        return tracking_result
+    elif tracking_count == 1:
+        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        return tracking
+
+
+
 
 #def entering_who():
 #    """

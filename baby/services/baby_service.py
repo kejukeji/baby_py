@@ -205,8 +205,8 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
             if not allowed_file_extension(upload_image.stream.filename, HEAD_PICTURE_ALLOWED_EXTENSION):
                 return False
             baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
-            old_picture = str(baby_picture.rel_path) + '/' + str(baby_picture.picture_name)
             base_path = HEAD_PICTURE_BASE_PATH
+            old_picture = base_path + str(baby_picture.rel_path) + '/' + str(baby_picture.picture_name)
             baby_picture.rel_path = HEAD_PICTURE_UPLOAD_FOLDER
             baby_picture.picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
             upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', baby_picture.picture_name))
@@ -219,3 +219,8 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
         return True
     else:
         return False
+
+
+def insert_baby(patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+                complication_id, apagar_score):
+    pass

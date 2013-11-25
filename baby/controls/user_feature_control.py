@@ -74,7 +74,7 @@ def standard():
 
 
 def to_formula():
-    return render_template('user_feature/formula.html')
+    return render_template('doctor/formula_milk.html')
 
 def to_additional_follow_up():
-    return render_template('user_feature/add_follow-up.html')
+    return render_template('doctor/add_visit_record.html')

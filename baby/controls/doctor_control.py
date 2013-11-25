@@ -7,4 +7,8 @@ def to_meeting():
 
 
 def to_academic():
-    return render_template('doctor/academic.html')
+    return render_template('doctor/add_visit_record.html')
+
+
+def to_formula_milk():
+    return render_template('doctor/formula_milk.html')
