@@ -150,7 +150,7 @@ MZ.namespace('app');
 	function ModePop(options) {
 		this._options = $.extend({
 			mode: 'msg',
-			text: '网页提示',
+			text: '登陆成功',
 		}, options || {});
 		this._init();
 	}
@@ -391,7 +391,7 @@ MZ.app = {
 					setTimeout(function() {
 						var doctorList = json.doctor_list
 						// 调用java方法
-						window.webviewLogin(doctorList[0].id)
+						window.app.webviewLogin(doctorList[0].id)
 					}, 2000)
 				} else {
 					window.Notification.simple(MZ.constant.ACCOUNT_PASSWORD_ERROR, 2000)
