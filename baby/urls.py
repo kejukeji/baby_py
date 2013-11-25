@@ -9,6 +9,7 @@ from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegi
 from baby.controls.user_feature_control import to_login, to_update_password, to_register
 from baby.controls.baby_control import to_grow_line, to_raise
 from baby.controls.doctor_control import to_meeting, to_academic
+from baby.restfuls.feature_restful import AddFormula
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -22,8 +23,8 @@ from baby.controls.doctor_control import to_meeting, to_academic
 # admin.add_view(Yu_Picture_File(yu_picture_path, 'baby/static/system/baby_picture/', name='YuImage', category=u'Yu'))
 
 # html页面访问路劲
-app.add_url_rule('/html/login.html/', 'to_login', to_login, methods={ 'GET', 'POST'})
-app.add_url_rule('/html/password.html/', 'to_update_password', to_update_password, methods={'GET', 'POST'})
+app.add_url_rule('/html/login.html', 'to_login', to_login, methods={ 'GET', 'POST'})
+app.add_url_rule('/html/password.html', 'to_update_password', to_update_password, methods={'GET', 'POST'})
 app.add_url_rule('/html/register.html', 'to_register', to_register, methods={'GET', 'POST'})
 app.add_url_rule('/html/grow_line.html', 'to_grow_line', to_grow_line, methods={ 'GET', 'POST'})
 app.add_url_rule('/html/raise.html', 'to_raise', to_raise, methods={'GET', 'POST'})
@@ -47,3 +48,4 @@ api.add_resource(RegisterData, '/restful/html/register/data')
 api.add_resource(AlterPassword, '/restful/html/forget/password')
 api.add_resource(DoRegisterDoctor, '/restful/html/do/register')
 api.add_resource(AcademicAbstract, '/restful/html/academic')
+api.add_resource(AddFormula, '/restful/html/add/formula')

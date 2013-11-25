@@ -343,6 +343,7 @@ MZ.constant = {
     'TEL_EMPTY': '手机号不能为空',
     'ACCOUNT_EXIST': '账号已存在',
     'REGISTER_SUCCESS': '注册成功',
+    'ACCOUNT_PASSWORD_ERROR': '用户名或密码错误',
 	// 'LOGIN_URL': 'json/login.json',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/forget/password',
@@ -393,7 +394,10 @@ MZ.app = {
 						// 调用java方法
 						window.app.webviewLogin(json.doctor_list.user_id, json.doctor_list.is_remember)
 					}, 2000)
-				}
+				}else {
+                    window.Notification.simple(MZ.constant.ACCOUNT_PASSWORD_ERROR, 2000)
+                    return
+                }
 			})
 
 		})
