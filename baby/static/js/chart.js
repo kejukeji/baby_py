@@ -47,7 +47,7 @@ $(function() {
 			scale: [{
 				position: 'left',
 				start_scale: weightObj.yStart,
-				end_scale: weightObj.yEnd.,
+				end_scale: weightObj.yEnd,
 				scale_space: weightObj.ySpace,
 				scale_size: 1,
 				scale_enable: false,
