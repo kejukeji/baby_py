@@ -385,7 +385,7 @@ MZ.app = {
 			}, function(json) {
 				var code = json.code
 				Notification.pop({
-					'text': json.msg
+					'text': json.message
 				}).flash(2000)
 				if (code === 200) {
 					setTimeout(function() {
