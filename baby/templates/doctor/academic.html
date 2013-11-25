@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试上传图片</title>
+</head>
+<body>
+<form action="/restful/doctor/info" method="post" enctype="multipart/form-data">
+    <input type="hidden" value="update" name="type">
+    <input type="hidden" value="1" name="doctor_id">
+    <input type="file" name="upload_image">
+    <input type="submit">
+</form>
+</body>
+</html>

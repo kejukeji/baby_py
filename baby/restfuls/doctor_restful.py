@@ -4,12 +4,13 @@ from flask.ext import restful
 from flask.ext.restful import reqparse
 
 from baby.util.others import success_dic, fail_dic
-from ..util.baby_doctor_commonality import format_baby, doctor_pickler, search_pickler, system_message_pickler
+from ..util.baby_doctor_commonality import format_baby, search_pickler, system_message_pickler
 
 from ..services.baby_service import baby_collect_list, baby_list, search_by_keyword_time
-from ..services.doctor_service import doctor_info, get_meeting_message
+from ..services.doctor_service import doctor_info, get_meeting_message, update_doctor, doctor_pickler
 from ..services.search_history_service import search_history_list, delete_all_search
 from ..services.academic_abstract_service import get_academic_abstract
+import werkzeug
 
 
 class BabyList(restful.Resource):
@@ -32,7 +33,7 @@ class BabyList(restful.Resource):
         doctor_id = args['doctor_id']
 
         resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
+        fail = fail_dic().dic
         resp_suc['baby_list'] = []
         baby = baby_list(page, doctor_id)
         if baby:
@@ -43,7 +44,7 @@ class BabyList(restful.Resource):
                 format_baby(baby, resp_suc)
             return resp_suc
         else:
-            return resp_fail
+            return fail
 
 
 class BabyCollect(restful.Resource):
@@ -64,7 +65,7 @@ class BabyCollect(restful.Resource):
         doctor_id = args['doctor_id']
         page = args['page']
         resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
+        fail = fail_dic().dic
         resp_suc['baby_list'] = []
         baby_collect = baby_collect_list(page, doctor_id)
         if baby_collect:
@@ -75,7 +76,7 @@ class BabyCollect(restful.Resource):
                 format_baby(baby_collect, resp_suc)
             return resp_suc
         else:
-            return resp_fail
+            return fail
 
 
 class DoctorInfo(restful.Resource):
@@ -83,27 +84,53 @@ class DoctorInfo(restful.Resource):
         医生我的个人资料
     """
     @staticmethod
-    def get():
+    def post():
         """
             参数：
                 doctor_id: 医生登录id
         """
         parser = reqparse.RequestParser()
         parser.add_argument('doctor_id', type=str, required=True, help=u'医生登录doctor_id必须。')
+        parser.add_argument('type', type=str, required=False)
+        parser.add_argument('real_name', type=str, required=False)
+        parser.add_argument('province', type=str, required=False)
+        parser.add_argument('belong_hospital', type=str, required=False)
+        parser.add_argument('belong_department', type=str, required=False)
+        parser.add_argument('position', type=str, required=False)
+        parser.add_argument('email', type=str, required=False)
+        parser.add_argument('tel', type=str, required=False)
+        parser.add_argument('upload_image', type=werkzeug.datastructures.FileStorage, location='files')
 
         args = parser.parse_args()
 
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
-        resp_suc['doctor_list'] = []
+        success = success_dic().dic
+        fail = fail_dic().dic
+        success['doctor_list'] = []
 
         doctor_id = args['doctor_id']
-        doctor = doctor_info(doctor_id)
-        if doctor:
-            doctor_pickler(doctor, resp_suc)
-            return resp_suc
+        type_way = args['type']
+        if type_way:
+            real_name = args['real_name']
+            province_id = args['province']
+            belong_hospital = args['belong_hospital']
+            belong_department = args['belong_department']
+            position = args['position']
+            email = args['email']
+            tel = args['tel']
+            upload_image = args['upload_image']
+            is_ture = update_doctor(doctor_id, real_name, province_id, belong_hospital, belong_department, position,
+                                    email, tel, upload_image, success)
+            if is_ture:
+                return success
+            else:
+                return fail
         else:
-            return resp_fail
+            doctor = doctor_info(doctor_id)
+            if doctor:
+                doctor_pickler(doctor, success)
+                return success
+            else:
+                return fail
 
 
 class Search(restful.Resource):
@@ -123,18 +150,18 @@ class Search(restful.Resource):
 
         args = parser.parse_args()
 
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
-        resp_suc['baby_list'] = []
+        success = success_dic().dic
+        fail = fail_dic().dic
+        success['baby_list'] = []
 
         keyword = args['keyword']
         birthday_time = args['birthday_time']
         baby = search_by_keyword_time(keyword, birthday_time)
         if baby:
-            format_baby(baby, resp_suc)
-            return resp_suc
+            format_baby(baby, success)
+            return success
         else:
-            return resp_fail
+            return fail
 
 
 class Search_View(restful.Resource):
@@ -146,20 +173,20 @@ class Search_View(restful.Resource):
         """
 
         """
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
-        resp_suc['search_history_list'] = []
+        success = success_dic().dic
+        fail = fail_dic().dic
+        success['search_history_list'] = []
 
         search_history = search_history_list()
         if search_history:
             if type(search_history) is list:
                 for search in search_history:
-                    search_pickler(search, resp_suc)
+                    search_pickler(search, success)
             else:
-                search_pickler(search_history, resp_suc)
-            return resp_suc
+                search_pickler(search_history, success)
+            return success
         else:
-            return resp_fail
+            return fail
 
 
 class DeleteSearchHistoryAll(restful.Resource):
@@ -171,13 +198,13 @@ class DeleteSearchHistoryAll(restful.Resource):
         """
 
         """
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
+        success = success_dic().dic
+        fail = fail_dic().dic
         result = delete_all_search()
         if result == 0:
-            return resp_suc
+            return success
         else:
-            return resp_fail
+            return fail
 
 
 class MeetingNotice(restful.Resource):
@@ -196,20 +223,20 @@ class MeetingNotice(restful.Resource):
         args = parser.parse_args()
 
         id = args['id']
-        resp_suc = success_dic().dic
-        resp_fail = fail_dic().dic
-        resp_suc['system_message_list'] = []
+        success = success_dic().dic
+        fail = fail_dic().dic
+        success['system_message_list'] = []
 
         system_message = get_meeting_message(id)
         if system_message:
             if type(system_message) is list:
                 for system in system_message:
-                    system_message_pickler(system, resp_suc)
+                    system_message_pickler(system, success)
             else:
-                system_message_pickler(system_message, resp_suc)
-            return resp_suc
+                system_message_pickler(system_message, success)
+            return success
         else:
-            return resp_fail
+            return fail
 
 
 class AcademicAbstract(restful.Resource):

@@ -2,8 +2,7 @@
 
 from baby import app
 from flask.ext import restful
-from restfuls.doctor_restful import BabyList, BabyCollect, DoctorInfo, Search,\
-    Search_View, DeleteSearchHistoryAll, MeetingNotice, AcademicAbstract
+from restfuls.doctor_restful import *
 from restfuls.baby_restful import BabyInfo, ParentingGuide
 from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegisterDoctor
 from baby.controls.user_feature_control import to_login, to_update_password, to_register
