@@ -1,11 +1,52 @@
 # coding: UTF-8
 
-from ..models.baby_model import Baby, BabyPicture
+from ..models.baby_model import Baby, BabyPicture, ChildbirthStyle, Complication
 from ..models import db
 from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
-from ..util.others import page_utils
+from ..util.others import page_utils, flatten, time_diff
 from ..models.feature_model import Collect
+from werkzeug import secure_filename
+from baby.setting.xq import *
+from baby.util.ex_file import *
+import os
+
+
+def format_baby(baby, resp_suc):
+    """
+        格式化baby对象
+    """
+    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
+    childbirth_style = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.complication_id).first()
+    complication_id_list = baby.complication_id.split(',')
+    baby_pic = flatten(baby)
+    get_complication(complication_id_list, baby_pic)
+    if baby.born_birthday:
+        baby_birthday = baby.born_birthday
+        baby_pic['time'] = time_diff(baby_birthday)
+    if baby_picture:
+        if baby_picture.rel_path and baby_picture.picture_name:
+            baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
+    if childbirth_style:
+        baby_pic['childbirth'] = childbirth_style.name
+    resp_suc['baby_list'].append(baby_pic)
+
+
+def get_complication(complication_list, baby_pic):
+    """
+       根据baby.complication_id
+       得到合并症
+    """
+    complication_count = Complication.query.filter(Complication.id.in_(complication_list)).count()
+    if complication_count > 1:
+        complications = Complication.query.filter(Complication.id.in_(complication_list)).all()
+        baby_pic['complication'] = ''
+        for complication in complications:
+            baby_pic['complication'] = baby_pic['complication'] + ',' + complication.name
+    else:
+        complication = Complication.query.filter(Complication.id.in_(complication_list)).first()
+        if complication:
+            baby_pic['complication'] = complication.name
 
 
 def baby_list(page, doctor_id):
@@ -111,13 +152,13 @@ def get_picture_by_id(baby_id, baby):
         baby.picture_path = baby_picture.rel_path + '/' + baby_picture.picture_name
 
 
-def get_baby_info(baby_id):
+def get_baby_info(baby_id, success):
     """
         得到婴儿信息
             baby_id：婴儿登录id
     """
     baby = Baby.query.filter(Baby.id == baby_id).first()
-    get_picture_by_id(baby_id, baby)
+    format_baby(baby, success)
     return baby
 
 
@@ -135,3 +176,46 @@ def get_parenting_guide(baby_id):
         else:
             system_message = SystemMessage.query.filter(SystemMessage.type == 'guide').first()
             return system_message
+
+
+def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+                complication_id, apagar_score, upload_image, success):
+    '''修改婴儿资料'''
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    if baby:
+        if patriarch_tel:
+            baby.patriarch_tel = patriarch_tel
+        if baby_name:
+            baby.baby_name = baby_name
+        if due_date:
+            baby.due_date = due_date
+        if born_weight:
+            baby.born_weight = born_weight
+        if born_height:
+            baby.born_height = born_height
+        if born_head:
+            baby.born_head = born_head
+        if childbirth_style_id:
+            baby.childbirth_style_id = childbirth_style_id
+        if complication_id:
+            baby.complication_id = complication_id
+        if apagar_score:
+            baby.apgar_score = apagar_score
+        if upload_image:
+            if not allowed_file_extension(upload_image.stream.filename, HEAD_PICTURE_ALLOWED_EXTENSION):
+                return False
+            baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
+            old_picture = str(baby_picture.rel_path) + '/' + str(baby_picture.picture_name)
+            base_path = HEAD_PICTURE_BASE_PATH
+            baby_picture.rel_path = HEAD_PICTURE_UPLOAD_FOLDER
+            baby_picture.picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
+            upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', baby_picture.picture_name))
+            try:
+                os.remove(old_picture)
+            except:
+                pass
+        format_baby(baby, success)
+        db.commit()
+        return True
+    else:
+        return False

@@ -7,6 +7,32 @@ from baby.util.ex_time import todayfstr
 
 BABY_TABLE = 'baby'
 BABY_PICTURE = 'baby_picture'
+COMPLICATIONS = 'complication'
+CHILDBIRTH_STYLES = 'childbirth_style'
+
+
+class Complication(Base):
+    """
+    合并症
+    id：主键
+    name：合并症名
+    parent_id: 所属那种
+    """
+    __tablename__ = COMPLICATIONS
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    parent_id = Column(Integer, nullable=False)
+
+
+class ChildbirthStyle(Base):
+    """
+    分娩方式
+    id: 主键
+    name： 方式
+    """
+    __tablename__ = CHILDBIRTH_STYLES
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
 
 
 class Baby(Base):
@@ -22,7 +48,7 @@ class Baby(Base):
         born_height		出生身高
         born_head		出生头围
         childbirth_style	分娩方式
-        complications	合并症
+        complication_id	合并症(可以多选，实用逗号隔开)
         restore_day		恢复出生体重天数
         apgar_score		Apgar评分
         growth_standard		生长参考标准
@@ -41,8 +67,8 @@ class Baby(Base):
     born_weight = Column(Float(2), nullable=False, server_default=None)
     born_height = Column(Float(2), nullable=False, server_default=None)
     born_head = Column(Float(2), nullable=False, server_default=None)
-    childbirth_style = Column(String(10), nullable=False, server_default=None)
-    complication = Column(String(255), nullable=False, server_default=None)
+    childbirth_style_id = Column(Integer, ForeignKey(ChildbirthStyle.id, ondelete='cascade', onupdate='cascade'), nullable=False)
+    complication_id = Column(String(255), nullable=False, server_default=None)
     restore_day = Column(Integer, nullable=False, server_default=None)
     apgar_score = Column(Integer, nullable=False, server_default=None)
     growth_standard = Column(String(100), nullable=True)
@@ -59,8 +85,8 @@ class Baby(Base):
         self.born_weight = kwargs.pop('born_weight')
         self.born_height = kwargs.pop('born_height')
         self.born_head = kwargs.pop('born_head')
-        self.childbirth_style = kwargs.pop('childbirth_style')
-        self.complication = kwargs.pop('complication')
+        self.childbirth_style_id = kwargs.pop('childbirth_style')
+        self.complication_id = kwargs.pop('complication')
         self.restore_day = kwargs.pop('restore_day')
         self.apgar_score = kwargs.pop('apgar_score')
         self.growth_standard = kwargs.pop('growth_standard')
@@ -105,4 +131,5 @@ class BabyPicture(Base):
         self.base_path = kwargs.pop('base_path')
         self.rel_path = kwargs.pop('rel_path')
         self.picture_name = kwargs.pop('picture_name')
+
 
