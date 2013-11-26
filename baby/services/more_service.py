@@ -147,12 +147,17 @@ def get_tracking(id):
     获得随访记录
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    weight = []
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
-        return tracking_result
+        for tracking in tracking_result:
+            weight.append(int(tracking.weight))
+        return weight
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
-        return tracking
+        if tracking:
+            weight.append(int(tracking.weight))
+        return weight
 
 
 

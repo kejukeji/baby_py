@@ -10,3 +10,7 @@ def to_grow_line(id):
 
 def to_raise():
     return render_template('baby/raise.html')
+
+
+def to_record():
+    return render_template('baby/visit_record.html')

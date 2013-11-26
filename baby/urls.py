@@ -6,7 +6,7 @@ from restfuls.doctor_restful import *
 from restfuls.baby_restful import BabyInfo, ParentingGuide
 from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegisterDoctor
 from baby.controls.user_feature_control import *
-from baby.controls.baby_control import to_grow_line, to_raise
+from baby.controls.baby_control import to_grow_line, to_raise, to_record
 from baby.controls.doctor_control import to_meeting, to_academic
 from baby.restfuls.feature_restful import AddFormula
 
@@ -31,6 +31,7 @@ app.add_url_rule('/html/meeting.html', 'to_meeting', to_meeting, methods={'GET',
 app.add_url_rule('/html/academic.html', 'to_academic', to_academic, methods={'GET', 'POST'})
 app.add_url_rule('/html/formula.html', 'to_formula', to_formula, methods={'GET', 'POST'})
 app.add_url_rule('/html/add_follow-up.html', 'to_additional_follow_up', to_additional_follow_up, methods={'GET', 'POST'})
+app.add_url_rule('/html/visit_record.html', 'to_record', to_record, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)
