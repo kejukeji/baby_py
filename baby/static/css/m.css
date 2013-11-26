@@ -808,3 +808,52 @@ body {
   font-size: 14px;
   line-height: 28px;
 }
+.box-list li {
+  margin: 20px 10px;
+  background: #e4ddc3;
+  padding: 5px;
+  border-radius: 2px;
+}
+.box-list li .box-wrapper {
+  display: block;
+  color: #b29e63;
+  border: 1px solid #b19e63;
+  background-color: #FFF;
+  border-radius: 2px;
+  padding: 10px;
+}
+.box-list li .box-wrapper .imag {
+  float: left;
+  padding-right: 8px;
+  width: 25%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.box-list li .box-wrapper .imag img {
+  width: 60px;
+  height: 76px;
+}
+.box-list li .box-wrapper .imag p {
+  line-height: 24px;
+  text-align: center;
+}
+.box-list li .box-wrapper .cont {
+  float: left;
+  width: 75%;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+.box-list li .box-wrapper .cont h3 {
+  font-size: 14px;
+  height: 20px;
+}
+.box-list li .box-wrapper .cont p {
+  padding-top: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+  line-height: 18px;
+}
+.box-list li .box-wrapper .cont p.date {
+  text-align: right;
+  line-height: 24px;
+}
