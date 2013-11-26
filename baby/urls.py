@@ -33,6 +33,7 @@ app.add_url_rule('/html/formula.html', 'to_formula', to_formula, methods={'GET',
 app.add_url_rule('/html/add_follow-up.html', 'to_additional_follow_up', to_additional_follow_up, methods={'GET', 'POST'})
 app.add_url_rule('/html/visit_record.html', 'to_record', to_record, methods={'GET', 'POST'})
 app.add_url_rule('/html/create_baby.html', 'to_create_baby_account', to_create_baby_account, methods={'GET', 'POST'})
+app.add_url_rule('/html/style', 'to_style', to_style, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)
