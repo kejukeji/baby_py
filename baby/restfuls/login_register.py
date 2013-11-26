@@ -7,6 +7,7 @@ from baby.util.others import success_dic, fail_dic
 from baby.util.baby_doctor_commonality import register_data_department, register_data_hospital, register_data_position,\
     register_data_province
 from baby.services.doctor_service import register_doctor
+from baby.services.baby_service import create_baby
 
 
 class DoLogin(restful.Resource):
@@ -128,3 +129,68 @@ class AlterPassword(restful.Resource):
             return return_success
         else:
             return return_fail
+
+
+class CreateBabyAccount(restful.Resource):
+    """
+    创建婴儿账户
+    """
+    @staticmethod
+    def post():
+        """
+        参数：
+        baby_name	    婴儿名
+        login_name      婴儿登陆
+        gender		    性别
+        due_date	    预产期
+        born_birthday	出生日期
+        born_weight		出生体重
+        born_height		出生身高
+        born_head		出生头围
+        childbirth_style	分娩方式
+        complication_id	合并症(可以多选，实用逗号隔开)
+        restore_day		恢复出生体重天数
+        apgar_score		Apgar评分
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('patriarch_tel', type=str, required=True, help=u'patriarch_tel 必须')
+        parser.add_argument('baby_name', type=str, required=True, help=u'baby_name 必须')
+        # parser.add_argument('login_name', type=str, required=True, help=u'login_name 必须')
+        parser.add_argument('baby_pass', type=str, required=True, help=u'baby_pass 必须')
+        parser.add_argument('gender', type=str, required=True, help=u'gender 必须')
+        parser.add_argument('due_date', type=str, required=True, help=u'due_date 必须')
+        parser.add_argument('born_birthday', type=str, required=True, help=u'born_birthday 必须')
+        parser.add_argument('born_weight', type=str, required=True, help=u'born_weight 必须')
+        parser.add_argument('born_height', type=str, required=True, help=u'born_height 必须')
+        parser.add_argument('born_head', type=str, required=True, help=u'born_head 必须')
+        parser.add_argument('childbirth_style_id', type=str, required=True, help=u'childbirth_style_id 必须')
+        parser.add_argument('complication_id', type=str, required=True, help=u'complication_id 必须')
+        # parser.add_argument('restore_day', type=str, required=True, help=u'restore_day 必须')
+        parser.add_argument('apgar_score', type=str, required=True, help=u'apgar_score 必须')
+
+        args = parser.parse_args()
+
+        success = success_dic().dic
+        fail = fail_dic().dic
+
+        patriarch_tel = args['patriarch_tel']
+        baby_name = args['baby_name']
+        baby_pass = args['baby_pass']
+        # login_name = args['login_name']
+        gender = args['gender']
+        due_date = args['due_date']
+        born_birthday = args['born_birthday']
+        born_weight = args['born_weight']
+        born_height = args['born_height']
+        born_head = args['born_head']
+        childbirth_style = args['childbirth_style_id']
+        complication_id = args['complication_id']
+        # restore_day = args['restore_day']
+        apgar_score = args['apgar_score']
+        is_ture = create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head,
+                              childbirth_style, complication_id, apgar_score)
+        if is_ture != 0:
+            success['baby_id'] = is_ture
+            return success
+        else:
+            return fail
