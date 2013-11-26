@@ -147,19 +147,27 @@ def get_tracking(id):
     获得随访记录
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
-    weight = []
+    weight = [0,0,0,0,0,0,0,0,0,0,0,0]
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
         for tracking in tracking_result:
-            weight.append(int(tracking.weight))
+            result = is_null(tracking.measure_date)
+            weight[result] = (int(tracking.weight))
         return weight
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
-            weight.append(int(tracking.weight))
+            result = is_null(tracking.measure_date)
+            weight[result] = (int(tracking.weight))
         return weight
 
 
+def is_null(measure_date):
+    if measure_date:
+        singe_time = str(measure_date)[:10]
+        singe_time = singe_time.split('-')
+        result = singe_time[1]
+        return int(result) - 1
 
 
 #def entering_who():
