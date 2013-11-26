@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>登录</title>
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
+<link rel="stylesheet" href="/static/css/modal.css" type="text/css">
 </head>
 <body class="bg-gray">
 	<section class="huge-box">
@@ -111,6 +112,7 @@
 				</li>
 				<li class="last-agree">
 					<input type="checkbox" id="register-agree"/>
+					<label for="register-agree">确认阅读并同意协议（</label><a href="#modal-text">阅读协议</a>）
 				</li>
 			</ul>
 			<div class="text-ct">
@@ -118,7 +120,29 @@
 			</div>
 		</form>
 	</section>
-    <script type="text/javascript" src="/static/js/zepto.min.js"></script>
+
+	<section class="semantic-content" id="modal-text" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
+		<div class="modal-inner">
+			<div class="modal-content">
+				<h4>欢迎注册营养随访体系App！</h4>
+					<p>请仔细阅读下面的协议，只有接受协议才能继续进行注册。 </p>
+					<p>1．服务条款的确认和接纳</p>
+					<p>营养随访体系App的所有权和运营权归XXX学会所有。营养随访体系App Android iOS平台所提供的服务将按照有关章程、服务条款和操作规则严格执行。用户通过注册程序点击“我同意” 按钮，即表示用户完全接受本协议的所有条款。</p>
+					<p>2. 服务内容</p>
+					<p>营养随访体系App Android </p>
+					<p>iOS平台的服务内容由XXX学会根据实际情况向平台用户提供，营养随访体系App Android iOS平台保留变更服务的权利。
+					</p>
+					<p>3. 用户账户的安全性</p>
+					<p>用户注册成功后， 营养随访体系App Android iOS平台将给予每个用户一个用户帐号以及相应密码，该用户帐号和密码由用户负责保管，用户应当对以其用户帐号进行的所有活动和事件负法律责任。用户不得以任何形式擅自转让或授权他人使用自己的 营养随访体系App </p>
+					<p>ndroidiOS平台用户名或密码。如果用户泄漏了自己的营养随访体系App Android</p>
+					<p>iOS平台用户名或密码，有可能导致不利的法律后果将由用户自己承担。</p>
+			</div>
+		</div>
+		<a href="#!" class="modal-close" data-dismiss="modal">&times;</a>
+	</section>
+
+    	<script type="text/javascript" src="/static/js/zepto.min.js"></script>
+    	<script src="/static/js/modal.js"></script>
 	<script type="text/javascript" src="/static/js/base.js"></script>
 	<script type="text/javascript">
 		// 注册函数
