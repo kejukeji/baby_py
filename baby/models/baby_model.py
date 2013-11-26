@@ -87,9 +87,9 @@ class Baby(Base):
         self.born_head = kwargs.pop('born_head')
         self.childbirth_style_id = kwargs.pop('childbirth_style')
         self.complication_id = kwargs.pop('complication')
-        self.restore_day = kwargs.pop('restore_day')
+        self.restore_day = kwargs.pop('restore_day', 0)
         self.apgar_score = kwargs.pop('apgar_score')
-        self.growth_standard = kwargs.pop('growth_standard')
+        self.growth_standard = kwargs.pop('growth_standard', 0)
         self.system_message_time = kwargs.pop('system_message_time', todayfstr())
         self.login_type = kwargs.pop('login_type', 'baby')
 
