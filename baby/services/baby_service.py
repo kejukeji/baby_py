@@ -58,7 +58,7 @@ def baby_list(page, doctor_id):
     page, per_page = page_utils(baby_count, page)
     baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
-        babys = Baby.query.filter()[per_page*(temp_page-1):per_page*temp_page]
+        babys = Baby.query.filter().all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
@@ -106,7 +106,7 @@ def baby_collect_list(page, doctor_id):
     page, per_page = page_utils(result_count, page)
     if result_count > 1:
         results = db.query(Baby).\
-            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(temp_page-1):per_page*temp_page]
+            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         for result in results:
             get_picture_by_id(result.id, result)
             result.is_collect = 0

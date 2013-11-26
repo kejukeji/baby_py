@@ -91,6 +91,7 @@ class Baby(Base):
         self.apgar_score = kwargs.pop('apgar_score')
         self.growth_standard = kwargs.pop('growth_standard', 0)
         self.system_message_time = kwargs.pop('system_message_time', todayfstr())
+        self.login_name = kwargs.pop('login_name', '')
         self.login_type = kwargs.pop('login_type', 'baby')
 
     def update(self, **kwargs):
