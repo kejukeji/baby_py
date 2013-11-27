@@ -150,7 +150,7 @@ MZ.namespace('app');
 	function ModePop(options) {
 		this._options = $.extend({
 			mode: 'msg',
-			text: '登陆成功',
+			text: '网页提示',
 		}, options || {});
 		this._init();
 	}
@@ -624,20 +624,20 @@ MZ.app = {
 				'energy': $.trim(energy.val()),
 				'protein': $.trim(protein.val()),
 				'carbohydrates': $.trim(carbohydrates.val()),
-				'fat': $.trim(fat.val())
+				'fat': $.trim(fat)
 			}
 			MZ.util.Request({
 				url: MZ.constant.MILK_URL,
 				data: params
 			}, function(json) {
-				var code = json.code
+				var code = '添加成功'
 				Notification.pop({
 					'text': json.msg
 				}).flash(2000)
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						// window.webviewPassword(json.userId)
+						// window.webviewFormula(json.userId)
 						// where to go ?
 					}, 2000)
 				}
