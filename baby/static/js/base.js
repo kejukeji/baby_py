@@ -344,9 +344,15 @@ MZ.constant = {
 	'REAL_NAME_EMPTY': '真实姓名不能为空',
 	'EMAIL_EMPTY': '邮箱不能为空',
 	'TEL_EMPTY': '手机号不能为空',
+    'KIND_EMPTY': '种类不能为空',
+    'ENERGY_EMPTY': '能量不能为空',
+    'PROTEIN_EMPTY': '蛋白质不能为空',
+    'TSHHEW_EMPTY': '碳化学物不能为空',
+    'FAT_EMPTY': '脂肪不能为空',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/alter/password',
-	'REGISTER_URL': '/restful/html/do/register'
+	'REGISTER_URL': '/restful/html/do/register',
+    'MILK_URL': '/restful/html/add/formula'
 }
 
 MZ.app = {
@@ -618,19 +624,19 @@ MZ.app = {
 				return
 			}
 			var params = {
-				'location': location,
-				'brand': brand,
+				'court_id': location,
+				'brand_id': brand,
 				'kind': $.trim(kind.val()),
 				'energy': $.trim(energy.val()),
 				'protein': $.trim(protein.val()),
 				'carbohydrates': $.trim(carbohydrates.val()),
-				'fat': $.trim(fat)
+				'fat': $.trim(fat.val())
 			}
 			MZ.util.Request({
 				url: MZ.constant.MILK_URL,
 				data: params
 			}, function(json) {
-				var code = '添加成功'
+				var code = json.code
 				Notification.pop({
 					'text': json.msg
 				}).flash(2000)

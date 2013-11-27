@@ -20,32 +20,34 @@ class AddFormula(restful.Resource):
        name: 配方奶名称
     """
     @staticmethod
-    def get():
+    def post():
         parser = reqparse.RequestParser()
         parser.add_argument('court_id', type=str, required=True, help=u'court_id 必须')
         parser.add_argument('brand_id', type=str, required=True, help=u'brand_id 必须')
-        parser.add_argument('type', type=str, required=True, help=u'type 必须')
+        parser.add_argument('kind', type=str, required=True, help=u'type 必须')
         parser.add_argument('energy', type=str, required=True, help=u'energy 必须')
         parser.add_argument('protein', type=str, required=True, help=u'protein 必须')
-        parser.add_argument('carbon_compound', type=str, required=True, help=u'carbon_compound 必须')
-        parser.add_argument('axunge', type=str, required=True, help=u'axunge 必须')
+        parser.add_argument('carbohydrates', type=str, required=True, help=u'carbon_compound 必须')
+        parser.add_argument('fat', type=str, required=True, help=u'axunge 必须')
 
         args = parser.parse_args()
 
         court_id = args['court_id']
         brand_id = args['brand_id']
-        types = args['type']
+        kind = args['kind']
         energy = args['energy']
         protein = args['protein']
-        carbon_compound= args['carbon_compound']
-        axunge = args['axunge']
+        carbohydrates = args['carbohydrates']
+        fat = args['fat']
 
         success = success_dic().dic
         fail = fail_dic().dic
 
-        is_ture = insert_formula(court_id, brand_id, types, energy, protein, carbon_compound, axunge)
+        is_ture = insert_formula(court_id, brand_id, kind, energy, protein, carbohydrates, fat)
 
         if is_ture:
+            success['msg'] = '添加成功'
             return success
         else:
+            fail['msg'] = '添加失败'
             return fail
