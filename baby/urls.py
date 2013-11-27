@@ -6,8 +6,8 @@ from restfuls.doctor_restful import *
 from restfuls.baby_restful import BabyInfo, ParentingGuide
 from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegisterDoctor, CreateBabyAccount
 from baby.controls.user_feature_control import *
-from baby.controls.baby_control import to_grow_line, to_raise, to_record
-from baby.controls.doctor_control import to_meeting, to_academic, to_create_baby_account
+from baby.controls.baby_control import *
+from baby.controls.doctor_control import *
 from baby.restfuls.feature_restful import AddFormula
 
 # # 后台Admin
@@ -34,6 +34,9 @@ app.add_url_rule('/html/add_follow-up.html', 'to_additional_follow_up', to_addit
 app.add_url_rule('/html/visit_record.html', 'to_record', to_record, methods={'GET', 'POST'})
 app.add_url_rule('/html/create_baby.html', 'to_create_baby_account', to_create_baby_account, methods={'GET', 'POST'})
 app.add_url_rule('/html/style', 'to_style', to_style, methods={'GET', 'POST'})
+app.add_url_rule('/html/need.html', 'to_need', to_yy_need, methods={'GET', 'POST'})
+app.add_url_rule('/html/meeting_notice.html', 'to_meeting_notice', to_meeting_notice, methods={'GET', 'POST'})
+app.add_url_rule('/html/raise_dir.html', 'to_raise_dir', to_raise_dir, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)

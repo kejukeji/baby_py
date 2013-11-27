@@ -14,3 +14,7 @@ def to_raise():
 
 def to_record():
     return render_template('baby/visit_record.html')
+
+
+def to_raise_dir():
+    return render_template('baby/raise_dir.html')
