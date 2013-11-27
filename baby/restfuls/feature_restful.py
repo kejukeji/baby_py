@@ -51,3 +51,26 @@ class AddFormula(restful.Resource):
         else:
             fail['msg'] = '添加失败'
             return fail
+
+
+class AddVisitRecord(restful.Resource):
+    """
+    新增随访记录
+    """
+    @staticmethod
+    def get():
+        """
+        参数
+        due_date: 测量日期
+        weight: 体重
+        height: 身长
+        head: 头围
+        breastfeeding: 母乳喂养
+        location: 院内/外
+        brand: 品牌
+        kind: 种类
+        nutrition: 配方奶营养量
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('due_date', type=str, required=True, help=u'due_date 必须')
+        parser.add_argument('weight', type=str, required=True, help=u'weight 必须')

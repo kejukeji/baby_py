@@ -179,7 +179,7 @@ def get_parenting_guide(baby_id):
             return system_message
 
 
-def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight, born_height, born_head, childbirth_style_id,
                 complication_id, apagar_score, upload_image, success):
     '''修改婴儿资料'''
     baby = Baby.query.filter(Baby.id == baby_id).first()
@@ -190,6 +190,8 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
             baby.baby_name = baby_name
         if due_date:
             baby.due_date = due_date
+        if gender:
+            baby.gender = gender
         if born_weight:
             baby.born_weight = born_weight
         if born_height:
