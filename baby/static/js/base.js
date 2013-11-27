@@ -349,10 +349,21 @@ MZ.constant = {
     'PROTEIN_EMPTY': '蛋白质不能为空',
     'TSHHEW_EMPTY': '碳化学物不能为空',
     'FAT_EMPTY': '脂肪不能为空',
+    'PATRIARCH_EMPTY': '家长手机号不能为空',
+    'BABY_NAME_EMPTY': '婴儿名不能为空',
+    'GENDER_EMPTY': '性别不能为空',
+    'DUE_DATE_EMPTY': '预产期不能为空',
+    'BIRTHDAY_EMPTY': '出生日期不能为空',
+    'WEIGHT_EMPTY': '出生体重不能为空',
+    'HEIGHT_EMPTY': '出生身长不能为空',
+    'HEAD_EMPTY': '出生头围不能为空',
+    'CHILDBIRTH_EMPTY': '分娩方式不能为空',
+    'COMPLICATION_EMPTY': '合并症不能为空',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/alter/password',
 	'REGISTER_URL': '/restful/html/do/register',
-    'MILK_URL': '/restful/html/add/formula'
+    'MILK_URL': '/restful/html/add/formula',
+    'CREATE_BABY_URL': '/restful/html/create/baby'
 }
 
 MZ.app = {
@@ -718,5 +729,111 @@ MZ.app = {
 				}
 			})
 		})
-	}
+	},
+    createBabyAccount: function(ele){
+        var subBtn = $(ele).find('#z-create');
+		var complication = $(ele).find('#z-complication');
+		var childbirth = $(ele).find('#z-childbirth');
+		var head = $(ele).find('#z-head');
+		var height = $(ele).find('#z-height');
+		var patriarch = $(ele).find('#z-patriarch-tel');
+        var babyName = $(ele).find('#z-baby-name');
+        var password = $(ele).find('#z-password');
+        var confirmPassword = $(ele).find('#z-confirm-password');
+        var gender = $(ele).find('#z-gender');
+        var dueDate = $(ele).find('#z-due-date');
+        var birthday = $(ele).find('#z-birthday');
+        var weight = $(ele).find('#z-weight');
+        var height = $(ele).find('#z-height');
+        var head = $(ele).find('#z-head');
+
+        subBtn.bind('click', function(){
+            var checkPatriarch = MZ.app.checkField(patriarch);
+			var checkBabyName = MZ.app.checkField(babyName);
+			var checkPassword = MZ.app.checkField(password);
+			var checkConfirmPassword = MZ.app.checkField(confirmPassword);
+			var checkWeight = MZ.app.checkField(weight);
+            var checkHeight = MZ.app.checkField(height);
+            var checkHead = MZ.app.checkField(head);
+
+            if (!checkPatriarch) {
+				window.Notification.simple(MZ.constant.PATRIARCH_EMPTY, 2000)
+				return
+			}
+            if (!checkBabyName) {
+				window.Notification.simple(MZ.constant.BABY_NAME_EMPTY, 2000)
+				return
+			}
+            if (!checkPassword) {
+				window.Notification.simple(MZ.constant.PASSWORD_EMPTY, 2000)
+				return
+			}
+            if (!checkConfirmPassword) {
+				window.Notification.simple(MZ.constant.REPWD_EMPTY, 2000)
+				return
+			}
+            if (!checkWeight) {
+				window.Notification.simple(MZ.constant.WEIGHT_EMPTY, 2000)
+				return
+			}
+            if (!checkHeight) {
+				window.Notification.simple(MZ.constant.HEIGHT_EMPTY, 2000)
+				return
+			}
+            if (!checkHead) {
+				window.Notification.simple(MZ.constant.HEAD_EMPTY, 2000)
+				return
+			}
+            var patriarchValue = $.trim(patriarch.val())
+			var babyNameValue = $.trim(babyName.val())
+			var passwordValue = $.trim(password.val())
+			var confirmPasswordValue = $.trim(confirmPassword.val())
+			var genderValue = $.trim(gender.val())
+			var dueDateValue = $.trim(dueDate.val())
+			var birthdayValue = $.trim(birthday.val())
+			var weightValue = $.trim(weight.val())
+			var heightValue = $.trim(height.val())
+			var headValue = $.trim(head.val())
+            var childbirthValue = $.trim(childbirth.val())
+            var complicationValue = $.trim(complication.val())
+
+            if (passwordValue != confirmPasswordValue) {
+				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
+				return
+			}
+
+            var params = {
+				'patriarch_tel': patriarchValue,
+				'baby_name': babyNameValue,
+				'baby_pass': passwordValue,
+				'gender': genderValue,
+				'due_date': dueDateValue,
+				'born_birthday': birthdayValue,
+				'born_weight': weightValue,
+				'born_height': heightValue,
+				'born_head': headValue,
+                'childbirth_style_id': childbirthValue,
+                'complication_id': complicationValue
+			};
+            MZ.util.Request({
+				url: MZ.constant.CREATE_BABY_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': json.msg
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						// 调用java方法
+						window.app.webviewCreateBaby(json.baby_id)
+						// where to go ?
+					}, 2000)
+				} else {
+					window.Notification.simple(MZ.constant.ACCOUNT_EXIST, 2000)
+					return
+				}
+			})
+        })
+    }
 }
