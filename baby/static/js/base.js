@@ -365,7 +365,8 @@ MZ.constant = {
 	'FORGET_PWD': '/restful/html/alter/password',
 	'REGISTER_URL': '/restful/html/do/register',
     'MILK_URL': '/restful/html/add/formula',
-    'CREATE_BABY_URL': '/restful/html/create/baby'
+    'CREATE_BABY_URL': '/restful/html/create/baby',
+    'ADD_VISIT_URL': '/restful/html/add/visit'
 }
 
 MZ.app = {
@@ -671,6 +672,7 @@ MZ.app = {
 		var height = $(ele).find('#l-height');
 		var head = $(ele).find('#l-head');
 		var feeding = $(ele).find('#l-breastfeeding');
+        var baby_id = $(ele).find('#baby_id')
 
 		subBtn.bind('click', function() {
 			var location = $(ele).find('#l-location').val();
@@ -704,15 +706,16 @@ MZ.app = {
 				return
 			}
 			var params = {
-				'date': cdate.val(),
+				'measure_date': cdate.val(),
 				'weight': $.trim(weight.val()),
 				'height': $.trim(height.val()),
 				'head': $.trim(head.val()),
-				'feeding': $.trim(feeding.val()),
+				'breastfeeding': $.trim(feeding.val()),
 				'nutrition': nutrition,
 				'location': location,
 				'brand': brand,
-				'kind': kind
+				'kind': kind,
+                'baby_id': $.trim(baby_id.val())
 			};
 			MZ.util.Request({
 				url: MZ.constant.ADD_VISIT_URL,

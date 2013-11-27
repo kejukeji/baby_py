@@ -170,6 +170,23 @@ def is_null(measure_date):
         return int(result) - 1
 
 
+def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition):
+    """
+    新增随访记录
+    """
+    tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
+                        court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
+                        formula_feed_measure=nutrition)
+
+    try:
+        db.add(tracking)
+        db.commit()
+    except:
+        return False
+    return True
+
+
+
 #def entering_who():
 #    """
 #       录入who标准数据

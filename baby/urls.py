@@ -8,7 +8,7 @@ from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegi
 from baby.controls.user_feature_control import *
 from baby.controls.baby_control import *
 from baby.controls.doctor_control import *
-from baby.restfuls.feature_restful import AddFormula
+from baby.restfuls.feature_restful import AddFormula, AddVisitRecord
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -57,3 +57,4 @@ api.add_resource(DoRegisterDoctor, '/restful/html/do/register')
 api.add_resource(AcademicAbstract, '/restful/html/academic')
 api.add_resource(AddFormula, '/restful/html/add/formula')
 api.add_resource(CreateBabyAccount, '/restful/html/create/baby')
+api.add_resource(AddVisitRecord, '/restful/html/add/visit')
