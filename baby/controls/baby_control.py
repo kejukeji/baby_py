@@ -18,3 +18,7 @@ def to_record():
 
 def to_raise_dir():
     return render_template('baby/raise_dir.html')
+
+
+def to_baby_detail():
+    return render_template('baby/detail_info.html')
