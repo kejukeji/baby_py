@@ -73,10 +73,12 @@ class DoRegisterDoctor(restful.Resource):
         tel = args.get('tel')
         is_true = register_doctor(login_name, login_pass, real_name, province_id, belong_hospital, belong_department,
                                   position, email, tel)
-        if is_true:
-            success['doctor_id'] = 1
+        if is_true != 0:
+            success['doctor_id'] = is_true
+            success['msg'] = '注册成功'
             return success
         else:
+            fail['msg'] = '注册失败'
             return fail
 
 
@@ -191,6 +193,8 @@ class CreateBabyAccount(restful.Resource):
                               childbirth_style, complication_id, apgar_score)
         if is_ture != 0:
             success['baby_id'] = is_ture
+            success['msg'] = '创建账户成功'
             return success
         else:
+            fail['msg'] = '创建账户失败'
             return fail

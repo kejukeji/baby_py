@@ -106,7 +106,7 @@ def register_doctor(login_name, login_pass, argument_real_name, argument_provinc
     """
     doctor_result = Doctor.query.filter(Doctor.doctor_name == login_name).first()
     if doctor_result:
-        return False
+        return 0
     else:
         doctor = Doctor(doctor_name=login_name, doctor_pass=login_pass, real_name=argument_real_name, province=argument_province,
                         belong_hospital=argument_belong_hospital, belong_department=argument_belong_department, position=argument_position,
@@ -115,6 +115,6 @@ def register_doctor(login_name, login_pass, argument_real_name, argument_provinc
             db.add(doctor)
             db.commit()
         except:
-            return False
-        return True
+            return 0
+        return doctor.id
 
