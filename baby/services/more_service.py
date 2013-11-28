@@ -12,7 +12,7 @@ def check_login(login_name, login_pass):
        login_name: 登陆名
        login_pass: 登陆密码
     """
-    baby = Baby.query.filter(Baby.login_name == login_name, Baby.baby_pass == login_pass).first()
+    baby = Baby.query.filter(Baby.patriarch_tel == login_name, Baby.baby_pass == login_pass).first()
     doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
     if baby != None or doctor != None:
         if baby != None:
@@ -119,6 +119,7 @@ def check_is_type(result, remember, return_success):
             baby_pic['is_remember'] = int(remember)
             baby_pic.pop('id')
             baby_pic['user_id'] = result.id
+            baby_pic['user_name'] = result.baby_name
             if result.born_birthday:
                 baby_birthday = result.born_birthday
                 baby_pic['time'] = time_diff(baby_birthday)
@@ -131,6 +132,7 @@ def check_is_type(result, remember, return_success):
             doctor_pic = flatten(result)
             doctor_pic['is_remember'] = int(remember)
             doctor_pic.pop('id')
+            doctor_pic['user_name'] = result.real_name
             doctor_pic['user_id'] = result.id
             if result.rel_path and result.picture_name:
                 doctor_pic['picture_path'] = result.rel_path + '/' + result.picture_name

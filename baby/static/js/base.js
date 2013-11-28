@@ -411,7 +411,7 @@ MZ.app = {
 					setTimeout(function() {
 						var doctorList = json.doctor_list
 						// 调用java方法
-						window.app.webviewLogin(doctorList.user_id, doctorList.is_remember)
+						window.app.webviewLogin(doctorList.user_id, doctorList.is_remember, doctorList.user_name)
 					}, 2000)
 				} else {
 					window.Notification.simple(MZ.constant.ACCOUNT_PASSWORD_ERROR, 2000)

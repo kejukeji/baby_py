@@ -63,7 +63,12 @@
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
 							<select name="hospital" id="l-location">
-								<option value="1">骨科医院</option>
+                                {% if court_count > 1 %}
+                                    {% for court in courts %}
+                                       <option value="{{ court.id }}">{{ court.type }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -117,6 +122,36 @@
 </section>
      <script type="text/javascript" src="/static/js/zepto.min.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript">
+        var brandArray = new Array()
+        var formulaArray = new Array()
+        {% set count = 0 %}
+        {% for brand in brands %}
+            brandArray[{{ count }}] = new Array({{ brand.court_id }}, "{{ brand.name}}", {{ brand.id }})
+            {% set count = count + 1 %}
+        {% endfor %}
+
+        {% set count1 = 0 %}
+        {% for formula in formulas %}
+            formulaArray[{{ count }}] = new Array({{ formula.brand_id }}, "{{ formula.type}}", {{ formula.id }})
+            {% set count1 = count1 + 1 %}
+        {% endfor %}
+        $(function(){
+            courtObj = $('#l-location')
+            brandObj = $('#l-brand')
+            courtObj.bind('change', function(){
+                var selectedVal = parseInt($(this).val())
+                for (i =0; i < brandArray.length; i++) {
+                    var brandVal = brandArray[i][0]
+                    if (selectedVal == brandVal){
+                        brandObj.length = 0
+                        var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        brandObj.append(options)
+                    }
+                }
+            })
+        })
+    </script>
 	<script>
 		$(function(){
 			MZ.app.addVisitSubmit('#formula-form');
