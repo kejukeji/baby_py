@@ -142,24 +142,34 @@ def check_is_type(result, remember, return_success):
         return False
 
 
-def get_tracking(id):
+def get_tracking(id, types):
     """
     获得随访记录
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
-    weight = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_line = [0,0,0,0,0,0,0,0,0,0,0,0]
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
         for tracking in tracking_result:
             result = is_null(tracking.measure_date)
-            weight[result] = (int(tracking.weight))
-        return weight
+            if types == 'weight':
+                grow_line[result] = int(tracking.weight)
+            if types == 'height':
+                grow_line[result] = int(tracking.height)
+            if types == 'head':
+                grow_line[result] = int(tracking.head_wai)
+        return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
             result = is_null(tracking.measure_date)
-            weight[result] = (int(tracking.weight))
-        return weight
+            if types == 'weight':
+                grow_line[result] = int(tracking.weight)
+            if types == 'height':
+                grow_line[result] = int(tracking.height)
+            if types == 'head':
+                grow_line[result] = int(tracking.head_wai)
+        return grow_line
 
 
 def is_null(measure_date):

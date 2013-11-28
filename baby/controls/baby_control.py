@@ -3,9 +3,11 @@ from baby.services.more_service import get_tracking
 
 
 def to_grow_line(id):
-    tracking = get_tracking(id)
+    types = request.args.get('type', 'weight')
+    tracking = get_tracking(id, types)
     return render_template('baby/grow_line.html',
-                           tracking=tracking)
+                           tracking=tracking,
+                           types=types)
 
 
 def to_raise():
