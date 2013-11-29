@@ -270,6 +270,7 @@ def get_baby_by_id(baby_id):
     获得baby
     """
     baby = Baby.query.filter(Baby.id == baby_id).first()
+    get_picture_by_id(baby.id, baby)
     if baby.id <= 9 and baby.id >= 1:
         baby.id = '1000' + str(baby.id)
     if baby.id <= 99 and baby.id >= 10:
@@ -280,7 +281,6 @@ def get_baby_by_id(baby_id):
         baby.id = '1' + str(baby.id)
     childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
     complication = Complication.query.filter(Complication.id == baby.complication_id).first()
-    get_picture_by_id(baby.id, baby)
     baby.complication = complication.name
     baby.childbirth_style = childbirth.name
     if baby.due_date:
