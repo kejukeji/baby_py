@@ -17,6 +17,7 @@ $(function() {
 		height: 300,
 		border: 0,
 		column_width: 20,
+		turn_off_touchmove: true,
 		background_color: '#FFF',
 		label: {
 			color: '#000',
