@@ -25,63 +25,42 @@
 
            <div class="visit-title clearfix">
            	<img src="/static/img/system/head_picture/71X71.png" alt="" />
-           	<p class="title">牛宝宝已经出生16周大，快来看看历史随访记录吧！</p>
+           	<p class="title">{{ baby.baby_name }} 已经出生{{ baby.birthday }}大，快来看看历史随访记录吧！</p>
            </div>
 
            <div class="visit-wrapper">
            	<ul class="visit-list">
-           		<li class="clearfix">
-           			<div class="dark-line"></div>
-                    <a href="/html/need.html">
-           			<div class="visit-dialog">
-           				<p class="t">2013/7/29  三个月</p>
-           				<p>身长：62.3cm（x%）</p>
-           				<p>体重：6730g（y%）</p>
-           				<p>头围：47.0cm（z%）</p>
-           				<p>母乳喂养量：250ml（z%）</p>
-           				<p>低出生体重儿院内专用配方奶喂养量</p>
-           			</div>
-                    </a>
-           		</li>
-           		<li class="clearfix">
-           			<div class="dark-line"></div>
-                    <a href="/html/need.html">
-           			<div class="visit-dialog">
-           				<p class="t">2013/7/29  三个月</p>
-           				<p>身长：62.3cm（x%）</p>
-           				<p>体重：6730g（y%）</p>
-           				<p>头围：47.0cm（z%）</p>
-           				<p>母乳喂养量：250ml（z%）</p>
-           				<p>低出生体重儿院内专用配方奶喂养量</p>
-           			</div>
-                    </a>
-           		</li>
-           		<li class="clearfix">
-           			<div class="dark-line"></div>
-                    <a href="/html/need.html">
-           			<div class="visit-dialog">
-           				<p class="t">2013/7/29  三个月</p>
-           				<p>身长：62.3cm（x%）</p>
-           				<p>体重：6730g（y%）</p>
-           				<p>头围：47.0cm（z%）</p>
-           				<p>母乳喂养量：250ml（z%）</p>
-           				<p>低出生体重儿院内专用配方奶喂养量</p>
-           			</div>
-                    </a>
-           		</li>
-           		<li class="clearfix">
-           			<div class="dark-line"></div>
-                    <a href="/html/need.html">
-           			<div class="visit-dialog">
-           				<p class="t">2013/7/29  三个月</p>
-           				<p>身长：62.3cm（x%）</p>
-           				<p>体重：6730g（y%）</p>
-           				<p>头围：47.0cm（z%）</p>
-           				<p>母乳喂养量：250ml（z%）</p>
-           				<p>低出生体重儿院内专用配方奶喂养量</p>
-           			</div>
-                    </a>
-           		</li>
+                {% if record_count > 1 %}
+                    {% for r in record %}
+                        <li class="clearfix">
+                            <div class="dark-line"></div>
+                            <a href="/html/need.html">
+                            <div class="visit-dialog">
+                                <p class="t">{{ r.measure_date }}  {{ r.birthday_time }} </p>
+                                <p>身长：{{ r.height }} cm（x%）</p>
+                                <p>体重：{{ r.weight }} g（y%）</p>
+                                <p>头围：{{ r.head_wai }} cm（z%）</p>
+                                <p>母乳喂养量：{{ r.formula_feed_measure }} ml（z%）</p>
+                                <p>低出生体重儿院内专用配方奶喂养量</p>
+                            </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="clearfix">
+                        <div class="dark-line"></div>
+                        <a href="/html/need.html">
+                        <div class="visit-dialog">
+                            <p class="t">{{ record.measure_date }}  {{ r.birthday_time }} </p>
+                            <p>身长：{{ record.height }} cm（x%）</p>
+                            <p>体重：{{ record.weight }} g（y%）</p>
+                            <p>头围：{{ record.head_wai }} cm（z%）</p>
+                            <p>母乳喂养量：{{ record.formula_feed_measure }} ml（z%）</p>
+                            <p>低出生体重儿院内专用配方奶喂养量</p>
+                        </div>
+                        </a>
+                    </li>
+                {% endif %}
            	</ul>
            </div>
 

@@ -5,6 +5,8 @@ from baby.models.hospital_model import Doctor, Province, Hospital, Department, P
 from baby.util.others import set_session_user, time_diff, flatten
 from baby.models.feature_model import Tracking
 from baby.models.database import db
+from .tracking_service import get_tracking_model
+import datetime
 
 
 def check_login(login_name, login_pass):
@@ -198,6 +200,67 @@ def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, b
     return True
 
 
+def get_visit_record(id):
+    """
+    根据baby_id获取随访记录
+    """
+    tracking, tracking_count = get_tracking_model(Tracking)
+    baby = Baby.query.filter(Baby.id == id).first()
+    time_birthday_week(baby)
+    if type(tracking) is list:
+        for t in tracking:
+            t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
+            t.measure_date = str(t.measure_date)[:10]
+    else:
+        tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
+        tracking.measure_date = str(tracking.measure_date)[:10]
+    return tracking, tracking_count, baby
+
+
+def time_birthday_time_compare(dt, baby):
+    dt = datetime.datetime.strptime(str(dt), "%Y-%m-%d %H:%M:%S")
+    # today = datetime.datetime.today()
+    if baby.born_birthday:
+        birthday = baby.born_birthday
+        s = int((dt - birthday).total_seconds())
+
+        # day_diff > 365, use year
+        if s / 3600 / 24 >= 365:
+            return str(s / 3600 / 24 / 365) + " 年"
+        elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+            return str(s / 3600 / 24 / 30) + " 个月"
+        elif s / 3600 >= 24:  # hour_diff > 24, use day
+            return str(s / 3600 / 24) + " 天"
+        elif s / 60 > 60:  # minite_diff > 60, use hour
+            return str(s / 3600) + " 小时"
+        elif s > 60:  # second_diff > 60, use minite
+            return str(s / 60) + " 分钟"
+        else:  # use "just now"
+            return "刚刚"
+    return ""
+
+
+def time_birthday_week(baby):
+    if baby.born_birthday:
+        dt = datetime.datetime.strptime(str(baby.born_birthday), "%Y-%m-%d %H:%M:%S")
+        today = datetime.datetime.today()
+        s = int((today - dt).total_seconds())
+
+        # day_diff > 365, use year
+        if s / 3600 / 24 >= 365:
+            baby.birthday =  str(s / 3600 / 24 / 365) + " 年"
+        elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+            baby.birthday =  str(s / 3600 / 24 / 30) + " 个月"
+        elif s / 3600 / 24 >= 7:  # day_diff > 7, use week
+            baby.birthday = str(s / 3600 / 24 / 7) + "周"
+        elif s / 3600 >= 24:  # hour_diff > 24, use day
+            baby.birthday = str(s / 3600 / 24) + " 天"
+        elif s / 60 > 60:  # minite_diff > 60, use hour
+            baby.birthday = str(s / 3600) + " 小时"
+        elif s > 60:  # second_diff > 60, use minite
+            baby.birthday = str(s / 60) + " 分钟"
+        else:  # use "just now"
+            baby.birthday = ''
 
 #def entering_who():
 #    """
