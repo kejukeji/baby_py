@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>生长曲线</title>
+<link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
+<script type="text/javascript">
+    window.growObj = {
+        'xAxis': ['0', '0.5', '1', '2', '3'],
+        'yStart': 0,
+        'yEnd': 450,
+        'ySpace': 50,
+        'data': [{
+            name: '母乳',
+            value: [120, 140, 150, 160, 180],
+            color: '#08c'
+        }, {
+            name: '配方奶',
+            value: [130, 150, 170, 180, 200],
+            color: '#c12c44'
+        }]
+    };
+</script>
+</head>
+<body>
+    <section>
+           <div class="nav-wrapper">
+                <a id="L-arrow-left" class="arrow"><span>&lt;</span></a>
+                <div class="nav-cont" id="L-nav">
+                    <ul>
+                        <li><a href="#">随访记录</a></li>
+                        <li><a href="#">生长曲线</a></li>
+                        <li><a href="#">生长速率</a></li>
+                        <li><a href="#">详细资料</a></li>
+                    </ul>
+                </div>
+                <a id="L-arrow-right" class="arrow"><span>&gt;</span></a>
+           </div>
+    
+            <div class="chart-frame">
+                <div class="chart-tab">
+                    <a class="current" href="#">体     重</a>
+                    <a href="#">身     长</a>
+                    <a href="#">头     围</a>
+                </div>
+                <!-- <h3 class="chart-y">体              重</h3> -->
+
+                <div class="chart-stage" id="linechart">
+                        <div id="canvasDiv"></div>
+                </div>
+
+                <!-- <h3 class="chart-x">月龄</h3> -->
+            </div>
+
+    </section>
+    <script type="text/javascript" src="/static/js/zepto.min.js"></script>
+    <script type="text/javascript" src="/static/js/extend/touch.js"></script>
+    <script type="text/javascript" src="/static/js/extend/iscroll.js"></script>
+    <script type="text/javascript" src="/static/js/extend/highlight.js"></script>
+    <script type="text/javascript" src="/static/js/extend/parseTpl.js"></script>
+    <script type="text/javascript" src="/static/js/core/gmu.js"></script>
+    <script type="text/javascript" src="/static/js/core/event.js"></script>
+     <script type="text/javascript" src="/static/js/core/widget.js"></script>
+    <script type="text/javascript" src="/static/js/widget/navigator/navigator.js"></script>
+    <script type="text/javascript" src="/static/js/widget/navigator/scrolltonext.js"></script>
+    <script type="text/javascript" src="/static/js/widget/navigator/$scrollable.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/chart.min.js"></script>
+    <script type="text/javascript" src="/static/js/barChart.js"></script>
+    <script type="text/javascript">
+        MZ.app.slideNavigator()
+    </script>
+</body>
+</html>
