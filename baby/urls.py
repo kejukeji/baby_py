@@ -36,7 +36,7 @@ app.add_url_rule('/html/create_baby.html', 'to_create_baby_account', to_create_b
 app.add_url_rule('/html/need.html', 'to_need', to_yy_need, methods={'GET', 'POST'})
 app.add_url_rule('/html/meeting_notice.html', 'to_meeting_notice', to_meeting_notice, methods={'GET', 'POST'})
 app.add_url_rule('/html/raise_dir.html', 'to_raise_dir', to_raise_dir, methods={'GET', 'POST'})
-app.add_url_rule('/html/baby_detail.html', 'to_baby_detail', to_baby_detail, methods={'GET', 'POST'})
+app.add_url_rule('/html/baby_detail.html/<int:baby_id>', 'to_baby_detail', to_baby_detail, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)

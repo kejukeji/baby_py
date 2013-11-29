@@ -1,5 +1,5 @@
 from flask import render_template, request
-from baby.services.more_service import get_tracking, get_visit_record
+from baby.services.more_service import get_tracking, get_visit_record, get_baby_by_id
 
 
 def to_grow_line(id):
@@ -26,5 +26,7 @@ def to_raise_dir():
     return render_template('baby/raise_dir.html')
 
 
-def to_baby_detail():
-    return render_template('baby/detail_info.html')
+def to_baby_detail(baby_id):
+    baby = get_baby_by_id(baby_id)
+    return render_template('baby/detail_info.html',
+                           baby=baby)

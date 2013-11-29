@@ -4,8 +4,10 @@ from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
 from baby.util.others import set_session_user, time_diff, flatten
 from baby.models.feature_model import Tracking
+from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
 from .tracking_service import get_tracking_model
+from .baby_service import get_picture_by_id
 import datetime
 
 
@@ -261,6 +263,29 @@ def time_birthday_week(baby):
             baby.birthday = str(s / 60) + " 分钟"
         else:  # use "just now"
             baby.birthday = ''
+
+
+def get_baby_by_id(baby_id):
+    """
+    获得baby
+    """
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    if baby.id <= 9 and baby.id >= 1:
+        baby.id = '1000' + str(baby.id)
+    if baby.id <= 99 and baby.id >= 10:
+        baby.id = '100' + str(baby.id)
+    if baby.id <= 999 and baby.id >= 100:
+        baby.id = '10' + str(baby.id)
+    if baby.id <= 9999 and baby.id >= 1000:
+        baby.id = '1' + str(baby.id)
+    childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
+    complication = Complication.query.filter(Complication.id == baby.complication_id).first()
+    get_picture_by_id(baby.id, baby)
+    baby.complication = complication.name
+    baby.childbirth_style = childbirth.name
+    if baby.due_date:
+        baby.due_date = str(baby.due_date)[:10]
+    return baby
 
 #def entering_who():
 #    """

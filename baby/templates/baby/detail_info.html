@@ -17,7 +17,7 @@
                         <li><a href="/html/visit_record.html/1">随访记录</a></li>
                         <li><a href="/html/grow_line.html/1">生长曲线</a></li>
                         <li><a href="#">生长速率</a></li>
-                        <li class="ui-state-active"><a href="/html/baby_detail.html">详细资料</a></li>
+                        <li class="ui-state-active"><a href="/html/baby_detail.html/1">详细资料</a></li>
                     </ul>
                 </div>
                 <a id="L-arrow-right" class="arrow"><span>&gt;</span></a>
@@ -25,7 +25,7 @@
 
            <div class="baby-img">
               <a href="#">
-                <img src="/static/img/system/head_picture/71X71.png" alt="" />
+                <img src="{{ baby.picture_path }}" alt="" />
               </a>
            </div>
 
@@ -33,47 +33,47 @@
             <ul>
               <li>
                     <span>婴儿ID</span>
-                    <span class="f-r">10001</span>
+                    <span class="f-r">{{ baby.id }}</span>
               </li>
               <li>
                        <span>婴儿名</span>
-                    <span class="f-r">龙宝宝</span>
+                    <span class="f-r">{{ baby.baby_name }}</span>
               </li>
               <li>
                        <span>性别</span>
-                    <span class="f-r">男</span>
+                    <span class="f-r">{{ baby.gender }}</span>
               </li>
               <li>
                        <span>预产期</span>
-                    <span class="f-r">2013/05/05</span>
+                    <span class="f-r">{{ baby.due_date }}</span>
               </li>
                <li>
                        <span>出生身长</span>
-                    <span class="f-r">50.6cm</span>
+                    <span class="f-r">{{ baby.born_height }} cm</span>
               </li>
               <li>
                        <span>出生体重</span>
-                    <span class="f-r">2306kg</span>
+                    <span class="f-r">{{ baby.born_weight }} kg</span>
               </li>
               <li>
                        <span>出生头围</span>
-                    <span class="f-r">34.3cm</span>
+                    <span class="f-r">{{ baby.born_head }} cm</span>
               </li>
               <li>
                        <span>分娩方式</span>
-                    <span class="f-r">剖腹产</span>
+                    <span class="f-r">{{ baby.childbirth_style }} </span>
               </li>
               <li>
                        <span>参考指标</span>
-                    <span class="f-r">小儿黄疸</span>
+                    <span class="f-r">{{ baby.complication }}</span>
               </li>
               <li>
                        <span>Apgar评分</span>
-                    <span class="f-r">68</span>
+                    <span class="f-r">{{ baby.apgar_score }}</span>
               </li>
               <li>
                        <span>生长指标</span>
-                    <span class="f-r">WHO</span>
+                    <span class="f-r">{{ baby.growth_standard }}</span>
               </li>
               <li>
                        <span>备注</span>
