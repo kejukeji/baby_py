@@ -220,25 +220,26 @@ def get_visit_record(id):
 
 
 def time_birthday_time_compare(dt, baby):
-    dt = datetime.datetime.strptime(str(dt), "%Y-%m-%d %H:%M:%S")
-    # today = datetime.datetime.today()
-    if baby.born_birthday:
-        birthday = baby.born_birthday
-        s = int((dt - birthday).total_seconds())
+    if dt:
+        dt = datetime.datetime.strptime(str(dt), "%Y-%m-%d %H:%M:%S")
+        # today = datetime.datetime.today()
+        if baby.born_birthday:
+            birthday = baby.born_birthday
+            s = int((dt - birthday).total_seconds())
 
-        # day_diff > 365, use year
-        if s / 3600 / 24 >= 365:
-            return str(s / 3600 / 24 / 365) + " 年"
-        elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
-            return str(s / 3600 / 24 / 30) + " 个月"
-        elif s / 3600 >= 24:  # hour_diff > 24, use day
-            return str(s / 3600 / 24) + " 天"
-        elif s / 60 > 60:  # minite_diff > 60, use hour
-            return str(s / 3600) + " 小时"
-        elif s > 60:  # second_diff > 60, use minite
-            return str(s / 60) + " 分钟"
-        else:  # use "just now"
-            return "刚刚"
+            # day_diff > 365, use year
+            if s / 3600 / 24 >= 365:
+                return str(s / 3600 / 24 / 365) + " 年"
+            elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+                return str(s / 3600 / 24 / 30) + " 个月"
+            elif s / 3600 >= 24:  # hour_diff > 24, use day
+                return str(s / 3600 / 24) + " 天"
+            elif s / 60 > 60:  # minite_diff > 60, use hour
+                return str(s / 3600) + " 小时"
+            elif s > 60:  # second_diff > 60, use minite
+                return str(s / 60) + " 分钟"
+            else:  # use "just now"
+                return "刚刚"
     return ""
 
 

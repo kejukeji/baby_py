@@ -10,6 +10,10 @@ def to_grow_line(id):
                            types=types)
 
 
+def to_grow_bar(id):
+    return render_template('baby/grow_bar.html')
+
+
 def to_raise():
     return render_template('baby/raise.html')
 
