@@ -206,17 +206,23 @@ def get_visit_record(id):
     """
     根据baby_id获取随访记录
     """
-    tracking, tracking_count = get_tracking_model(Tracking)
+    tracking, tracking_count = get_tracking_model(Tracking, id)
     baby = Baby.query.filter(Baby.id == id).first()
     time_birthday_week(baby)
-    if type(tracking) is list:
-        for t in tracking:
-            t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
-            t.measure_date = str(t.measure_date)[:10]
+    if tracking != 0:
+        if type(tracking) is list:
+            for t in tracking:
+                t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
+                t.measure_date = str(t.measure_date)[:10]
+        else:
+            tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
+            tracking.measure_date = str(tracking.measure_date)[:10]
+        return tracking, tracking_count, baby
     else:
-        tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
-        tracking.measure_date = str(tracking.measure_date)[:10]
-    return tracking, tracking_count, baby
+        if baby:
+            return 0,0, baby
+        else:
+            return 0,0,0
 
 
 def time_birthday_time_compare(dt, baby):

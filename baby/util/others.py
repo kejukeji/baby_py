@@ -98,9 +98,16 @@ def get_session_user():
     return None
 
 
-def set_session_user(user_name, user_id):
+def get_session(key):
+    '''获取session中key的值'''
+    if session.has_key(str(key)) and session[str(key)]:
+        return session[str(key)]
+    return None
+
+
+def set_session_user(key_name, value_name, key_id, value_id):
     """
        登陆成功保存到session当中
     """
-    session['user'] = user_name
-    session['user_id'] = user_id
+    session[str(key_name)] = value_name
+    session[str(key_id)] = value_id
