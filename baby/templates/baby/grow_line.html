@@ -27,7 +27,11 @@
                         <li><a href="/html/visit_record.html/{{ user_id }}">随访记录</a></li>
                         <li class="ui-state-active"><a href="/html/grow_line.html/{{ user_id }}">生长曲线</a></li>
                         <li><a href="/html/grow_bar.html/{{ user_id }}">生长速率</a></li>
-                        <li><a href="/html/baby_detail.html/{{ user_id }}">详细资料</a></li>
+                        {% if entrance == 'baby' %}
+
+                        {% else %}
+                            <li><a href="/html/baby_detail.html/{{ user_id }}">详细资料</a></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <a id="L-arrow-right" class="arrow"><span>&gt;</span></a>

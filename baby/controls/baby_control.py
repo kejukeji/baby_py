@@ -9,12 +9,14 @@ def to_grow_line(baby_id):
     return render_template('baby/grow_line.html',
                            tracking=tracking,
                            types=types,
-                           user_id=get_session('baby_id'))
+                           user_id=get_session('baby_id'),
+                           entrance=get_session('entrance'))
 
 
 def to_grow_bar(baby_id):
     return render_template('baby/grow_bar.html',
-                           user_id=get_session('baby_id'))
+                           user_id=get_session('baby_id'),
+                           entrance=get_session('entrance'))
 
 
 def to_raise():
@@ -24,7 +26,7 @@ def to_raise():
 def to_record(baby_id):
     entrance = str(request.args.get('entrance_type', 'baby'))
     record, record_count, baby = get_visit_record(baby_id)
-    set_session_user('baby', '','baby_id', baby_id)
+    set_session_user('entrance', entrance,'baby_id', baby_id)
     return render_template('baby/visit_record.html',
                            record=record,
                            record_count=record_count,
@@ -41,4 +43,5 @@ def to_baby_detail(baby_id):
     baby = get_baby_by_id(baby_id)
     return render_template('baby/detail_info.html',
                            baby=baby,
-                           user_id=get_session('baby_id'))
+                           user_id=get_session('baby_id'),
+                           entrance=get_session('entrance'))
