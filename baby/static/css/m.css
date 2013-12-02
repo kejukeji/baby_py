@@ -461,16 +461,16 @@ body {
   cursor: pointer;
 }
 .form-btns div {
-  width: 50%;
+  width: 45%;
   box-sizing: border-box;
 }
 .form-btns div.btn-l {
   text-align: right;
-  padding-right: 30px;
+  padding-right: 0px;
 }
 .form-btns div.btn-r {
   text-align: left;
-  padding-left: 30px;
+  padding-left: 0px;
 }
 .form-btns .btn {
   width: 90%;
@@ -780,4 +780,105 @@ body {
   height: 10px;
   background-color: #84691a;
   border-radius: 5px;
+}
+.need-title {
+  font-size: 16px;
+  line-height: 30px;
+  padding: 0 12px;
+  margin-top: 20px;
+  color: #9c8333;
+  font-weight: normal;
+}
+.need-list {
+  border: 1px solid #ccbf95;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  zoom: 1;
+  background-color: #fff;
+  margin: 10px;
+  margin-top: 0;
+}
+.need-list li {
+  padding: 10px;
+  margin-top: -1px;
+  border-top: 1px solid #ccbf95;
+  color: #9c8333;
+  font-size: 14px;
+  line-height: 28px;
+}
+.box-list li {
+  margin: 20px 10px;
+  background: #e4ddc3;
+  padding: 5px;
+  border-radius: 2px;
+}
+.box-list li .box-wrapper {
+  display: block;
+  color: #b29e63;
+  border: 1px solid #b19e63;
+  background-color: #FFF;
+  border-radius: 2px;
+  padding: 10px;
+}
+.box-list li .box-wrapper .imag {
+  float: left;
+  padding-right: 8px;
+  width: 25%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.box-list li .box-wrapper .imag img {
+  width: 60px;
+  height: 76px;
+}
+.box-list li .box-wrapper .imag p {
+  line-height: 24px;
+  text-align: center;
+}
+.box-list li .box-wrapper .cont {
+  float: left;
+  width: 75%;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+.box-list li .box-wrapper .cont h3 {
+  font-size: 14px;
+  height: 20px;
+}
+.box-list li .box-wrapper .cont p {
+  padding-top: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+  line-height: 18px;
+}
+.box-list li .box-wrapper .cont p.date {
+  text-align: right;
+  line-height: 24px;
+}
+.baby-img {
+  height: 110px;
+  border-bottom: 1px solid #b6b1ad;
+  box-shadow: 0px 1px 2px #CCC;
+  padding-top: 18px;
+}
+.baby-img a {
+  display: block;
+  width: 90px;
+  height: 90px;
+  background-color: #FFF;
+  border-radius: 45px;
+  box-shadow: 0px 2px 5px #8a856f;
+  padding: 2px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.baby-img a img {
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+}
+.baby-info-items {
+  margin: 15px;
 }

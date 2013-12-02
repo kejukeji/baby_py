@@ -4,7 +4,11 @@ from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
 from baby.util.others import set_session_user, time_diff, flatten
 from baby.models.feature_model import Tracking
+from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
+from .tracking_service import get_tracking_model
+from .baby_service import get_picture_by_id
+import datetime
 
 
 def check_login(login_name, login_pass):
@@ -12,7 +16,7 @@ def check_login(login_name, login_pass):
        login_name: 登陆名
        login_pass: 登陆密码
     """
-    baby = Baby.query.filter(Baby.login_name == login_name, Baby.baby_pass == login_pass).first()
+    baby = Baby.query.filter(Baby.patriarch_tel == login_name, Baby.baby_pass == login_pass).first()
     doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
     if baby != None or doctor != None:
         if baby != None:
@@ -119,6 +123,7 @@ def check_is_type(result, remember, return_success):
             baby_pic['is_remember'] = int(remember)
             baby_pic.pop('id')
             baby_pic['user_id'] = result.id
+            baby_pic['user_name'] = result.baby_name
             if result.born_birthday:
                 baby_birthday = result.born_birthday
                 baby_pic['time'] = time_diff(baby_birthday)
@@ -131,6 +136,7 @@ def check_is_type(result, remember, return_success):
             doctor_pic = flatten(result)
             doctor_pic['is_remember'] = int(remember)
             doctor_pic.pop('id')
+            doctor_pic['user_name'] = result.real_name
             doctor_pic['user_id'] = result.id
             if result.rel_path and result.picture_name:
                 doctor_pic['picture_path'] = result.rel_path + '/' + result.picture_name
@@ -142,24 +148,34 @@ def check_is_type(result, remember, return_success):
         return False
 
 
-def get_tracking(id):
+def get_tracking(id, types):
     """
     获得随访记录
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
-    weight = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_line = [0,0,0,0,0,0,0,0,0,0,0,0]
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
         for tracking in tracking_result:
             result = is_null(tracking.measure_date)
-            weight[result] = (int(tracking.weight))
-        return weight
+            if types == 'weight':
+                grow_line[result] = int(tracking.weight)
+            if types == 'height':
+                grow_line[result] = int(tracking.height)
+            if types == 'head':
+                grow_line[result] = int(tracking.head_wai)
+        return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
             result = is_null(tracking.measure_date)
-            weight[result] = (int(tracking.weight))
-        return weight
+            if types == 'weight':
+                grow_line[result] = int(tracking.weight)
+            if types == 'height':
+                grow_line[result] = int(tracking.height)
+            if types == 'head':
+                grow_line[result] = int(tracking.head_wai)
+        return grow_line
 
 
 def is_null(measure_date):
@@ -169,6 +185,114 @@ def is_null(measure_date):
         result = singe_time[1]
         return int(result) - 1
 
+
+def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition):
+    """
+    新增随访记录
+    """
+    tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
+                        court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
+                        formula_feed_measure=nutrition)
+
+    try:
+        db.add(tracking)
+        db.commit()
+    except:
+        return False
+    return True
+
+
+def get_visit_record(id):
+    """
+    根据baby_id获取随访记录
+    """
+    tracking, tracking_count = get_tracking_model(Tracking, id)
+    baby = Baby.query.filter(Baby.id == id).first()
+    time_birthday_week(baby)
+    if tracking != 0:
+        if type(tracking) is list:
+            for t in tracking:
+                t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
+                t.measure_date = str(t.measure_date)[:10]
+        else:
+            tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
+            tracking.measure_date = str(tracking.measure_date)[:10]
+        return tracking, tracking_count, baby
+    else:
+        if baby:
+            return 0,0, baby
+        else:
+            return 0,0,0
+
+
+def time_birthday_time_compare(dt, baby):
+    if dt:
+        dt = datetime.datetime.strptime(str(dt), "%Y-%m-%d %H:%M:%S")
+        # today = datetime.datetime.today()
+        if baby.born_birthday:
+            birthday = baby.born_birthday
+            s = int((dt - birthday).total_seconds())
+
+            # day_diff > 365, use year
+            if s / 3600 / 24 >= 365:
+                return str(s / 3600 / 24 / 365) + " 年"
+            elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+                return str(s / 3600 / 24 / 30) + " 个月"
+            elif s / 3600 >= 24:  # hour_diff > 24, use day
+                return str(s / 3600 / 24) + " 天"
+            elif s / 60 > 60:  # minite_diff > 60, use hour
+                return str(s / 3600) + " 小时"
+            elif s > 60:  # second_diff > 60, use minite
+                return str(s / 60) + " 分钟"
+            else:  # use "just now"
+                return "刚刚"
+    return ""
+
+
+def time_birthday_week(baby):
+    if baby.born_birthday:
+        dt = datetime.datetime.strptime(str(baby.born_birthday), "%Y-%m-%d %H:%M:%S")
+        today = datetime.datetime.today()
+        s = int((today - dt).total_seconds())
+
+        # day_diff > 365, use year
+        if s / 3600 / 24 >= 365:
+            baby.birthday =  str(s / 3600 / 24 / 365) + " 年"
+        elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+            baby.birthday =  str(s / 3600 / 24 / 30) + " 个月"
+        elif s / 3600 / 24 >= 7:  # day_diff > 7, use week
+            baby.birthday = str(s / 3600 / 24 / 7) + "周"
+        elif s / 3600 >= 24:  # hour_diff > 24, use day
+            baby.birthday = str(s / 3600 / 24) + " 天"
+        elif s / 60 > 60:  # minite_diff > 60, use hour
+            baby.birthday = str(s / 3600) + " 小时"
+        elif s > 60:  # second_diff > 60, use minite
+            baby.birthday = str(s / 60) + " 分钟"
+        else:  # use "just now"
+            baby.birthday = ''
+
+
+def get_baby_by_id(baby_id):
+    """
+    获得baby
+    """
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    get_picture_by_id(baby.id, baby)
+    if baby.id <= 9 and baby.id >= 1:
+        baby.id = '1000' + str(baby.id)
+    if baby.id <= 99 and baby.id >= 10:
+        baby.id = '100' + str(baby.id)
+    if baby.id <= 999 and baby.id >= 100:
+        baby.id = '10' + str(baby.id)
+    if baby.id <= 9999 and baby.id >= 1000:
+        baby.id = '1' + str(baby.id)
+    childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
+    complication = Complication.query.filter(Complication.id == baby.complication_id).first()
+    baby.complication = complication.name
+    baby.childbirth_style = childbirth.name
+    if baby.due_date:
+        baby.due_date = str(baby.due_date)[:10]
+    return baby
 
 #def entering_who():
 #    """

@@ -16,20 +16,21 @@ def format_baby(baby, resp_suc):
     """
         格式化baby对象
     """
-    baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
-    childbirth_style = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.complication_id).first()
-    complication_id_list = baby.complication_id.split(',')
-    baby_pic = flatten(baby)
-    get_complication(complication_id_list, baby_pic)
-    if baby.born_birthday:
-        baby_birthday = baby.born_birthday
-        baby_pic['time'] = time_diff(baby_birthday)
-    if baby_picture:
-        if baby_picture.rel_path and baby_picture.picture_name:
-            baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
-    if childbirth_style:
-        baby_pic['childbirth'] = childbirth_style.name
-    resp_suc['baby_list'].append(baby_pic)
+    if baby:
+        baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
+        childbirth_style = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.complication_id).first()
+        complication_id_list = baby.complication_id.split(',')
+        baby_pic = flatten(baby)
+        get_complication(complication_id_list, baby_pic)
+        if baby.born_birthday:
+            baby_birthday = baby.born_birthday
+            baby_pic['time'] = time_diff(baby_birthday)
+        if baby_picture:
+            if baby_picture.rel_path and baby_picture.picture_name:
+                baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
+        if childbirth_style:
+            baby_pic['childbirth'] = childbirth_style.name
+        resp_suc['baby_list'].append(baby_pic)
 
 
 def get_complication(complication_list, baby_pic):
@@ -58,7 +59,7 @@ def baby_list(page, doctor_id):
     page, per_page = page_utils(baby_count, page)
     baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
-        babys = Baby.query.filter()[per_page*(temp_page-1):per_page*temp_page]
+        babys = Baby.query.filter().all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
@@ -106,7 +107,7 @@ def baby_collect_list(page, doctor_id):
     page, per_page = page_utils(result_count, page)
     if result_count > 1:
         results = db.query(Baby).\
-            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(temp_page-1):per_page*temp_page]
+            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         for result in results:
             get_picture_by_id(result.id, result)
             result.is_collect = 0
@@ -178,7 +179,7 @@ def get_parenting_guide(baby_id):
             return system_message
 
 
-def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight, born_height, born_head, childbirth_style_id,
                 complication_id, apagar_score, upload_image, success):
     '''修改婴儿资料'''
     baby = Baby.query.filter(Baby.id == baby_id).first()
@@ -189,6 +190,8 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
             baby.baby_name = baby_name
         if due_date:
             baby.due_date = due_date
+        if gender:
+            baby.gender = gender
         if born_weight:
             baby.born_weight = born_weight
         if born_height:
@@ -222,14 +225,13 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_h
 
 
 def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head, childbirth_style_id,
-                complication_id, apgar_score):
+                complication_id):
     baby = Baby.query.filter(Baby.patriarch_tel == patriarch_tel).first()
     if baby:
         return 0
     else:
         baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
-                    born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id,
-                    apgar_score=apgar_score)
+                    born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id)
         try:
             db.add(baby)
             db.commit()

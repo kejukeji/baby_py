@@ -18,6 +18,7 @@
 					<div class="input-wrap f-r">
 						<div class="select-wrap nobg">
 							<input type="date" class="input-date" id="l-checkdate"/>
+                            <input type="hidden" id="baby_id" value="1"/>
 						</div>
 					</div>
 				</li>
@@ -52,7 +53,7 @@
 					<label class="f-l">配方奶种类：</label>
 					<div class="input-wrap f-r">
 						<p class="btn-wrap">
-							<a href="#" class="green-btn2">查看营养数据</a>
+							<a href="/html/need.html" class="green-btn2">查看营养数据</a>
 							<a href="/html/formula.html"  class="green-btn2">新增加配方奶</a>
 						</p>
 					</div>
@@ -62,7 +63,12 @@
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
 							<select name="hospital" id="l-location">
-								<option value="1">骨科医院</option>
+                                {% if court_count > 1 %}
+                                    {% for court in courts %}
+                                       <option value="{{ court.id }}">{{ court.type }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                {% endif %}
 							</select>
 						</div>
 					</div>
@@ -72,8 +78,7 @@
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
 							<select name="class" id="l-brand">
-								<option value="1">科室1</option>
-								<option value="2">科室2</option>
+
 							</select>
 						</div>
 					</div>
@@ -83,10 +88,7 @@
 					<div class="input-wrap f-r">
 						<div class="select-wrap">
 							<select name="profile" id="l-kind">
-								<option value="1">职称1</option>
-								<option value="2">职称2</option>
-								<option value="3">职称3</option>
-								<option value="4">职称4</option>
+
 							</select>
 						</div>
 					</div>
@@ -116,6 +118,85 @@
 </section>
      <script type="text/javascript" src="/static/js/zepto.min.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript">
+        var brandArray = new Array()
+        var formulaArray = new Array()
+        {% set count = 0 %}
+        {% for brand in brands %}
+            brandArray[{{ count }}] = new Array({{ brand.court_id }}, "{{ brand.name}}", {{ brand.id }})
+            {% set count = count + 1 %}
+        {% endfor %}
+
+        {% set count1 = 0 %}
+        {% for formula in formulas %}
+            formulaArray[{{ count1 }}] = new Array({{ formula.brand_id }}, "{{ formula.type}}", {{ formula.id }})
+            {% set count1 = count1 + 1 %}
+        {% endfor %}
+        $(function(){
+            courtObj = $('#l-location')
+            brandObj = $('#l-brand')
+            kindObj = $('#l-kind')
+            var c_defaultVal = courtObj.val()
+            // 绑定change时间，实现连动
+            courtObj.bind('change', function(){
+                brandObj.empty()
+                var selectedVal = parseInt($(this).val())
+                var is_true = true
+                for (i =0; i < brandArray.length; i++) {
+                    var brandVal = brandArray[i][0]
+                    if (selectedVal == brandVal){
+                        // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        brandObj.append("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        is_true = false
+                    }
+                }
+                if (is_true){
+                    brandObj.append("<option value='0'>暂无此品牌</option>")
+                }
+                var b_defaultVal = brandObj.val()
+                kindObj.empty()
+                for (i =0; i < formulaArray.length; i++) {
+                    var kindVal = formulaArray[i][0]
+                    if (b_defaultVal == kindVal){
+                        // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        kindObj.append("<option value='"+formulaArray[i][2]+"'>"+formulaArray[i][1]+"</option>")
+                    }
+                }
+            })
+            brandObj.bind('change', function(){
+                var selectedVal = parseInt($(this).val())
+                kindObj.empty()
+                var is_true = true
+                for (i =0; i < formulaArray.length; i++) {
+                    var kindVal = formulaArray[i][0]
+                    if (selectedVal == kindVal){
+                        // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        kindObj.append("<option value='"+formulaArray[i][2]+"'>"+formulaArray[i][1]+"</option>")
+                        is_ture = false
+                    }
+                }
+                if (is_true){
+                    kindObj.append("<option value='0'>暂无此种类</option>")
+                }
+            })
+            //加载页面时候，默认选中
+            for (i =0; i < brandArray.length; i++) {
+                    var brandVal = brandArray[i][0]
+                    if (c_defaultVal == brandVal){
+                        // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        brandObj.append("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                    }
+            }
+            var b_defaultVal = brandArray[0][0]
+            for (i =0; i < formulaArray.length; i++) {
+                    var kindVal = formulaArray[i][0]
+                    if (b_defaultVal == kindVal){
+                        // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
+                        kindObj.append("<option value='"+formulaArray[i][2]+"'>"+formulaArray[i][1]+"</option>")
+                    }
+            }
+        })
+    </script>
 	<script>
 		$(function(){
 			MZ.app.addVisitSubmit('#formula-form');

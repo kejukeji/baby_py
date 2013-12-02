@@ -24,6 +24,7 @@ class BabyInfo(restful.Resource):
         parser.add_argument('patriarch_tel', type=str, required=False)
         parser.add_argument('baby_name', type=str, required=False)
         parser.add_argument('due_date', type=str, required=False)
+        parser.add_argument('gender', type=str, required=False)
         parser.add_argument('born_weight', type=str, required=False)
         parser.add_argument('born_height', type=str, required=False)
         parser.add_argument('born_head', type=str, required=False)
@@ -56,7 +57,8 @@ class BabyInfo(restful.Resource):
             complication_id = args['complication_id']
             apagar_score = args['apagar_score']
             upload_image = args['upload_image']
-            is_ture = update_baby(baby_id, patriarch_tel, baby_name, due_date, born_weight, born_height, born_head, childbirth_style_id,
+            gender = args['gender']
+            is_ture = update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight, born_height, born_head, childbirth_style_id,
                         complication_id, apagar_score, upload_image, success)
             if is_ture:
                 return success

@@ -1,9 +1,11 @@
 # coding: UTF-8
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 from baby.util.others import get_session_user
 from baby.services.more_service import check_login, get_department, get_hospital\
     , get_position, get_province
+from baby.services.more_service import get_tracking
+from baby.services.feature_service import get_court, get_brand, get_formula
 
 
 
@@ -77,4 +79,13 @@ def to_formula():
     return render_template('doctor/formula_milk.html')
 
 def to_additional_follow_up():
-    return render_template('doctor/add_visit_record.html')
+    court, court_count = get_court()
+    brand, brand_count = get_brand()
+    formula, formula_count = get_formula()
+    return render_template('doctor/add_visit_record.html',
+                           courts=court,
+                           brands=brand,
+                           formulas=formula,
+                           court_count=court_count,
+                           brand_count=brand_count,
+                           formula_count=formula_count)

@@ -8,14 +8,21 @@
 <title>生长曲线</title>
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
 <script type="text/javascript">
-
-    window.weightObj = {
-        'xAxis': ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],  // 横坐标的范围（月份建议01...12）
-        'yStart': 0, // 这个数值是y轴最小值
-        'yEnd': 100, // 这个数值是y轴最大值,
-        'ySpace': 20, // y值刻度差范围
-        'data': {{ tracking }} // 数据（先试下一条线，如果ok，我这边开放多条线）
-    }
+    window.growObj = {
+        'xAxis': ['0', '0.5', '1', '2', '3'],
+        'yStart': 0,
+        'yEnd': 450,
+        'ySpace': 50,
+        'data': [{
+            name: '母乳',
+            value: [120, 140, 150, 160, 180],
+            color: '#08c'
+        }, {
+            name: '配方奶',
+            value: [130, 150, 170, 180, 200],
+            color: '#c12c44'
+        }]
+    };
 </script>
 </head>
 <body>
@@ -25,8 +32,8 @@
                 <div class="nav-cont" id="L-nav">
                     <ul>
                         <li><a href="/html/visit_record.html/{{ user_id }}">随访记录</a></li>
-                        <li class="ui-state-active"><a href="/html/grow_line.html/{{ user_id }}">生长曲线</a></li>
-                        <li><a href="/html/grow_bar.html/{{ user_id }}">生长速率</a></li>
+                        <li><a href="/html/grow_line.html/{{ user_id }}">生长曲线</a></li>
+                        <li class="ui-state-active"><a href="/html/grow_bar.html/{{ user_id }}">生长速率</a></li>
                         <li><a href="/html/baby_detail.html/{{ user_id }}">详细资料</a></li>
                     </ul>
                 </div>
@@ -35,31 +42,18 @@
     
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a class="current" href="/html/grow_line.html/1?type=weight" id="weight">体     重</a>
-                    <a href="/html/grow_line.html/1?type=height" id="height">身     长</a>
-                    <a href="/html/grow_line.html/1?type=head" id="head">头     围</a>
+                    <a class="current" href="#">体     重</a>
+                    <a href="#">身     长</a>
+                    <a href="#">头     围</a>
                 </div>
-                <h3 class="chart-y" id="mark">体              重</h3>
+                <!-- <h3 class="chart-y">体              重</h3> -->
 
                 <div class="chart-stage" id="linechart">
                         <div id="canvasDiv"></div>
                 </div>
 
-                <h3 class="chart-x">月龄</h3>
+                <!-- <h3 class="chart-x">月龄</h3> -->
             </div>
-
-            <ul class="select-block clearfix">
-                     <ul>
-                               <li>
-                                    <div class="iradio checked"><input type="radio" name="place" value="0" checked></div>  
-                                    <label for="y-in">WHO</label>
-                                </li>
-                                <li>
-                                    <div class="iradio"><input type="radio" name="place" value="1" checked></div>  
-                                    <label for="y-in">上海</label>
-                                </li>
-                     </ul>
-            </ul>
 
     </section>
     <script type="text/javascript" src="/static/js/zepto.min.js"></script>
@@ -75,32 +69,9 @@
     <script type="text/javascript" src="/static/js/widget/navigator/$scrollable.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/chart.min.js"></script>
-    <script type="text/javascript" src="/static/js/chart.js"></script>
-    <script type="text/javascript">
-        a_chart_tab = $('.chart-tab a') //得到类样式.chart-tab包含的所有a标签元素
-        marks = $('#mark') //得到标示位
-        $(a_chart_tab).each(function(i, ele){
-            types = '{{ types }}'
-            e_id = ele.id
-            if (e_id == types){
-                ele.className = 'current'
-                if (types == 'weight'){
-                    marks.html('体              重')
-                }
-                if (types == 'height'){
-                    marks.html('身              长')
-                }
-                if (types == 'head'){
-                    marks.html('头              围')
-                }
-            }else{
-                ele.className = ''
-            }
-        })
-    </script>
+    <script type="text/javascript" src="/static/js/barChart.js"></script>
     <script type="text/javascript">
         MZ.app.slideNavigator()
-        MZ.app.checkRadio('.iradio');
     </script>
 </body>
 </html>

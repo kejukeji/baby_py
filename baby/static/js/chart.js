@@ -19,6 +19,7 @@ $(function() {
 		width: $('.chart-frame').width(),
 		height: 300,
 		border: 0,
+		turn_off_touchmove: true,
 		//background_color: '#0391d5',
 		sub_option: {
 			smooth: true,
