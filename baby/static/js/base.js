@@ -467,7 +467,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.webviewPassword(json.code)
+						window.app.webviewPassword(json.code)
 						// where to go ?
 					}, 2000)
 				}else if (code === 500) {
@@ -664,7 +664,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.webviewFormula(json.code)
+						window.app.webviewFormula(json.code)
 						// where to go ?
 					}, 2000)
 				}
@@ -735,7 +735,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.webviewAddVisit(json.code)
+						window.app.webviewAddVisit(json.code)
 						// where to go ?
 					}, 2000)
 				}
