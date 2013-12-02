@@ -36,7 +36,7 @@ class BabyList(restful.Resource):
         resp_suc = success_dic().dic
         fail = fail_dic().dic
         resp_suc['baby_list'] = []
-        baby = baby_list(page, doctor_id)
+        baby = baby_list(page, int(doctor_id))
         if baby:
             if type(baby) is list:
                 for bb in baby:

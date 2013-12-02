@@ -26,12 +26,18 @@ def to_raise():
 def to_record(baby_id):
     entrance = str(request.args.get('entrance_type', 'doctor'))
     record, record_count, baby = get_visit_record(baby_id)
-    set_session_user('entrance', entrance,'baby_id', baby_id)
+    login_id = 0
+    if entrance == 'baby':
+        set_session_user('entrance', entrance,'user_id', baby_id)
+        login_id = get_session('user_id')
+    else:
+        set_session_user('entrance', entrance,'baby_id', baby_id)
+        login_id = get_session('baby_id')
     return render_template('baby/visit_record.html',
                            record=record,
                            record_count=record_count,
                            baby=baby,
-                           user_id=get_session('baby_id'),
+                           user_id=login_id,
                            entrance=entrance)
 
 

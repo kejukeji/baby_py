@@ -4,7 +4,7 @@ from ..models.baby_model import Baby, BabyPicture, ChildbirthStyle, Complication
 from ..models import db
 from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
-from ..util.others import page_utils, flatten, time_diff
+from ..util.others import page_utils, flatten, time_diff, set_session_user
 from ..models.feature_model import Collect
 from werkzeug import secure_filename
 from baby.setting.server import *
@@ -54,6 +54,7 @@ def baby_list(page, doctor_id):
     """
         全部婴儿列表
     """
+    set_session_user('', '', 'user_id', doctor_id)
     baby_count = Baby.query.filter().count()
     temp_page = page
     page, per_page = page_utils(baby_count, page)
