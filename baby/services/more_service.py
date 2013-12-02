@@ -2,7 +2,7 @@
 
 from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
-from baby.util.others import set_session_user, time_diff, flatten
+from baby.util.others import set_session_user, time_diff, flatten, get_session
 from baby.models.feature_model import Tracking
 from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
@@ -92,28 +92,31 @@ def by_id_alter_password(user_id, old_password, new_password):
           判断old_password是否正确
              修改密码
     """
-    baby = Baby.query.filter(Baby.id == user_id).first()
-    if baby:
-        if baby.baby_pass == old_password:
-            baby.baby_pass = new_password
-            try:
-                db.commit()
-            except:
+    entrance = get_session('entrance')
+    if entrance == 'baby':
+        baby = Baby.query.filter(Baby.id == user_id).first()
+        if baby:
+            if baby.baby_pass == old_password:
+                baby.baby_pass = new_password
+                try:
+                    db.commit()
+                except:
+                    return False
+                return True
+            else:
                 return False
-            return True
-        else:
-            return False
-    doctor = Doctor.query.filter(Doctor.id == user_id).first()
-    if doctor:
-        if doctor.doctor_pass == old_password:
-            doctor.doctor_pass = new_password
-            try:
-                db.commit()
-            except:
+    elif entrance is None or entrance == 'doctor':
+        doctor = Doctor.query.filter(Doctor.id == user_id).first()
+        if doctor:
+            if doctor.doctor_pass == old_password:
+                doctor.doctor_pass = new_password
+                try:
+                    db.commit()
+                except:
+                    return False
+                return True
+            else:
                 return False
-            return True
-        else:
-            return False
 
 
 def json_append(return_success, obj_pic):
