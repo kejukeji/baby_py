@@ -96,6 +96,10 @@ def by_id_alter_password(user_id, old_password, new_password):
     if baby:
         if baby.baby_pass == old_password:
             baby.baby_pass = new_password
+            try:
+                db.commit()
+            except:
+                return False
             return True
         else:
             return False
@@ -103,6 +107,10 @@ def by_id_alter_password(user_id, old_password, new_password):
     if doctor:
         if doctor.doctor_pass == old_password:
             doctor.doctor_pass = new_password
+            try:
+                db.commit()
+            except:
+                return False
             return True
         else:
             return False

@@ -4,7 +4,7 @@ from baby import app
 from flask.ext import restful
 from restfuls.doctor_restful import *
 from restfuls.baby_restful import BabyInfo, ParentingGuide
-from restfuls.login_register import DoLogin, RegisterData, AlterPassword, DoRegisterDoctor, CreateBabyAccount
+from restfuls.login_register import DoLogin, RegisterData, ForgetPassword, DoRegisterDoctor, CreateBabyAccount
 from baby.controls.user_feature_control import *
 from baby.controls.baby_control import *
 from baby.controls.doctor_control import *
@@ -53,7 +53,7 @@ api.add_resource(BabyInfo, '/restful/baby/info')
 api.add_resource(ParentingGuide, '/restful/baby/parenting/guide')
 api.add_resource(DoLogin, '/restful/html/do/login')
 api.add_resource(RegisterData, '/restful/html/register/data')
-api.add_resource(AlterPassword, '/restful/html/forget/password')
+api.add_resource(ForgetPassword, '/restful/html/forget/password')
 api.add_resource(DoRegisterDoctor, '/restful/html/do/register')
 api.add_resource(AcademicAbstract, '/restful/html/academic')
 api.add_resource(AddFormula, '/restful/html/add/formula')

@@ -361,8 +361,9 @@ MZ.constant = {
     'COMPLICATION_EMPTY': '合并症不能为空',
     'DATE_EMPTY': '测量日期不能为空',
     'FEEDING_EMPTY': '母乳喂养不能为空',
+    'OLD_PASSWORD_ERROR': '旧密码不正确',
 	'LOGIN_URL': '/restful/html/do/login',
-	'FORGET_PWD': '/restful/html/alter/password',
+	'FORGET_PWD': '/restful/html/forget/password',
 	'REGISTER_URL': '/restful/html/do/register',
     'MILK_URL': '/restful/html/add/formula',
     'CREATE_BABY_URL': '/restful/html/create/baby',
@@ -452,8 +453,8 @@ MZ.app = {
 				return
 			}
 			var params = {
-				'oldPassword': oldPwdValue,
-				'newPassword': newPwdValue
+				'old_password': oldPwdValue,
+				'new_password': newPwdValue
 			}
 			MZ.util.Request({
 				url: MZ.constant.FORGET_PWD,
@@ -466,10 +467,16 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						// window.webviewPassword(json.userId)
+						window.webviewPassword(json.code)
 						// where to go ?
 					}, 2000)
-				}
+				}else if (code === 500) {
+                    window.Notification.simple(MZ.constant.OLD_PASSWORD_ERROR, 2000)
+					return
+                }else{
+                    window.Notification.simple(json.msg, 2000)
+					return
+                }
 			})
 
 		})

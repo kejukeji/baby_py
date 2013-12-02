@@ -3,7 +3,7 @@
 from flask.ext import restful
 from flask.ext.restful import reqparse
 from baby.services.more_service import *
-from baby.util.others import success_dic, fail_dic
+from baby.util.others import success_dic, fail_dic, get_session
 from baby.util.baby_doctor_commonality import register_data_department, register_data_hospital, register_data_position,\
     register_data_province
 from baby.services.doctor_service import register_doctor
@@ -106,14 +106,14 @@ class RegisterData(restful.Resource):
             return return_fail
 
 
-class AlterPassword(restful.Resource):
+class ForgetPassword(restful.Resource):
     """
        修改密码
     """
     @staticmethod
     def post():
         parser = reqparse.RequestParser()
-        parser.add_argument('user_id', type=str, required=True, help=u'user_id 必须')
+        # parser.add_argument('user_id', type=str, required=True, help=u'user_id 必须')
         parser.add_argument('old_password', type=str, required=True, help=u'old_password 必须')
         parser.add_argument('new_password', type=str, required=True, help=u'new_password 必须')
 
@@ -121,15 +121,25 @@ class AlterPassword(restful.Resource):
 
         old_password = args['old_password']
         new_password = args['new_password']
-        user_id = args['user_id']
+        # user_id = args['user_id']
 
         return_success = success_dic().dic
         return_fail = fail_dic().dic
+        user_id = get_session('user_id')
+        if user_id is None:
+            return_fail.pop('message')
+            return_fail['msg'] = '请先登录!'
+            return_fail.pop('code')
+            return_fail['code'] = 404
+            return return_fail
 
         is_true = by_id_alter_password(user_id, old_password, new_password)
         if is_true:
+            return_success['msg'] = '修改密码成功'
             return return_success
         else:
+            return_fail.pop('message')
+            return_fail['message'] = '旧密码不正确!'
             return return_fail
 
 
