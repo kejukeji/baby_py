@@ -160,6 +160,11 @@ class Collect(Base):
     type_id = Column(Integer, nullable=False)
     type = Column(String(10), nullable=True)
 
+    def __init__(self, **kwargs):
+        self.doctor_id = kwargs.pop('doctor_id')
+        self.type_id = kwargs.pop('type_id')
+        self.type = kwargs.pop('type')
+
 
 class SearchHistory(Base):
     """

@@ -265,3 +265,23 @@ class AcademicAbstract(restful.Resource):
             return success
         else:
             return fail
+
+
+class CollectBaby(restful.Resource):
+    """
+    收藏baby
+    """
+    @staticmethod
+    def get():
+        """
+        argument:
+        1.type: 收藏类型，baby  or  abstract
+        2.baby_id: 收藏baby id
+        3.abstract_id: 收藏abstract id
+        4.doctor_id: 医生id
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('type', type=str, required=True, help=u'type 必须')
+        parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
+        parser.add_argument('baby_id', type=str)
+        parser.add_argument('abstract_id', type=str)

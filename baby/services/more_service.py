@@ -20,10 +20,10 @@ def check_login(login_name, login_pass):
     doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
     if baby != None or doctor != None:
         if baby != None:
-            set_session_user(baby.login_name, baby.id)
+            set_session_user('user', baby.login_name, 'user_id', baby.id)
             return baby
         if doctor != None:
-            set_session_user(doctor.doctor_name, doctor.id)
+            set_session_user('user', doctor.doctor_name, 'user_id', doctor.id)
             return doctor
     return None
 
