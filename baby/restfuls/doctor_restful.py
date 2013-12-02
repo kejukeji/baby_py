@@ -10,6 +10,7 @@ from ..services.baby_service import baby_collect_list, baby_list, search_by_keyw
 from ..services.doctor_service import doctor_info, get_meeting_message, update_doctor, doctor_pickler
 from ..services.search_history_service import search_history_list, delete_all_search
 from ..services.academic_abstract_service import get_academic_abstract
+from ..services.collect_service import insert_or_cancel_collects
 import werkzeug
 
 
@@ -267,7 +268,7 @@ class AcademicAbstract(restful.Resource):
             return fail
 
 
-class CollectBaby(restful.Resource):
+class DoctorCollect(restful.Resource):
     """
     收藏baby
     """
@@ -285,3 +286,26 @@ class CollectBaby(restful.Resource):
         parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
         parser.add_argument('baby_id', type=str)
         parser.add_argument('abstract_id', type=str)
+
+        args = parser.parse_args()
+
+        collect_type = args['type']
+        doctor_id = args['doctor_id']
+        baby_id = args['baby_id']
+        abstract_id = args['abstract_id']
+
+        success = success_dic().dic
+        fail = fail_dic().dic
+
+        if baby_id:
+            is_true = insert_or_cancel_collects(doctor_id, baby_id, collect_type)
+            if is_true:
+                return success
+            else:
+                return fail
+        if abstract_id:
+            is_true = insert_or_cancel_collects(doctor_id, abstract_id, collect_type)
+            if is_true:
+                return success
+            else:
+                return fail

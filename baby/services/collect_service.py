@@ -12,7 +12,7 @@ def check_is_collect(doctor_id, type_id, collect_type):
         return None
 
 
-def insert_collects(doctor_id, type_id, collect_type):
+def insert_or_cancel_collects(doctor_id, type_id, collect_type):
     '''添加收藏'''
     result = check_is_collect(doctor_id, type_id, collect_type)
     if result:
