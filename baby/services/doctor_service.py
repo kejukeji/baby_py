@@ -83,17 +83,15 @@ def update_doctor(doctor_id, real_name, province_id, belong_hospital_id, belong_
         return False
 
 
-def get_meeting_message(page):
+def get_meeting_message():
     """
         得到会议消息
 
     """
     system_message_count = SystemMessage.query.filter(SystemMessage.type == 'meeting').count()
-    temp_page = page
-    page, per_page = page_utils(system_message_count, page, per_page=3)
     if system_message_count > 1:
         system_messages = SystemMessage.query.filter(SystemMessage.type == 'meeting').\
-            order_by(SystemMessage.message_date.desc())[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            order_by(SystemMessage.message_date.desc())
         for system_message in system_messages:
             system_message.message_date = str(system_message.message_date)[:10]
         return system_messages, system_message_count

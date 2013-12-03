@@ -34,7 +34,7 @@ app.add_url_rule('/html/add_follow-up.html', 'to_additional_follow_up', to_addit
 app.add_url_rule('/html/visit_record.html/<int:baby_id>', 'to_record', to_record, methods={'GET', 'POST'})
 app.add_url_rule('/html/create_baby.html', 'to_create_baby_account', to_create_baby_account, methods={'GET', 'POST'})
 app.add_url_rule('/html/need.html', 'to_need', to_yy_need, methods={'GET', 'POST'})
-app.add_url_rule('/html/meeting_notice.html/<int:page>', 'to_meeting_notice', to_meeting_notice, methods={'GET', 'POST'})
+app.add_url_rule('/html/meeting_notice.html', 'to_meeting_notice', to_meeting_notice, methods={'GET', 'POST'})
 app.add_url_rule('/html/raise_dir.html', 'to_raise_dir', to_raise_dir, methods={'GET', 'POST'})
 app.add_url_rule('/html/baby_detail.html/<int:baby_id>', 'to_baby_detail', to_baby_detail, methods={'GET', 'POST'})
 app.add_url_rule('/html/grow_bar.html/<int:baby_id>', 'to_grow_bar', to_grow_bar, methods={'GET', 'POST'})

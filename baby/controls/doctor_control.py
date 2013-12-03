@@ -24,8 +24,8 @@ def to_yy_need():
     return render_template('doctor/yy_need.html')
 
 
-def to_meeting_notice(page):
-    result, count = get_meeting_message(page)
+def to_meeting_notice():
+    result, count = get_meeting_message()
     return render_template('doctor/meeting_notice.html',
                            result=result,
                            count=count)

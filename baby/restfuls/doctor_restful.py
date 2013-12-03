@@ -229,7 +229,7 @@ class MeetingNotice(restful.Resource):
         fail = fail_dic().dic
         success['system_message_list'] = []
 
-        system_message, count = get_meeting_message(page)
+        system_message, count = get_meeting_message()
         if system_message:
             if type(system_message) is list:
                 for system in system_message:
