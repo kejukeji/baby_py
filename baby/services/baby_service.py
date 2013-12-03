@@ -60,7 +60,7 @@ def baby_list(page, doctor_id):
     page, per_page = page_utils(baby_count, page)
     baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
-        babys = Baby.query.filter().order_by(Baby.born_birthday.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+        babys = Baby.query.filter().order_by(Baby.system_message_time.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
