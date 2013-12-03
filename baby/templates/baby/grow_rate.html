@@ -7,24 +7,16 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>生长曲线</title>
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
-<style type="text/css">
-    .need-list ul li span {font-size: 12px;}
-    .need-title {font-size: 14px;}
-</style>
 <script type="text/javascript">
     window.growObj = {
-        'xAxis': ['0', '0.5', '1', '2', '3'],
+        'xAxis': ['13-02-05', '13-06-05', '13-10-05', '13-12-05', '14-02-05'],
         'yStart': 0,
-        'yEnd': 450,
-        'ySpace': 50,
+        'yEnd': 5,
+        'ySpace': 1,
         'data': [{
             name: '母乳',
-            value: {{ breastfeeding}},
+            value: [3.2, 4.1, 3.9, 3.4, 3.1],
             color: '#08c'
-        }, {
-            name: '配方奶',
-            value: {{ formula_feeding }},
-            color: '#c12c44'
         }]
     };
 </script>
@@ -47,63 +39,46 @@
                 </div>
                 <a id="L-arrow-right" class="arrow"><span>&gt;</span></a>
            </div>
+
+           <div class="need-list" style="margin-top: 10px;">
+            <ul>
+                <li>
+                    <span>已摄入营养</span>
+                </li>
+                <li>
+                    <span>能量</span>
+                    <span class="f-r">kcal/kg/day</span>
+                </li>
+                <li>
+                    <span>蛋白质</span>
+                    <span class="f-r">mg/kg/day</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="need-list">
+            <ul>
+                <li>
+                    <span>当前营养差距</span>
+                </li>
+                <li>
+                    <span>能量</span>
+                    <span class="f-r">kcal/kg/day</span>
+                </li>
+                <li>
+                    <span>蛋白质</span>
+                    <span class="f-r">mg/kg/day</span>
+                </li>
+            </ul>
+        </div>
     
             <div class="chart-frame">
-                <div class="chart-tab">
-                    <a class="current" href="/html/grow_bar.html/{{ user_id }}?type=weight" id="weight">体     重</a>
-                    <a href="/html/grow_bar.html/{{ user_id }}?type=height" id="height">身     长</a>
-                    <a href="/html/grow_bar.html/{{ user_id }}?type=head" id="head">头     围</a>
-                </div>
-                <!-- <h3 class="chart-y">体              重</h3> -->
 
                 <div class="chart-stage" id="linechart">
                         <div id="canvasDiv"></div>
                 </div>
 
-                <!-- <h3 class="chart-x">月龄</h3> -->
             </div>
-
-
-            <h3 class="need-title">当天喂养量</h3>
-            <div class="need-list">
-                <ul>
-                    <li>
-                        <span>母乳</span>
-                        <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
-                    </li>
-                    <li>
-                        <span>早产儿院内专用配方奶</span>
-                        <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
-                    </li>
-                    <li>
-                        <span>早产儿出院后专用配方奶</span>
-                        <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
-                    </li>
-                </ul>
-            </div>
-
-        <h3 class="need-title">当天喂养量差距（不同喂养信息显示不同）</h3>
-        <div class="need-list">
-            <ul>
-                <li>
-                    <span>喂养信息</span>
-                    <span class="f-r">营养差距显示内容</span>
-                </li>
-                <li>
-                    <span>纯母乳喂养</span>
-                    <span class="f-r">按实际发生显示</span>
-                    <span class="f-r">（毫升/天）</span>
-                </li>
-                <li>
-                    <span>早产儿院内专用配方奶</span>
-                    <span class="f-r">按实际发生显示</span>
-                    <span class="f-r">（毫升/天）</span>
-                </li>
-            </ul>
-        </div>
 
     </section>
     <script type="text/javascript" src="/static/js/zepto.min.js"></script>
@@ -119,19 +94,7 @@
     <script type="text/javascript" src="/static/js/widget/navigator/$scrollable.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/chart.min.js"></script>
-    <script type="text/javascript" src="/static/js/barChart.js"></script>
-    <script type="text/javascript">
-        a_chart_tab = $('.chart-tab a') //得到类样式.chart-tab包含的所有a标签元素
-        $(a_chart_tab).each(function(i, ele){
-            types = '{{ types }}'
-            e_id = ele.id
-            if (e_id == types){
-                ele.className = 'current'
-            }else{
-                ele.className = ''
-            }
-        })
-    </script>
+    <script type="text/javascript" src="/static/js/barChart2.js"></script>
     <script type="text/javascript">
         MZ.app.slideNavigator()
     </script>
