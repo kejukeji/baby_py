@@ -38,6 +38,7 @@ app.add_url_rule('/html/meeting_notice.html', 'to_meeting_notice', to_meeting_no
 app.add_url_rule('/html/raise_dir.html', 'to_raise_dir', to_raise_dir, methods={'GET', 'POST'})
 app.add_url_rule('/html/baby_detail.html/<int:baby_id>', 'to_baby_detail', to_baby_detail, methods={'GET', 'POST'})
 app.add_url_rule('/html/grow_bar.html/<int:baby_id>', 'to_grow_bar', to_grow_bar, methods={'GET', 'POST'})
+app.add_url_rule('/html/grow_rate.html/<int:baby_id>', 'to_grow_rate', to_grow_rate, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)

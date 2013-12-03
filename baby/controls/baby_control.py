@@ -56,3 +56,8 @@ def to_baby_detail(baby_id):
                            baby=baby,
                            user_id=get_session('baby_id'),
                            entrance=get_session('entrance'))
+
+
+def to_grow_rate(baby_id):
+    return render_template('baby/grow_rate.html',
+                           user_id=get_session('baby_id'))
