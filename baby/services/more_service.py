@@ -161,7 +161,7 @@ def check_is_type(result, remember, return_success):
 
 def get_tracking(id, types):
     """
-    获得随访记录
+    获得随访记录_身长，体重，头围
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
     grow_line = [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -187,6 +187,29 @@ def get_tracking(id, types):
             if types == 'head':
                 grow_line[result] = int(tracking.head_wai)
         return grow_line
+
+
+def get_tracking_bar(id, types):
+    """
+    获得随访记录——配方奶
+    """
+    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    grow_bar_breastfeeding = [0,0,0,0,0]
+    grow_bar_formula_feeding = [0,0,0,0,0]
+    count = 0
+    if tracking_count > 1:
+        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        for tracking in tracking_result:
+            grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
+            grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
+            count = count + 1
+        return grow_bar_breastfeeding, grow_bar_formula_feeding
+    elif tracking_count == 1:
+        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        if tracking:
+            grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
+            grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
+        return grow_bar_breastfeeding, grow_bar_formula_feeding
 
 
 def is_null(measure_date):

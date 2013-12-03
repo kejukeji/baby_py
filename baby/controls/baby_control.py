@@ -1,5 +1,5 @@
 from flask import render_template, request
-from baby.services.more_service import get_tracking, get_visit_record, get_baby_by_id
+from baby.services.more_service import get_tracking, get_visit_record, get_baby_by_id, get_tracking_bar
 from baby.util.others import set_session_user, get_session
 
 
@@ -14,9 +14,14 @@ def to_grow_line(baby_id):
 
 
 def to_grow_bar(baby_id):
+    types = request.args.get('type', 'weight')
+    breastfeeding, formula_feeding  = get_tracking_bar(baby_id, types)
     return render_template('baby/grow_bar.html',
                            user_id=get_session('baby_id'),
-                           entrance=get_session('entrance'))
+                           entrance=get_session('entrance'),
+                           types=types,
+                           breastfeeding=breastfeeding,
+                           formula_feeding=formula_feeding)
 
 
 def to_raise():

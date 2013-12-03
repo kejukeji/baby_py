@@ -15,11 +15,11 @@
         'ySpace': 50,
         'data': [{
             name: '母乳',
-            value: [120, 140, 150, 160, 180],
+            value: {{ breastfeeding}},
             color: '#08c'
         }, {
             name: '配方奶',
-            value: [130, 150, 170, 180, 200],
+            value: {{ formula_feeding }},
             color: '#c12c44'
         }]
     };
@@ -46,9 +46,9 @@
     
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a class="current" href="#">体     重</a>
-                    <a href="#">身     长</a>
-                    <a href="#">头     围</a>
+                    <a class="current" href="/html/grow_bar.html/{{ user_id }}?type=weight" id="weight">体     重</a>
+                    <a href="/html/grow_bar.html/{{ user_id }}?type=height" id="height">身     长</a>
+                    <a href="/html/grow_bar.html/{{ user_id }}?type=head" id="head">头     围</a>
                 </div>
                 <!-- <h3 class="chart-y">体              重</h3> -->
 
@@ -74,6 +74,18 @@
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/chart.min.js"></script>
     <script type="text/javascript" src="/static/js/barChart.js"></script>
+    <script type="text/javascript">
+        a_chart_tab = $('.chart-tab a') //得到类样式.chart-tab包含的所有a标签元素
+        $(a_chart_tab).each(function(i, ele){
+            types = '{{ types }}'
+            e_id = ele.id
+            if (e_id == types){
+                ele.className = 'current'
+            }else{
+                ele.className = ''
+            }
+        })
+    </script>
     <script type="text/javascript">
         MZ.app.slideNavigator()
     </script>
