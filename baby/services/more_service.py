@@ -212,6 +212,8 @@ def get_tracking_bar(id, types):
             grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
             grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
         return grow_bar_breastfeeding, grow_bar_formula_feeding
+    else:
+        return grow_bar_breastfeeding, grow_bar_formula_feeding
 
 
 def is_null(measure_date):
