@@ -169,23 +169,25 @@ def get_tracking(id, types):
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
         for tracking in tracking_result:
             result = is_null(tracking.measure_date)
-            if types == 'weight':
-                grow_line[result] = int(tracking.weight)
-            if types == 'height':
-                grow_line[result] = int(tracking.height)
-            if types == 'head':
-                grow_line[result] = int(tracking.head_wai)
+            if result:
+                if types == 'weight':
+                    grow_line[result] = int(tracking.weight)
+                if types == 'height':
+                    grow_line[result] = int(tracking.height)
+                if types == 'head':
+                    grow_line[result] = int(tracking.head_wai)
         return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
             result = is_null(tracking.measure_date)
-            if types == 'weight':
-                grow_line[result] = int(tracking.weight)
-            if types == 'height':
-                grow_line[result] = int(tracking.height)
-            if types == 'head':
-                grow_line[result] = int(tracking.head_wai)
+            if result:
+                if types == 'weight':
+                    grow_line[result] = int(tracking.weight)
+                if types == 'height':
+                    grow_line[result] = int(tracking.height)
+                if types == 'head':
+                    grow_line[result] = int(tracking.head_wai)
         return grow_line
 
 
@@ -218,6 +220,7 @@ def is_null(measure_date):
         singe_time = singe_time.split('-')
         result = singe_time[1]
         return int(result) - 1
+    return None
 
 
 def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition):

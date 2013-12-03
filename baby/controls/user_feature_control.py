@@ -78,7 +78,7 @@ def standard():
 def to_formula():
     return render_template('doctor/formula_milk.html')
 
-def to_additional_follow_up():
+def to_additional_follow_up(baby_id):
     court, court_count = get_court()
     brand, brand_count = get_brand()
     formula, formula_count = get_formula()
@@ -88,4 +88,5 @@ def to_additional_follow_up():
                            formulas=formula,
                            court_count=court_count,
                            brand_count=brand_count,
-                           formula_count=formula_count)
+                           formula_count=formula_count,
+                           baby_id=baby_id)
