@@ -5,7 +5,7 @@ from baby.util.others import set_session_user, get_session
 
 def to_grow_line(baby_id):
     types = request.args.get('type', 'weight')
-    tracking = get_tracking(id, types)
+    tracking = get_tracking(baby_id, types)
     return render_template('baby/grow_line.html',
                            tracking=tracking,
                            types=types,
