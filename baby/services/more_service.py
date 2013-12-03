@@ -189,6 +189,8 @@ def get_tracking(id, types):
                 if types == 'head':
                     grow_line[result] = int(tracking.head_wai)
         return grow_line
+    else:
+        return grow_line
 
 
 def get_tracking_bar(id, types):
@@ -201,7 +203,7 @@ def get_tracking_bar(id, types):
     count = 0
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
-        for tracking in tracking_result:
+        for tracking in tracking_result[:5]:
             grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
             grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
             count = count + 1
