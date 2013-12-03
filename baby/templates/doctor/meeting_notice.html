@@ -12,42 +12,35 @@
 </head>
 <body>
 	<ul class="box-list">
-		<li>
-			<a href="/html/meeting.html" class="box-wrapper clearfix">
+        {% if count > 1 %}
+            {% for r in result %}
+            <li>
+                <a href="/html/meeting.html/{{ r.id }}" class="box-wrapper clearfix">
+                    <div class="imag">
+                        <img src="/static/img/system/head_picture/default_doctor.jpg" alt="" />
+                        <p>管理员</p>
+                    </div>
+                    <div class="cont">
+                        <p>{{ r.message_content }}</p>
+                        <p class="date">{{ r.message_date }}</p>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        {% else %}
+        <li>
+			<a href="/html/meeting.html/{{ result.id }}" class="box-wrapper clearfix">
 				<div class="imag">
 					<img src="/static/img/system/head_picture/default_doctor.jpg" alt="" />
 					<p>管理员</p>
 				</div>
 				<div class="cont">
-					<p>尊敬的医生朋友们，9.3日在上海xxx医学中心将举行“惠氏奶粉-关注新生儿”的医学讲座，期待您的参与！</p>
-					<p class="date">2013-11-12</p>
+					<p>{{ result.message_content }}</p>
+					<p class="date">{{ result.message_date }}</p>
 				</div>
 			</a>
 		</li>
-		<li>
-			<a href="/html/meeting.html" class="box-wrapper clearfix">
-				<div class="imag">
-					<img src="/static/img/system/head_picture/default_doctor.jpg" alt="" />
-					<p>管理员</p>
-				</div>
-				<div class="cont">
-					<p>尊敬的医生朋友们，9.3日在上海xxx医学中心将举行“惠氏奶粉-关注新生儿”的医学讲座，期待您的参与！</p>
-					<p class="date">2013-11-12</p>
-				</div>
-			</a>
-		</li>
-		<li>
-			<a href="/html/meeting.html" class="box-wrapper clearfix">
-				<div class="imag">
-					<img src="/static/img/system/head_picture/default_doctor.jpg" alt="" />
-					<p>管理员</p>
-				</div>
-				<div class="cont">
-					<p>尊敬的医生朋友们，9.3日在上海xxx医学中心将举行“惠氏奶粉-关注新生儿”的医学讲座，期待您的参与！</p>
-					<p class="date">2013-11-12</p>
-				</div>
-			</a>
-		</li>
+        {% endif %}
 	</ul>
 </body>
 </html>

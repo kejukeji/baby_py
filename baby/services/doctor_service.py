@@ -6,7 +6,7 @@ from baby import db
 from baby.util.ex_file import *
 from baby.setting.server import *
 from werkzeug import secure_filename
-from baby.util.others import flatten
+from baby.util.others import flatten, page_utils
 import os
 
 
@@ -83,21 +83,34 @@ def update_doctor(doctor_id, real_name, province_id, belong_hospital_id, belong_
         return False
 
 
-def get_meeting_message(id):
+def get_meeting_message(page):
     """
         得到会议消息
-            id: 根据id来判断是属于医生还是婴儿
+
     """
-    doctor = Doctor.query.filter(Doctor.id == id).first()
-    if doctor:
-        system_message_count = SystemMessage.query.filter(SystemMessage.type == 'abstract').count()
-        if system_message_count > 1:
-            system_messages = SystemMessage.query.filter(SystemMessage.type == 'abstract').\
-                order_by(SystemMessage.message_date.desc())[:3]
-            return system_messages
-        else:
-            system_message = SystemMessage.query.filter(SystemMessage.type == 'abstract').first()
-            return system_message
+    system_message_count = SystemMessage.query.filter(SystemMessage.type == 'meeting').count()
+    temp_page = page
+    page, per_page = page_utils(system_message_count, page, per_page=3)
+    if system_message_count > 1:
+        system_messages = SystemMessage.query.filter(SystemMessage.type == 'meeting').\
+            order_by(SystemMessage.message_date.desc())[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+        for system_message in system_messages:
+            system_message.message_date = str(system_message.message_date)[:10]
+        return system_messages, system_message_count
+    else:
+        system_message = SystemMessage.query.filter(SystemMessage.type == 'meeting').first()
+        return system_message, system_message_count
+
+
+def get_meeting_by_id(id):
+    """
+        得到会议消息
+
+    """
+    system_message = SystemMessage.query.filter(SystemMessage.id == id).first()
+    system_message.message_date = str(system_message.message_date)[:10]
+    return system_message
+
 
 def register_doctor(login_name, login_pass, argument_real_name, argument_province, argument_belong_hospital,
                     argument_belong_department, argument_position, argument_email, argument_tel):

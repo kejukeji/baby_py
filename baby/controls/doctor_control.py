@@ -1,9 +1,12 @@
 from flask import request, render_template
+from ..services.doctor_service import get_meeting_message, get_meeting_by_id
 
 
 
-def to_meeting():
-    return render_template('doctor/meeting.html')
+def to_meeting(id):
+    result = get_meeting_by_id(id)
+    return render_template('doctor/meeting.html',
+                           result=result)
 
 
 def to_academic():
@@ -21,5 +24,8 @@ def to_yy_need():
     return render_template('doctor/yy_need.html')
 
 
-def to_meeting_notice():
-    return render_template('doctor/meeting_notice.html')
+def to_meeting_notice(page):
+    result, count = get_meeting_message(page)
+    return render_template('doctor/meeting_notice.html',
+                           result=result,
+                           count=count)

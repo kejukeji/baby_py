@@ -210,7 +210,7 @@ class DeleteSearchHistoryAll(restful.Resource):
 
 class MeetingNotice(restful.Resource):
     """
-        会议通知以及育儿指南
+        会议通知
     """
     @staticmethod
     def get():
@@ -219,16 +219,17 @@ class MeetingNotice(restful.Resource):
                 id: 登录id
         """
         parser = reqparse.RequestParser()
-        parser.add_argument('id', type=str, required=True, help=u'登录的id')
+        parser.add_argument('page', type=str, required=True, help=u'page 必须')
 
         args = parser.parse_args()
 
-        id = args['id']
+        page = args['page']
+
         success = success_dic().dic
         fail = fail_dic().dic
         success['system_message_list'] = []
 
-        system_message = get_meeting_message(id)
+        system_message, count = get_meeting_message(page)
         if system_message:
             if type(system_message) is list:
                 for system in system_message:
