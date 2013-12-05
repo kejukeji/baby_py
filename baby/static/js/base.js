@@ -1,3 +1,170 @@
+//     Zepto.js
+//     (c) 2010-2013 Thomas Fuchs
+//     Zepto.js may be freely distributed under the MIT license.
+;
+(function($) {
+	var touch = {},
+		touchTimeout, tapTimeout, swipeTimeout, longTapTimeout,
+		longTapDelay = 750,
+		gesture
+
+		function swipeDirection(x1, x2, y1, y2) {
+			return Math.abs(x1 - x2) >=
+				Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
+		}
+
+		function longTap() {
+			longTapTimeout = null
+			if (touch.last) {
+				touch.el.trigger('longTap')
+				touch = {}
+			}
+		}
+
+		function cancelLongTap() {
+			if (longTapTimeout) clearTimeout(longTapTimeout)
+			longTapTimeout = null
+		}
+
+		function cancelAll() {
+			if (touchTimeout) clearTimeout(touchTimeout)
+			if (tapTimeout) clearTimeout(tapTimeout)
+			if (swipeTimeout) clearTimeout(swipeTimeout)
+			if (longTapTimeout) clearTimeout(longTapTimeout)
+			touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null
+			touch = {}
+		}
+
+		function isPrimaryTouch(event) {
+			return (event.pointerType == 'touch' ||
+				event.pointerType == event.MSPOINTER_TYPE_TOUCH) && event.isPrimary
+		}
+
+		function isPointerEventType(e, type) {
+			return (e.type == 'pointer' + type ||
+				e.type.toLowerCase() == 'mspointer' + type)
+		}
+
+	$(document).ready(function() {
+		var now, delta, deltaX = 0,
+			deltaY = 0,
+			firstTouch, _isPointerType
+
+		if ('MSGesture' in window) {
+			gesture = new MSGesture()
+			gesture.target = document.body
+		}
+
+		$(document)
+			.bind('MSGestureEnd', function(e) {
+				var swipeDirectionFromVelocity =
+					e.velocityX > 1 ? 'Right' : e.velocityX < -1 ? 'Left' : e.velocityY > 1 ? 'Down' : e.velocityY < -1 ? 'Up' : null;
+				if (swipeDirectionFromVelocity) {
+					touch.el.trigger('swipe')
+					touch.el.trigger('swipe' + swipeDirectionFromVelocity)
+				}
+			})
+			.on('touchstart MSPointerDown pointerdown', function(e) {
+				if ((_isPointerType = isPointerEventType(e, 'down')) && !isPrimaryTouch(e)) return
+				firstTouch = _isPointerType ? e : e.touches[0]
+				if (e.touches && e.touches.length === 1 && touch.x2) {
+					// Clear out touch movement data if we have it sticking around
+					// This can occur if touchcancel doesn't fire due to preventDefault, etc.
+					touch.x2 = undefined
+					touch.y2 = undefined
+				}
+				now = Date.now()
+				delta = now - (touch.last || now)
+				touch.el = $('tagName' in firstTouch.target ?
+					firstTouch.target : firstTouch.target.parentNode)
+				touchTimeout && clearTimeout(touchTimeout)
+				touch.x1 = firstTouch.pageX
+				touch.y1 = firstTouch.pageY
+				if (delta > 0 && delta <= 250) touch.isDoubleTap = true
+				touch.last = now
+				longTapTimeout = setTimeout(longTap, longTapDelay)
+				// adds the current touch contact for IE gesture recognition
+				if (gesture && _isPointerType) gesture.addPointer(e.pointerId);
+			})
+			.on('touchmove MSPointerMove pointermove', function(e) {
+				if ((_isPointerType = isPointerEventType(e, 'move')) && !isPrimaryTouch(e)) return
+				firstTouch = _isPointerType ? e : e.touches[0]
+				cancelLongTap()
+				touch.x2 = firstTouch.pageX
+				touch.y2 = firstTouch.pageY
+
+				deltaX += Math.abs(touch.x1 - touch.x2)
+				deltaY += Math.abs(touch.y1 - touch.y2)
+			})
+			.on('touchend MSPointerUp pointerup', function(e) {
+				if ((_isPointerType = isPointerEventType(e, 'up')) && !isPrimaryTouch(e)) return
+				cancelLongTap()
+
+				// swipe
+				if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
+					(touch.y2 && Math.abs(touch.y1 - touch.y2) > 30))
+
+					swipeTimeout = setTimeout(function() {
+						touch.el.trigger('swipe')
+						touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
+						touch = {}
+					}, 0)
+
+				// normal tap
+				else if ('last' in touch)
+				// don't fire tap when delta position changed by more than 30 pixels,
+				// for instance when moving to a point and back to origin
+					if (deltaX < 30 && deltaY < 30) {
+						// delay by one tick so we can cancel the 'tap' event if 'scroll' fires
+						// ('tap' fires before 'scroll')
+						tapTimeout = setTimeout(function() {
+
+							// trigger universal 'tap' with the option to cancelTouch()
+							// (cancelTouch cancels processing of single vs double taps for faster 'tap' response)
+							var event = $.Event('tap')
+							event.cancelTouch = cancelAll
+							touch.el.trigger(event)
+
+							// trigger double tap immediately
+							if (touch.isDoubleTap) {
+								if (touch.el) touch.el.trigger('doubleTap')
+								touch = {}
+							}
+
+							// trigger single tap after 250ms of inactivity
+							else {
+								touchTimeout = setTimeout(function() {
+									touchTimeout = null
+									if (touch.el) touch.el.trigger('singleTap')
+									touch = {}
+								}, 250)
+							}
+						}, 0)
+					} else {
+						touch = {}
+					}
+				deltaX = deltaY = 0
+
+			})
+		// when the browser window loses focus,
+		// for example when a modal dialog is shown,
+		// cancel all ongoing events
+		.on('touchcancel MSPointerCancel pointercancel', cancelAll)
+
+		// scrolling the window indicates intention of the user
+		// to scroll, not tap or swipe, so cancel all ongoing events
+		$(window).on('scroll', cancelAll)
+	})
+
+	;
+	['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown',
+		'doubleTap', 'tap', 'singleTap', 'longTap'
+	].forEach(function(eventName) {
+		$.fn[eventName] = function(callback) {
+			return this.on(eventName, callback)
+		}
+	})
+})(Zepto);
 /*-------------------------------------------------
      MZ Namespace
 -------------------------------------------------*/
@@ -182,10 +349,10 @@ MZ.namespace('app');
                                  callback.call(that, e, false);
                                  });
                                  */
-			E_floatOk.off('click').on('click', function(e) {
+			E_floatOk.off('tap').on('tap', function(e) {
 				callback.call(that, e, true);
 			});
-			E_floatCancel.off('click').on('click', function(e) {
+			E_floatCancel.off('tap').on('tap', function(e) {
 				callback.call(that, e, false);
 			});
 			if (!initDom) {
@@ -344,30 +511,30 @@ MZ.constant = {
 	'REAL_NAME_EMPTY': '真实姓名不能为空',
 	'EMAIL_EMPTY': '邮箱不能为空',
 	'TEL_EMPTY': '手机号不能为空',
-    'KIND_EMPTY': '种类不能为空',
-    'ENERGY_EMPTY': '能量不能为空',
-    'PROTEIN_EMPTY': '蛋白质不能为空',
-    'TSHHEW_EMPTY': '碳化学物不能为空',
-    'FAT_EMPTY': '脂肪不能为空',
-    'PATRIARCH_EMPTY': '家长手机号不能为空',
-    'BABY_NAME_EMPTY': '婴儿名不能为空',
-    'GENDER_EMPTY': '性别不能为空',
-    'DUE_DATE_EMPTY': '预产期不能为空',
-    'BIRTHDAY_EMPTY': '出生日期不能为空',
-    'WEIGHT_EMPTY': '体重不能为空',
-    'HEIGHT_EMPTY': '身长不能为空',
-    'HEAD_EMPTY': '头围不能为空',
-    'CHILDBIRTH_EMPTY': '分娩方式不能为空',
-    'COMPLICATION_EMPTY': '合并症不能为空',
-    'DATE_EMPTY': '测量日期不能为空',
-    'FEEDING_EMPTY': '母乳喂养不能为空',
-    'OLD_PASSWORD_ERROR': '旧密码不正确',
+	'KIND_EMPTY': '种类不能为空',
+	'ENERGY_EMPTY': '能量不能为空',
+	'PROTEIN_EMPTY': '蛋白质不能为空',
+	'TSHHEW_EMPTY': '碳化学物不能为空',
+	'FAT_EMPTY': '脂肪不能为空',
+	'PATRIARCH_EMPTY': '家长手机号不能为空',
+	'BABY_NAME_EMPTY': '婴儿名不能为空',
+	'GENDER_EMPTY': '性别不能为空',
+	'DUE_DATE_EMPTY': '预产期不能为空',
+	'BIRTHDAY_EMPTY': '出生日期不能为空',
+	'WEIGHT_EMPTY': '体重不能为空',
+	'HEIGHT_EMPTY': '身长不能为空',
+	'HEAD_EMPTY': '头围不能为空',
+	'CHILDBIRTH_EMPTY': '分娩方式不能为空',
+	'COMPLICATION_EMPTY': '合并症不能为空',
+	'DATE_EMPTY': '测量日期不能为空',
+	'FEEDING_EMPTY': '母乳喂养不能为空',
+	'OLD_PASSWORD_ERROR': '旧密码不正确',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/forget/password',
 	'REGISTER_URL': '/restful/html/do/register',
-    'MILK_URL': '/restful/html/add/formula',
-    'CREATE_BABY_URL': '/restful/html/create/baby',
-    'ADD_VISIT_URL': '/restful/html/add/visit'
+	'MILK_URL': '/restful/html/add/formula',
+	'CREATE_BABY_URL': '/restful/html/create/baby',
+	'ADD_VISIT_URL': '/restful/html/add/visit'
 }
 
 MZ.app = {
@@ -384,7 +551,7 @@ MZ.app = {
 		var password = $('#L-password')
 		var rememberCheckbox = $('#L-remember')
 
-		login_btn.bind('click', function() {
+		login_btn.bind('tap', function() {
 			var checkUsername = MZ.app.checkField(username)
 			var checkPassword = MZ.app.checkField(password)
 			if (!checkUsername) {
@@ -428,7 +595,7 @@ MZ.app = {
 		var rePassword = $('#L-re-password')
 		var saveBtn = $('#L-save')
 
-		saveBtn.bind('click', function() {
+		saveBtn.bind('tap', function() {
 			var checkOldPwd = MZ.app.checkField(oldPassword)
 			var checkNewPwd = MZ.app.checkField(newPassword)
 			var checkRePwd = MZ.app.checkField(rePassword)
@@ -470,13 +637,13 @@ MZ.app = {
 						window.app.webviewPassword(json.code)
 						// where to go ?
 					}, 2000)
-				}else if (code === 500) {
-                    window.Notification.simple(MZ.constant.OLD_PASSWORD_ERROR, 2000)
+				} else if (code === 500) {
+					window.Notification.simple(MZ.constant.OLD_PASSWORD_ERROR, 2000)
 					return
-                }else{
-                    window.Notification.simple(json.msg, 2000)
+				} else {
+					window.Notification.simple(json.msg, 2000)
 					return
-                }
+				}
 			})
 
 		})
@@ -495,7 +662,7 @@ MZ.app = {
 		var tel = $('#tel')
 		var registerBtn = $('#register-btn')
 
-		registerBtn.bind('click', function() {
+		registerBtn.bind('tap', function() {
 			var checkUserName = MZ.app.checkField(user_name)
 			var checkNewPwd = MZ.app.checkField(user_pass)
 			var checkConfirm = MZ.app.checkField(confirm_pass)
@@ -592,17 +759,17 @@ MZ.app = {
 			}
 		})
 
-		arrowLeftElem.on('click', function() {
+		arrowLeftElem.on('tap', function() {
 			navElem.iScroll('scrollTo', -100, 0, 400, true)
 		})
 
-		arrowRightElem.on('click', function() {
+		arrowRightElem.on('tap', function() {
 			navElem.iScroll('scrollTo', 100, 0, 400, true)
 		})
 	},
 	checkRadio: function(ele) {
 		var radio = $(ele);
-		radio.on('click', function() {
+		radio.on('tap', function() {
 			$(this).addClass('checked').find('input[type="radio"]').attr('checked', 'checked');
 			$(this).parent().siblings('li').find('.iradio').removeClass('checked').find('input[type="radio"]')
 				.attr('checked', null);
@@ -616,7 +783,7 @@ MZ.app = {
 		var carbohydrates = $(ele).find('#l-carbohydrates');
 		var fat = $(ele).find('#l-fat');
 
-		subBtn.bind('click', function() {
+		subBtn.bind('tap', function() {
 			var location = $(ele).find('input[type="radio"][name="location"]:checked').val();
 			var brand = $(ele).find('input[type="radio"][name="brand"]:checked').val();
 			var checkKind = MZ.app.checkField(kind)
@@ -679,9 +846,9 @@ MZ.app = {
 		var height = $(ele).find('#l-height');
 		var head = $(ele).find('#l-head');
 		var feeding = $(ele).find('#l-breastfeeding');
-        var baby_id = $(ele).find('#baby_id')
+		var baby_id = $(ele).find('#baby_id')
 
-		subBtn.bind('click', function() {
+		subBtn.bind('tap', function() {
 			var location = $(ele).find('#l-location').val();
 			var brand = $(ele).find('#l-brand').val();
 			var kind = $(ele).find('#l-kind').val();
@@ -722,7 +889,7 @@ MZ.app = {
 				'location': location,
 				'brand': brand,
 				'kind': kind,
-                'baby_id': $.trim(baby_id.val())
+				'baby_id': $.trim(baby_id.val())
 			};
 			MZ.util.Request({
 				url: MZ.constant.ADD_VISIT_URL,
@@ -742,61 +909,61 @@ MZ.app = {
 			})
 		})
 	},
-    createBabyAccount: function(ele){
-        var subBtn = $(ele).find('#z-create');
+	createBabyAccount: function(ele) {
+		var subBtn = $(ele).find('#z-create');
 		var complication = $(ele).find('#z-complication');
 		var childbirth = $(ele).find('#z-childbirth');
 		var head = $(ele).find('#z-head');
 		var height = $(ele).find('#z-height');
 		var patriarch = $(ele).find('#z-patriarch-tel');
-        var babyName = $(ele).find('#z-baby-name');
-        var password = $(ele).find('#z-password');
-        var confirmPassword = $(ele).find('#z-confirm-password');
-        var gender = $(ele).find('#z-gender');
-        var dueDate = $(ele).find('#z-due-date');
-        var birthday = $(ele).find('#z-birthday');
-        var weight = $(ele).find('#z-weight');
-        var height = $(ele).find('#z-height');
-        var head = $(ele).find('#z-head');
+		var babyName = $(ele).find('#z-baby-name');
+		var password = $(ele).find('#z-password');
+		var confirmPassword = $(ele).find('#z-confirm-password');
+		var gender = $(ele).find('#z-gender');
+		var dueDate = $(ele).find('#z-due-date');
+		var birthday = $(ele).find('#z-birthday');
+		var weight = $(ele).find('#z-weight');
+		var height = $(ele).find('#z-height');
+		var head = $(ele).find('#z-head');
 
-        subBtn.bind('click', function(){
-            var checkPatriarch = MZ.app.checkField(patriarch);
+		subBtn.bind('tap', function() {
+			var checkPatriarch = MZ.app.checkField(patriarch);
 			var checkBabyName = MZ.app.checkField(babyName);
 			var checkPassword = MZ.app.checkField(password);
 			var checkConfirmPassword = MZ.app.checkField(confirmPassword);
 			var checkWeight = MZ.app.checkField(weight);
-            var checkHeight = MZ.app.checkField(height);
-            var checkHead = MZ.app.checkField(head);
+			var checkHeight = MZ.app.checkField(height);
+			var checkHead = MZ.app.checkField(head);
 
-            if (!checkPatriarch) {
+			if (!checkPatriarch) {
 				window.Notification.simple(MZ.constant.PATRIARCH_EMPTY, 2000)
 				return
 			}
-            if (!checkBabyName) {
+			if (!checkBabyName) {
 				window.Notification.simple(MZ.constant.BABY_NAME_EMPTY, 2000)
 				return
 			}
-            if (!checkPassword) {
+			if (!checkPassword) {
 				window.Notification.simple(MZ.constant.PASSWORD_EMPTY, 2000)
 				return
 			}
-            if (!checkConfirmPassword) {
+			if (!checkConfirmPassword) {
 				window.Notification.simple(MZ.constant.REPWD_EMPTY, 2000)
 				return
 			}
-            if (!checkWeight) {
+			if (!checkWeight) {
 				window.Notification.simple(MZ.constant.WEIGHT_EMPTY, 2000)
 				return
 			}
-            if (!checkHeight) {
+			if (!checkHeight) {
 				window.Notification.simple(MZ.constant.HEIGHT_EMPTY, 2000)
 				return
 			}
-            if (!checkHead) {
+			if (!checkHead) {
 				window.Notification.simple(MZ.constant.HEAD_EMPTY, 2000)
 				return
 			}
-            var patriarchValue = $.trim(patriarch.val())
+			var patriarchValue = $.trim(patriarch.val())
 			var babyNameValue = $.trim(babyName.val())
 			var passwordValue = $.trim(password.val())
 			var confirmPasswordValue = $.trim(confirmPassword.val())
@@ -806,15 +973,15 @@ MZ.app = {
 			var weightValue = $.trim(weight.val())
 			var heightValue = $.trim(height.val())
 			var headValue = $.trim(head.val())
-            var childbirthValue = $.trim(childbirth.val())
-            var complicationValue = $.trim(complication.val())
+			var childbirthValue = $.trim(childbirth.val())
+			var complicationValue = $.trim(complication.val())
 
-            if (passwordValue != confirmPasswordValue) {
+			if (passwordValue != confirmPasswordValue) {
 				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
 				return
 			}
 
-            var params = {
+			var params = {
 				'patriarch_tel': patriarchValue,
 				'baby_name': babyNameValue,
 				'baby_pass': passwordValue,
@@ -824,10 +991,10 @@ MZ.app = {
 				'born_weight': weightValue,
 				'born_height': heightValue,
 				'born_head': headValue,
-                'childbirth_style_id': childbirthValue,
-                'complication_id': complicationValue
+				'childbirth_style_id': childbirthValue,
+				'complication_id': complicationValue
 			};
-            MZ.util.Request({
+			MZ.util.Request({
 				url: MZ.constant.CREATE_BABY_URL,
 				data: params
 			}, function(json) {
@@ -846,6 +1013,6 @@ MZ.app = {
 					return
 				}
 			})
-        })
-    }
+		})
+	}
 }
