@@ -10,23 +10,6 @@
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
 </head>
 <body>
-	<div class="nav-wrapper">
-                <a id="L-arrow-left" class="arrow"><span>&lt;</span></a>
-                <div class="nav-cont" id="L-nav">
-                    <ul>
-                        <li><a href="/html/visit_record.html/{{ user_id }}">随访记录</a></li>
-                        <li><a href="/html/grow_line.html/{{ user_id }}">生长曲线</a></li>
-                        <li><a href="/html/grow_rate.html/{{ user_id }}">生长速率</a></li>
-                        {% if entrance == 'baby' %}
-
-                        {% else %}
-                            <li><a href="/html/baby_detail.html/{{ user_id }}">详细资料</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <a id="L-arrow-right" class="arrow"><span>&gt;</span></a>
-           </div>
-
            <div class="visit-title clearfix">
            	<img src="/static/img/system/head_picture/71X71.png" alt="" />
             {% if record_count == 0 %}
@@ -75,16 +58,6 @@
            </div>
 
          <script type="text/javascript" src="/static/js/zepto.min.js"></script>
-	    <script type="text/javascript" src="/static/js/extend/touch.js"></script>
-	    <script type="text/javascript" src="/static/js/extend/iscroll.js"></script>
-	    <script type="text/javascript" src="/static/js/extend/highlight.js"></script>
-	    <script type="text/javascript" src="/static/js/extend/parseTpl.js"></script>
-	    <script type="text/javascript" src="/static/js/core/gmu.js"></script>
-	    <script type="text/javascript" src="/static/js/core/event.js"></script>
-	     <script type="text/javascript" src="/static/js/core/widget.js"></script>
-	    <script type="text/javascript" src="/static/js/widget/navigator/navigator.js"></script>
-	    <script type="text/javascript" src="/static/js/widget/navigator/scrolltonext.js"></script>
-	    <script type="text/javascript" src="/static/js/widget/navigator/$scrollable.js"></script>
 	    <script type="text/javascript" src="/static/js/base.js"></script>
 	    <script type="text/javascript">
 	        MZ.app.slideNavigator()
