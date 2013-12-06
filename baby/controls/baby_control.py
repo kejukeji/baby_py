@@ -4,16 +4,19 @@ from baby.util.others import set_session_user, get_session
 
 
 def to_grow_line(baby_id):
+    record, record_count, baby = get_visit_record(baby_id)
     types = request.args.get('type', 'weight')
     tracking = get_tracking(baby_id, types)
     return render_template('baby/grow_line.html',
                            tracking=tracking,
                            types=types,
                            user_id=get_session('baby_id'),
-                           entrance=get_session('entrance'))
+                           entrance=get_session('entrance'),
+                           baby=baby)
 
 
 def to_grow_bar(baby_id):
+    record, record_count, baby = get_visit_record(baby_id)
     types = request.args.get('type', 'weight')
     breastfeeding, formula_feeding  = get_tracking_bar(baby_id, types)
     return render_template('baby/grow_bar.html',
@@ -21,7 +24,8 @@ def to_grow_bar(baby_id):
                            entrance=get_session('entrance'),
                            types=types,
                            breastfeeding=breastfeeding,
-                           formula_feeding=formula_feeding)
+                           formula_feeding=formula_feeding,
+                           baby=baby)
 
 
 def to_raise():
@@ -59,5 +63,7 @@ def to_baby_detail(baby_id):
 
 
 def to_grow_rate(baby_id):
+    record, record_count, baby = get_visit_record(baby_id)
     return render_template('baby/grow_rate.html',
-                           user_id=get_session('baby_id'))
+                           user_id=get_session('baby_id'),
+                           baby=baby)
