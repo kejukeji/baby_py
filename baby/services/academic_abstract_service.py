@@ -30,3 +30,15 @@ def get_academic_abstract(page, success):
         else:
             return False
 
+
+def get_abstract_by_id(id, success):
+    """
+    根据id获取文摘
+    """
+    abstract = AcademicAbstract.query.filter(AcademicAbstract.id == id).first()
+    if abstract:
+        abstract_pic = flatten(abstract)
+        success['abstract'] = abstract_pic
+        return True
+    else:
+        return False

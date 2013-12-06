@@ -11,6 +11,7 @@ from ..services.doctor_service import doctor_info, get_meeting_message, update_d
 from ..services.search_history_service import search_history_list, delete_all_search
 from ..services.academic_abstract_service import get_academic_abstract
 from ..services.collect_service import insert_or_cancel_collects
+from ..services.academic_abstract_service import get_abstract_by_id
 import werkzeug
 
 
@@ -241,7 +242,7 @@ class MeetingNotice(restful.Resource):
             return fail
 
 
-class AcademicAbstract(restful.Resource):
+class Abstract(restful.Resource):
     """
        学术文摘
     """
@@ -255,7 +256,7 @@ class AcademicAbstract(restful.Resource):
 
         args = parser.parse_args()
 
-        page = args['page']
+        page = int(args['page'])
 
         success = success_dic().dic
         fail = fail_dic().dic
@@ -264,6 +265,30 @@ class AcademicAbstract(restful.Resource):
         is_true = get_academic_abstract(page, success)
 
         if is_true:
+            return success
+        else:
+            return fail
+
+
+class AbstractInfo(restful.Resource):
+    """
+    文摘详情
+    """
+    @staticmethod
+    def get():
+        parser = reqparse.RequestParser()
+        parser.add_argument('academic_id', type=str, required=True, help=u'academic_id 必须')
+
+        args = parser.parse_args()
+
+        academic_id = args['academic_id']
+
+        success = success_dic().dic
+        fail = fail_dic().dic
+
+        result = get_abstract_by_id(academic_id, success)
+
+        if result:
             return success
         else:
             return fail
