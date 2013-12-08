@@ -87,4 +87,8 @@ $(function() {
 	}));
 
 	chart.draw();
+
+	$(window).resize(function() {
+		chart.resize($('.chart-frame').width(), 300);
+	});
 });

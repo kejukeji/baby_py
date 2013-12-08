@@ -94,4 +94,8 @@ $(function() {
 	});
 	//开始画图
 	chart.draw();
+
+	$(window).resize(function() {
+		chart.resize($('.chart-frame').width(), 300);
+	});
 });
