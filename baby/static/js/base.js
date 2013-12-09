@@ -565,7 +565,53 @@ MZ.app = {
 			var params = {
 				'login_name': $.trim(username.val()),
 				'login_pass': $.trim(password.val()),
-				'remember': rememberCheckbox.attr('checked') ? 1 : 0
+				'remember': rememberCheckbox.attr('checked') ? 1 : 0,
+                'login_type': 'doctor'
+			}
+			MZ.util.Request({
+				url: MZ.constant.LOGIN_URL,
+				data: params
+			}, function(json) {
+				var code = json.code
+				Notification.pop({
+					'text': '登陆成功'
+				}).flash(2000)
+				if (code === 200) {
+					setTimeout(function() {
+						var doctorList = json.doctor_list
+						// 调用java方法
+						window.app.webviewLogin(doctorList.user_id, doctorList.is_remember, doctorList.user_name)
+					}, 2000)
+				} else {
+					window.Notification.simple(MZ.constant.ACCOUNT_PASSWORD_ERROR, 2000)
+					return
+				}
+			})
+
+		})
+	},
+    mummyLogin: function() {
+		var login_btn = $('#L-login-btn')
+		var username = $('#L-username')
+		var password = $('#L-password')
+		var rememberCheckbox = $('#L-remember')
+
+		login_btn.bind('click', function() {
+			var checkUsername = MZ.app.checkField(username)
+			var checkPassword = MZ.app.checkField(password)
+			if (!checkUsername) {
+				window.Notification.simple(MZ.constant.USERNAME_EMPTY, 2000)
+				return
+			}
+			if (!checkPassword) {
+				window.Notification.simple(MZ.constant.PASSWORD_EMPTY, 2000)
+				return
+			}
+			var params = {
+				'login_name': $.trim(username.val()),
+				'login_pass': $.trim(password.val()),
+				'remember': rememberCheckbox.attr('checked') ? 1 : 0,
+                'login_type': 'mummy'
 			}
 			MZ.util.Request({
 				url: MZ.constant.LOGIN_URL,

@@ -16,6 +16,7 @@ class DoLogin(restful.Resource):
           1.login_name
           2.login_pass
           3.remember (1.代表记住）
+          4.type
     """
     @staticmethod
     def post():
@@ -23,6 +24,7 @@ class DoLogin(restful.Resource):
         parser.add_argument('login_name', type=str, required=True, help=u'login_name 必须')
         parser.add_argument('login_pass', type=str, required=True, help=u'login_pass 必须')
         parser.add_argument('remember', type=str, required=True, help=u'remember 必须')
+        parser.add_argument('login_type', type=str, required=True, help=u'login_type 必须')
 
         args = parser.parse_args()
 
@@ -32,7 +34,8 @@ class DoLogin(restful.Resource):
         login_name = args.get('login_name')
         login_pass = args.get('login_pass')
         remember = args.get('remember')
-        result = check_login(login_name, login_pass)
+        login_type = args.get('login_type')
+        result = check_login(login_name, login_pass, login_type)
         is_true = check_is_type(result, remember, return_success)
         if is_true:
             return return_success

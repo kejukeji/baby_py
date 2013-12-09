@@ -9,6 +9,7 @@ from baby.controls.user_feature_control import *
 from baby.controls.baby_control import *
 from baby.controls.doctor_control import *
 from baby.restfuls.feature_restful import AddFormula, AddVisitRecord
+from baby.restfuls.visit_record_data import *
 
 # # 后台Admin
 # admin = Admin(name=u'小宇')
@@ -64,3 +65,4 @@ api.add_resource(CreateBabyAccount, '/restful/html/create/baby')
 api.add_resource(AddVisitRecord, '/restful/html/add/visit')
 api.add_resource(DoctorCollect, '/restful/doctor/collect')
 api.add_resource(AbstractInfo, '/restful/academic/info')
+api.add_resource(AddVisitRecordData, '/restful/record/data')

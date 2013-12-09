@@ -12,21 +12,25 @@ from baby.models.standard import WeightBoyStandard, WeightGirlStandard
 import datetime
 
 
-def check_login(login_name, login_pass):
+def check_login(login_name, login_pass, login_type):
     """
        login_name: 登陆名
        login_pass: 登陆密码
     """
-    baby = Baby.query.filter(Baby.patriarch_tel == login_name, Baby.baby_pass == login_pass).first()
-    doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
-    if baby != None or doctor != None:
+    if login_type == 'mummy':
+        baby = Baby.query.filter(Baby.patriarch_tel == login_name, Baby.baby_pass == login_pass).first()
         if baby != None:
             set_session_user('user', baby.login_name, 'user_id', baby.id)
             return baby
+        else:
+            return None
+    if login_type == 'doctor':
+        doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
         if doctor != None:
             set_session_user('user', doctor.doctor_name, 'user_id', doctor.id)
             return doctor
-    return None
+        else:
+            return None
 
 
 def is_null(model):
