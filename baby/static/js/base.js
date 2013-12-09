@@ -551,7 +551,7 @@ MZ.app = {
 		var password = $('#L-password')
 		var rememberCheckbox = $('#L-remember')
 
-		login_btn.bind('tap', function() {
+		login_btn.bind('click', function() {
 			var checkUsername = MZ.app.checkField(username)
 			var checkPassword = MZ.app.checkField(password)
 			if (!checkUsername) {
