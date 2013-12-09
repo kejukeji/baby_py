@@ -175,7 +175,7 @@ class CreateBabyAccount(restful.Resource):
         parser.add_argument('born_weight', type=str, required=True, help=u'born_weight 必须')
         parser.add_argument('born_height', type=str, required=True, help=u'born_height 必须')
         parser.add_argument('born_head', type=str, required=True, help=u'born_head 必须')
-        parser.add_argument('childbirth_style', type=str, required=True, help=u'childbirth_style_id 必须')
+        parser.add_argument('childbirth_style', type=str, required=True, help=u'childbirth_style 必须')
         parser.add_argument('complication_id', type=str, required=True, help=u'complication_id 必须')
         # parser.add_argument('restore_day', type=str, required=True, help=u'restore_day 必须')
         # parser.add_argument('apgar_score', type=str, required=True, help=u'apgar_score 必须')
@@ -195,7 +195,7 @@ class CreateBabyAccount(restful.Resource):
         born_weight = args['born_weight']
         born_height = args['born_height']
         born_head = args['born_head']
-        childbirth_style = args['childbirth_style_id']
+        childbirth_style = args['childbirth_style']
         complication_id = args['complication_id']
         # restore_day = args['restore_day']
         # apgar_score = args['apgar_score']
