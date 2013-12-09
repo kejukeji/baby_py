@@ -72,10 +72,14 @@ def baby_list(page, doctor_id):
                         baby.is_collect = 1
         else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
-            for baby in babys:
-                if baby.id == baby_collect.type_id:
-                    baby.is_collect = 0
-                else:
+            if baby_collect:
+                 for baby in babys:
+                    if baby.id == baby_collect.type_id:
+                        baby.is_collect = 0
+                    else:
+                        baby.is_collect = 1
+            else:
+                for baby in babys:
                     baby.is_collect = 1
         return babys
     else:
@@ -87,10 +91,13 @@ def baby_list(page, doctor_id):
                     baby.is_collect = 0
                 else:
                     baby.is_collect = 1
-        elif baby_collect_count == 1:
+        else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
-            if baby.id == baby_collect.type_id:
-                baby.is_collect = 0
+            if baby_collect:
+                if baby.id == baby_collect.type_id:
+                    baby.is_collect = 0
+                else:
+                    baby.is_collect = 1
             else:
                 baby.is_collect = 1
         return baby

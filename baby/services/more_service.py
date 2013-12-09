@@ -8,6 +8,7 @@ from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
 from .tracking_service import get_tracking_model
 from .baby_service import get_picture_by_id
+from baby.models.standard import WeightBoyStandard, WeightGirlStandard
 import datetime
 
 
@@ -191,6 +192,20 @@ def get_tracking(id, types):
         return grow_line
     else:
         return grow_line
+
+
+def get_who_standard(id, types):
+    """
+    获取who标准数据
+    """
+    baby = Baby.query.filter(Baby.id == id).first()
+    grow_standard = [0,0,0,0,0,0,0,0,0,0,0,0]
+    is_gender = ''
+    if baby:
+        is_gender = baby.gender
+    if types == 'weight' and is_gender == '男':
+        weight_standard = WeightBoyStandard.query.filter().all()
+
 
 
 def get_tracking_bar(id, types):
