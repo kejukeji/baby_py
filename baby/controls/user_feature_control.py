@@ -17,6 +17,13 @@ def to_login():
     return render_template('user_feature/login.html')
 
 
+def to_mummy_login():
+    """
+    to mummy
+    """
+    return render_template('user_feature/mummy_login.html')
+
+
 
 def do_login():
     """

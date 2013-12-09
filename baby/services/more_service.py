@@ -199,12 +199,19 @@ def get_who_standard(id, types):
     获取who标准数据
     """
     baby = Baby.query.filter(Baby.id == id).first()
-    grow_standard = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0]
     is_gender = ''
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        weight_standard = WeightBoyStandard.query.filter().all()
+        weight_standard = WeightBoyStandard.query.filter(WeightBoyStandard.age <= 12).all()
+        count = 0
+        for weight in weight_standard:
+            grow_p3[count] = weight.p3
+
 
 
 
