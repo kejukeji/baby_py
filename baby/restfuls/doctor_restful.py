@@ -253,16 +253,18 @@ class Abstract(restful.Resource):
         """
         parser = reqparse.RequestParser()
         parser.add_argument('page', type=str, required=True, help=u'page 必须')
+        parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
 
         args = parser.parse_args()
 
         page = int(args['page'])
+        doctor_id = args['doctor_id']
 
         success = success_dic().dic
         fail = fail_dic().dic
         # 调用service中方法获取model数据
         # 根据返回的boolean值来判断是否有数据
-        is_true = get_academic_abstract(page, success)
+        is_true = get_academic_abstract(page, doctor_id, success)
 
         if is_true:
             return success

@@ -258,9 +258,12 @@ def get_visit_record(id):
         else:
             tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
             tracking.measure_date = str(tracking.measure_date)[:10]
+        if baby:
+            get_picture_by_id(baby.id, baby)
         return tracking, tracking_count, baby
     else:
         if baby:
+            get_picture_by_id(baby.id, baby)
             return 0,0, baby
         else:
             return 0,0,0
