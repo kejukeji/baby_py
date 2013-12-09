@@ -6,6 +6,7 @@ from baby.services.more_service import check_login, get_department, get_hospital
     , get_position, get_province
 from baby.services.more_service import get_tracking
 from baby.services.feature_service import get_court, get_brand, get_formula
+from baby.services.formula import get_brand_out, get_court, get_brand_in
 
 
 
@@ -76,9 +77,29 @@ def standard():
 
 
 def to_formula():
-    return render_template('doctor/formula_milk.html')
+    court, court_count = get_court()
+    brand_in, brand_in_count = get_brand_in()
+    brand_out, brand_out_count = get_brand_out()
+    return render_template('doctor/formula_milk.html',
+                           court=court,
+                           court_count=court_count,
+                           brand_in=brand_in,
+                           brand_in_count=brand_in_count,
+                           brand_out=brand_out,
+                           brand_out_count=brand_out_count)
+
+def to_formula_out():
+    court, court_count = get_court()
+    brand_in, brand_in_count = get_brand_out()
+    return render_template('doctor/formula_milk_out.html',
+                           court=court,
+                           court_count=court_count,
+                           brand_in=brand_in,
+                           brand_in_count=brand_in_count)
+
 
 def to_additional_follow_up(baby_id):
+    login_type = request.args.get('type', 'doctor')
     court, court_count = get_court()
     brand, brand_count = get_brand()
     formula, formula_count = get_formula()
@@ -89,4 +110,5 @@ def to_additional_follow_up(baby_id):
                            court_count=court_count,
                            brand_count=brand_count,
                            formula_count=formula_count,
-                           baby_id=baby_id)
+                           baby_id=baby_id,
+                           login_type=login_type)

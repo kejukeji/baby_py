@@ -769,7 +769,7 @@ MZ.app = {
 	},
 	checkRadio: function(ele) {
 		var radio = $(ele);
-		radio.on('tap', function() {
+		radio.on('click', function() {
 			$(this).addClass('checked').find('input[type="radio"]').attr('checked', 'checked');
 			$(this).parent().siblings('li').find('.iradio').removeClass('checked').find('input[type="radio"]')
 				.attr('checked', null);
@@ -783,7 +783,7 @@ MZ.app = {
 		var carbohydrates = $(ele).find('#l-carbohydrates');
 		var fat = $(ele).find('#l-fat');
 
-		subBtn.bind('tap', function() {
+		subBtn.bind('click', function() {
 			var location = $(ele).find('input[type="radio"][name="location"]:checked').val();
 			var brand = $(ele).find('input[type="radio"][name="brand"]:checked').val();
 			var checkKind = MZ.app.checkField(kind)

@@ -54,7 +54,10 @@
 					<div class="input-wrap f-r">
 						<p class="btn-wrap">
 							<a href="/html/need.html" class="green-btn2">查看营养数据</a>
+                        {% if login_type == 'doctor' %}
 							<a href="/html/formula.html"  class="green-btn2">新增加配方奶</a>
+                        {% else %}
+                        {% endif %}
 						</p>
 					</div>
 				</li>
@@ -172,7 +175,7 @@
                     if (selectedVal == kindVal){
                         // var options = $("<option value='"+brandArray[i][2]+"'>"+brandArray[i][1]+"</option>")
                         kindObj.append("<option value='"+formulaArray[i][2]+"'>"+formulaArray[i][1]+"</option>")
-                        is_ture = false
+                        is_true = false
                     }
                 }
                 if (is_true){

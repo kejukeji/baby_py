@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="/static/css/m.min.css" type="text/css"></head>
 <body class="bg-gray">
 	<section class="huge-box">
-		<form id="formula-form">
+		<form id="formula-form-out">
 			<ul class="form-list mt0">
 				<li class="clearfix location">
 					<label class="f-l">院内/外：</label>
@@ -24,10 +24,10 @@
                                 {% for c in court %}
                                     <li>
                                         <label for="y-in">{{ c.type }}</label>
-                                        {% if count > 1 %}
-                                          <div class="iradio"><input type="radio" name="location" id="two" value="{{ c.id }}" checked></div>
+                                        {% if count == 1 %}
+                                           <a href="/html/formula.html"><div class="iradio"><input type="radio" name="location" id="two" value="{{ c.id }}" checked></div></a>
                                         {% else %}
-                                          <div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}" checked></div>
+                                           <a href="/html/formula/out.html"><div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}" checked></div></a>
                                         {% endif %}
                                     </li>
                                    {% set count = count + 1 %}
@@ -46,7 +46,7 @@
 					<label class="f-l">品牌：</label>
 					<div class="input-wrap f-r">
 						<div class="radio-wrap">
-							<ul id="in-ul">
+							<ul id="ul-brand">
                              {% if brand_in_count > 1 %}
                                 {% set count = 1 %}
                                 {% for b in brand_in %}
@@ -64,27 +64,6 @@
                                 <li>
 									<label for="y-in">{{ brand_in.name }}</label>
 									<div class="iradio checked"><input type="radio" name="brand" value="{{ brand_in.id }}" checked></div>
-								</li>
-                             {% endif %}
-							</ul>
-                            <ul style="display: none" id="out-ul">
-                             {% if brand_out_count > 1 %}
-                                {% set count = 1 %}
-                                {% for b in brand_out %}
-                                    <li>
-                                        <label for="y-in">{{ b.name }}</label>
-                                        {% if count > 1 %}
-                                            <div class="iradio"><input type="radio" name="brand" value="{{ b.id }}" checked></div>
-                                        {% else %}
-                                            <div class="iradio checked"><input type="radio" name="brand" value="{{ b.id }}" checked></div>
-                                        {% endif %}
-                                    </li>
-                                {% set count = count + 1 %}
-                                {% endfor %}
-                             {% elif brand_out_count == 1 %}
-                                <li>
-									<label for="y-in">{{ brand_out.name }}</label>
-									<div class="iradio checked"><input type="radio" name="brand" value="{{ brand_out.id }}" checked></div>
 								</li>
                              {% endif %}
 							</ul>
@@ -129,21 +108,16 @@
 					</div>
 				</li>
 			</ul>
-			 
-		
+
+
 	</form>
 </section>
 	<script type="text/javascript" src="/static/js/zepto.min.js"></script>
           <script type="text/javascript" src="/static/js/base.js"></script>
-    <script type="text/javascript">
-        $(function(){
-            
-        })
-    </script>
 	<script>
 		$(function(){
-			MZ.app.checkRadio('.iradio');
-			MZ.app.formulaSubmit('#formula-form');
+			MZ.app.checkRadioOut('.iradio');
+			MZ.app.formulaSubmitOut('#formula-form-out');
 		})
 	</script>
 
