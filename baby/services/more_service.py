@@ -207,11 +207,15 @@ def get_who_standard(id, types):
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        weight_standard = WeightBoyStandard.query.filter(WeightBoyStandard.age <= 12).all()
+        weight_standard = WeightBoyStandard.query.filter()[:11]
         count = 0
         for weight in weight_standard:
-            grow_p3[count] = weight.p3
-
+            grow_p3[count] = weight.P3
+            grow_p15[count] = weight.P15
+            grow_p75[count] = weight.P75
+            grow_p95[count] = weight.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
 
 
 

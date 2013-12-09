@@ -46,7 +46,7 @@ class BabyList(restful.Resource):
                 format_baby(baby, resp_suc)
             return resp_suc
         else:
-            return fail
+            return resp_suc
 
 
 class BabyCollect(restful.Resource):

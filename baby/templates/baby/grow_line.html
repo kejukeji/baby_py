@@ -15,11 +15,30 @@
         'yEnd': 100, // 这个数值是y轴最大值,
         'ySpace': 20, // y值刻度差范围
         'data': [{
-            name: 'WHO',
-            value: [100.1,200.1,30.1,44.4,55.2,66.1,77.7,88.8,99.9,101.9,111.9,12.3],
+            name: '3rd',
+            value: {{ grow_p3 }},
+            color: 'black',
+            line_width: 1
+        },
+        {
+            name: '15th',
+            value: {{ grow_p15 }},
+            color: 'blue',
+            line_width: 1
+        },
+        {
+            name: '75th',
+            value: {{ grow_p75 }},
+            color: 'red',
+            line_width: 1
+        },
+        {
+            name: '95th',
+            value: {{ grow_p95 }},
             color: '#0d8ecf',
             line_width: 1
-        }, {
+        },
+        {
             name: 'BABY',
             value: {{ tracking }},
             color: '#6db284',

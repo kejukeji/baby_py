@@ -1,5 +1,5 @@
 from flask import render_template, request
-from baby.services.more_service import get_tracking, get_visit_record, get_baby_by_id, get_tracking_bar
+from baby.services.more_service import get_tracking, get_visit_record, get_baby_by_id, get_tracking_bar, get_who_standard
 from baby.util.others import set_session_user, get_session
 
 
@@ -7,12 +7,17 @@ def to_grow_line(baby_id):
     record, record_count, baby = get_visit_record(baby_id)
     types = request.args.get('type', 'weight')
     tracking = get_tracking(baby_id, types)
+    grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard(baby_id, types)
     return render_template('baby/grow_line.html',
                            tracking=tracking,
                            types=types,
                            user_id=get_session('baby_id'),
                            entrance=get_session('entrance'),
-                           baby=baby)
+                           baby=baby,
+                           grow_p3=grow_p3,
+                           grow_p15=grow_p15,
+                           grow_p75=grow_p75,
+                           grow_p95=grow_p95)
 
 
 def to_grow_bar(baby_id):
