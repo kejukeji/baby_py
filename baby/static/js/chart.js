@@ -1,18 +1,6 @@
 $(function() {
-	var w2 = weightObj.data[0];
-	var w3 = weightObj.data[1];
 	var t;
-	var data = [{
-		name: 'WHO',
-		value: w2,
-		color: '#0d8ecf',
-		line_width: 1
-	}, {
-		name: 'SH',
-		value: w3,
-		color: '#6db284',
-		line_width: 1
-	}];
+	var data = weightObj.data;
 
 	var labels = weightObj.xAxis;
 
