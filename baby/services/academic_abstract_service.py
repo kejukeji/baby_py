@@ -88,12 +88,17 @@ def get_academic_abstract(page, doctor_id, success):
                 return False
 
 
-def get_abstract_by_id(id, success):
+def get_abstract_by_id(id, doctor_id, success):
     """
     根据id获取文摘
     """
     abstract = AcademicAbstract.query.filter(AcademicAbstract.id == id).first()
+    collect_result = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type_id == abstract.id).first()
     if abstract:
+        if collect_result:
+            abstract.is_collect = True
+        else:
+            abstract.is_collect = False
         abstract_pic = flatten(abstract)
         success['abstract'] = abstract_pic
         return True

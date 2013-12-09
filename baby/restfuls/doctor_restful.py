@@ -280,15 +280,17 @@ class AbstractInfo(restful.Resource):
     def get():
         parser = reqparse.RequestParser()
         parser.add_argument('academic_id', type=str, required=True, help=u'academic_id 必须')
+        parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
 
         args = parser.parse_args()
 
         academic_id = args['academic_id']
+        doctor_id = args['doctor_id']
 
         success = success_dic().dic
         fail = fail_dic().dic
 
-        result = get_abstract_by_id(academic_id, success)
+        result = get_abstract_by_id(academic_id, doctor_id, success)
 
         if result:
             return success
