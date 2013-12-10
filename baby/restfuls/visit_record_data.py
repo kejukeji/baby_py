@@ -16,13 +16,8 @@ class AddVisitRecordData(restful.Resource):
         success = success_dic().dic
         fail = fail_dic().dic
 
-        court_list = is_list_court()
-        brand_list = is_list_brand()
-        kind_list = is_list_kind()
-
-        success['court'] = court_list
-        success['brand'] = brand_list
-        success['kind'] = kind_list
+        success['total'] = []
+        div_data(success)
 
         return success
 

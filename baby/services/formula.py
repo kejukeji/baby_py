@@ -126,19 +126,28 @@ def is_list_kind():
         return store_list
 
 
-def div_data():
+def div_data(success):
     """
     层级显示
     """
-    court_list = is_list_court()
-    brand_list = is_list_brand()
-    kind_list = is_list_kind()
+    court_list, court_count = get_court()
+    brand_list, brand_count = get_brand()
+    kind_list, kind_count = get_kind()
 
     total_list = []
-
+    brand_pic = ''
+    court_pic = ''
     for court in court_list:
+        court_pic = flatten(court)
+        total_list.append(court_pic)
+        court_pic['sub_brand'] = []
         for brand in brand_list:
             if brand.court_id == court.id:
-                total_list.append(brand)
+                brand_pic = flatten(brand)
+                court_pic['sub_brand'].append(brand_pic)
+                brand_pic['sub_kind'] = []
             for kind in kind_list:
-                pass
+                if brand.id == kind.brand_id:
+                    kind_pic = flatten(kind)
+                    brand_pic['sub_kind'].append(kind_pic)
+        success['total'].append(court_pic)
