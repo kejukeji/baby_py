@@ -59,7 +59,7 @@ class AddVisitRecord(restful.Resource):
     新增随访记录
     """
     @staticmethod
-    def get():
+    def post():
         """
         参数
         baby_id  婴儿id
