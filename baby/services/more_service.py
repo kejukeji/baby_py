@@ -277,19 +277,19 @@ def get_tracking_bar(id, types):
     """
     获得随访记录——配方奶
     """
-    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    tracking_count = Tracking.query.filter(Tracking.id == id).count()
     grow_bar_breastfeeding = [0,0,0,0,0]
     grow_bar_formula_feeding = [0,0,0,0,0]
     count = 0
     if tracking_count > 1:
-        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        tracking_result = Tracking.query.filter(Tracking.id == id).all()
         for tracking in tracking_result[:5]:
             grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
             grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
             count = count + 1
         return grow_bar_breastfeeding, grow_bar_formula_feeding
     elif tracking_count == 1:
-        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        tracking = Tracking.query.filter(Tracking.id == id).first()
         if tracking:
             grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
             grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
@@ -347,6 +347,21 @@ def get_visit_record(id):
             return 0,0, baby
         else:
             return 0,0,0
+
+
+def get_analysis_data(id):
+    """
+    获取喂养量分析
+    """
+    analysis_data = Tracking.query.filter(Tracking.id == id).first()
+    baby = Baby.query.filter(Baby.id == analysis_data.baby_id).first()
+    if analysis_data:
+        if baby:
+            analysis_data.baby_name = baby.baby_name
+        return analysis_data
+    else:
+        return None
+
 
 
 def time_birthday_time_compare(dt, baby):

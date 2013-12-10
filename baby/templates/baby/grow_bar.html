@@ -15,8 +15,8 @@
     window.growObj = {
         'xAxis': ['0', '0.5', '1', '2', '3'],
         'yStart': 0,
-        'yEnd': 450,
-        'ySpace': 50,
+        'yEnd': 300,
+        'ySpace': 20,
         'data': [{
             name: '母乳',
             value: {{ breastfeeding}},
@@ -70,17 +70,17 @@
                     <li>
                         <span>母乳</span>
                         <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
+                        <span class="f-r">{{ analysis.breast_milk_amount }}（毫升/天）</span>
                     </li>
                     <li>
                         <span>早产儿院内专用配方奶</span>
                         <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
+                        <span class="f-r">{{ analysis.formula_feed_measure }}（毫升/天）</span>
                     </li>
                     <li>
                         <span>早产儿出院后专用配方奶</span>
                         <span class="f-r">按实际发生显示</span>
-                        <span class="f-r">（毫升/天）</span>
+                        <span class="f-r">{{ analysis.formula_feed_measure }}（毫升/天）</span>
                     </li>
                 </ul>
             </div>
