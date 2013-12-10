@@ -151,3 +151,11 @@ def div_data(success):
                     kind_pic = flatten(kind)
                     brand_pic['sub_kind'].append(kind_pic)
         success['total'].append(court_pic)
+
+
+def get_kind_by_id(id):
+    """
+    根据id来获取种类
+    """
+    kind = TypeOfMilk.query.filter(TypeOfMilk.id == id).first()
+    return kind

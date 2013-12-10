@@ -8,6 +8,7 @@ from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
 from .tracking_service import get_tracking_model
 from .baby_service import get_picture_by_id
+from .formula import *
 from baby.models.standard import *
 import datetime
 
@@ -330,19 +331,53 @@ def get_visit_record(id):
     tracking, tracking_count = get_tracking_model(Tracking, id)
     baby = Baby.query.filter(Baby.id == id).first()
     time_birthday_week(baby)
+    baby_nutrition_feeding_energy = 0
+    baby_nutrition_feeding_protein = 0
+    milk = [0,0,0,0,0]
+    milk_date = ['','','','','']
+    baby.milk = []
     if tracking != 0:
         if type(tracking) is list:
+            count = 0
             for t in tracking:
+                if count < 5:
+                    milk[count] = t.breast_milk_amount
+                    if t.measure_date:
+                        temp_milk = str(t.measure_date)[2:10]
+                    milk_date[count] = temp_milk
+                count = count + 1
+                kind = get_kind_by_id(t.type_of_milk_id)
+                if kind:
+                    baby_nutrition_feeding_energy = baby_nutrition_feeding_energy + int(kind.energy)
+                    baby_nutrition_feeding_protein = baby_nutrition_feeding_protein + int(kind.protein)
                 t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
                 t.measure_date = str(t.measure_date)[:10]
+            baby.milk = milk
+            baby.milk_date = milk_date
         else:
             tracking.birthday_time = time_birthday_time_compare(tracking.measure_date, baby)
             tracking.measure_date = str(tracking.measure_date)[:10]
+            milk[0] = tracking.breast_milk_amount
+            if tracking.measure_date:
+                temp_milk = str(tracking.measure_date)[2:10]
+            milk_date[0] = temp_milk
+            kind = get_kind_by_id(tracking.type_of_milk_id)
+            if kind:
+                baby_nutrition_feeding_energy = baby_nutrition_feeding_energy + int(kind.energy)
+                baby_nutrition_feeding_protein = baby_nutrition_feeding_protein + int(kind.protein)
+            baby.milk = milk
+            baby.milk_date = milk_date
         if baby:
+            baby.energy = baby_nutrition_feeding_energy
+            baby.protein = baby_nutrition_feeding_protein
             get_picture_by_id(baby.id, baby)
         return tracking, tracking_count, baby
     else:
         if baby:
+            baby.energy = baby_nutrition_feeding_energy
+            baby.protein = baby_nutrition_feeding_protein
+            baby.milk = milk
+            baby.milk_date = milk_date
             get_picture_by_id(baby.id, baby)
             return 0,0, baby
         else:

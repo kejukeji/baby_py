@@ -11,11 +11,11 @@
     window.growObj = {
         'xAxis': ['13-02-05', '13-06-05', '13-10-05', '13-12-05', '14-02-05'],
         'yStart': 0,
-        'yEnd': 5,
-        'ySpace': 1,
+        'yEnd': 300,
+        'ySpace': 20,
         'data': [{
             name: '母乳',
-            value: [3.2, 4.1, 3.9, 3.4, 3.1],
+            value: {{ baby.milk}},
             color: '#08c'
         }]
     };
@@ -31,11 +31,11 @@
                 </li>
                 <li>
                     <span>能量</span>
-                    <span class="f-r">kcal/kg/day</span>
+                    <span class="f-r">{{ baby.energy }}kcal/kg/day</span>
                 </li>
                 <li>
                     <span>蛋白质</span>
-                    <span class="f-r">mg/kg/day</span>
+                    <span class="f-r">{{ baby.protein }}mg/kg/day</span>
                 </li>
             </ul>
         </div>
@@ -47,11 +47,11 @@
                 </li>
                 <li>
                     <span>能量</span>
-                    <span class="f-r">kcal/kg/day</span>
+                    <span class="f-r">{{ baby.protein }}kcal/kg/day</span>
                 </li>
                 <li>
                     <span>蛋白质</span>
-                    <span class="f-r">mg/kg/day</span>
+                    <span class="f-r">{{ baby.energy }}mg/kg/day</span>
                 </li>
             </ul>
         </div>
