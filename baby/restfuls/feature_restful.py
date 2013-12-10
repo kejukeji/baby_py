@@ -75,7 +75,7 @@ class AddVisitRecord(restful.Resource):
         """
         parser = reqparse.RequestParser()
         parser.add_argument('baby_id', type=str, required=True, help=u'baby_id 必须')
-        parser.add_argument('measure_date', type=str, required=True, help=u'due_date 必须')
+        parser.add_argument('measure_date', type=str, required=True, help=u'measure_date 必须')
         parser.add_argument('weight', type=str, required=True, help=u'weight 必须')
         parser.add_argument('height', type=str, required=True, help=u'height 必须')
         parser.add_argument('head', type=str, required=True, help=u'head 必须')
