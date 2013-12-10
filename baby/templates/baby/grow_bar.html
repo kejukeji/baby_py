@@ -15,8 +15,8 @@
     window.growObj = {
         'xAxis': ['0', '0.5', '1', '2', '3'],
         'yStart': 0,
-        'yEnd': 300,
-        'ySpace': 20,
+        'yEnd': 1000,
+        'ySpace': 200,
         'data': [{
             name: '母乳',
             value: {{ breastfeeding}},
@@ -31,36 +31,12 @@
 </head>
 <body>
     <section>
-           <!--<div class="nav-wrapper">-->
-                <!--<a id="L-arrow-left" class="arrow"><span>&lt;</span></a>-->
-                <!--<div class="nav-cont" id="L-nav">-->
-                    <!--<ul>-->
-                        <!--<li><a href="/html/visit_record.html/{{ user_id }}">随访记录</a></li>-->
-                        <!--<li><a href="/html/grow_line.html/{{ user_id }}">生长曲线</a></li>-->
-                        <!--<li class="ui-state-active"><a href="/html/grow_bar.html/{{ user_id }}">生长速率</a></li>-->
-                        <!--{% if entrance == 'baby' %}-->
-
-                        <!--{% else %}-->
-                            <!--<li><a href="/html/baby_detail.html/{{ user_id }}">详细资料</a></li>-->
-                        <!--{% endif %}-->
-                    <!--</ul>-->
-                <!--</div>-->
-                <!--<a id="L-arrow-right" class="arrow"><span>&gt;</span></a>-->
-           <!--</div>-->
-
             <div class="chart-frame">
-                <!--<div class="chart-tab">-->
-                    <!--<a class="current" href="/html/grow_bar.html/{{ user_id }}?type=weight" id="weight">体     重</a>-->
-                    <!--<a href="/html/grow_bar.html/{{ user_id }}?type=height" id="height">身     长</a>-->
-                    <!--<a href="/html/grow_bar.html/{{ user_id }}?type=head" id="head">头     围</a>-->
-                <!--</div>-->
-                <!-- <h3 class="chart-y">体              重</h3> -->
-
                 <div class="chart-stage" id="linechart">
                         <div id="canvasDiv"></div>
                 </div>
 
-                <!-- <h3 class="chart-x">月龄</h3> -->
+                 <!--<h3 class="chart-x">月龄</h3>-->
             </div>
 
 

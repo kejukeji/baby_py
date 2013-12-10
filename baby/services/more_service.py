@@ -212,7 +212,7 @@ def get_who_standard(id, types):
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        standard = WeightBoyStandard.query.filter()[:11]
+        standard = WeightBoyStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -222,7 +222,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'weight' and is_gender == '女':
-        standard = WeightGirlStandard.query.filter()[:11]
+        standard = WeightGirlStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -232,7 +232,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '女':
-        standard = HeightGirlStandard.query.filter()[:11]
+        standard = HeightGirlStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -242,7 +242,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '男':
-        standard = HeightBoyStandard.query.filter()[:11]
+        standard = HeightBoyStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -252,7 +252,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '女':
-        standard = HeadSurroundGirlStandard.query.filter()[:11]
+        standard = HeadSurroundGirlStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -262,7 +262,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '男':
-        standard = HeadSurroundBoyStandard.query.filter()[:11]
+        standard = HeadSurroundBoyStandard.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -460,10 +460,10 @@ def get_baby_by_id(baby_id):
         baby.id = '10' + str(baby.id)
     if baby.id <= 9999 and baby.id >= 1000:
         baby.id = '1' + str(baby.id)
-    childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
+#    childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
     complication = Complication.query.filter(Complication.id == baby.complication_id).first()
     baby.complication = complication.name
-    baby.childbirth_style = childbirth.name
+    #baby.childbirth_style = childbirth.name
     if baby.due_date:
         baby.due_date = str(baby.due_date)[:10]
     return baby
