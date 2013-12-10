@@ -59,10 +59,11 @@ class AddVisitRecord(restful.Resource):
     新增随访记录
     """
     @staticmethod
-    def post():
+    def get():
         """
         参数
-        due_date: 测量日期
+        baby_id  婴儿id
+        measure_date: 测量日期
         weight: 体重
         height: 身长
         head: 头围
