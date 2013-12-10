@@ -2,7 +2,7 @@
 
 from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
-from baby.util.others import set_session_user, time_diff, flatten, get_session
+from baby.util.others import set_session_user, time_diff, flatten, get_session, page_utils
 from baby.models.feature_model import Tracking
 from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
