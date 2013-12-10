@@ -21,6 +21,8 @@ app.config.from_pyfile(CONFIG_FILE)
 def close_data_base(exception=None):
     if exception is not None:
         print('+++++++' + str(exception) + '+++++++')
+
+    if db is not None:
         db.remove()
 
 import urls
