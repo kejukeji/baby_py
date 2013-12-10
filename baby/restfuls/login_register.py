@@ -151,7 +151,7 @@ class CreateBabyAccount(restful.Resource):
     创建婴儿账户
     """
     @staticmethod
-    def post():
+    def get():
         """
         参数：
         baby_name	    婴儿名

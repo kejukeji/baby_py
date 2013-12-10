@@ -7,7 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from baby.ex_var import *
 
 # echo是否显示sql语句跟Hibernate里面show_sql一样
-engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=SQLALCHEMY_ECHO)
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=SQLALCHEMY_ECHO, pool_recycle=3600)
 # 创建事物，手动提交事物
 # db = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine, pool_recycle=3600))
 db = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))

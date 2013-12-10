@@ -124,3 +124,21 @@ def is_list_kind():
         court_pic = change_to_flatten(court)
         store_list.append(court_pic)
         return store_list
+
+
+def div_data():
+    """
+    层级显示
+    """
+    court_list = is_list_court()
+    brand_list = is_list_brand()
+    kind_list = is_list_kind()
+
+    total_list = []
+
+    for court in court_list:
+        for brand in brand_list:
+            if brand.court_id == court.id:
+                total_list.append(brand)
+            for kind in kind_list:
+                pass
