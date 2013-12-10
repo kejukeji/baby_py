@@ -8,7 +8,7 @@ from baby.models.baby_model import Complication, ChildbirthStyle
 from baby.models.database import db
 from .tracking_service import get_tracking_model
 from .baby_service import get_picture_by_id
-from baby.models.standard import WeightBoyStandard, WeightGirlStandard
+from baby.models.standard import *
 import datetime
 
 
@@ -211,13 +211,63 @@ def get_who_standard(id, types):
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        weight_standard = WeightBoyStandard.query.filter()[:11]
+        standard = WeightBoyStandard.query.filter()[:11]
         count = 0
-        for weight in weight_standard:
-            grow_p3[count] = weight.P3
-            grow_p15[count] = weight.P15
-            grow_p75[count] = weight.P75
-            grow_p95[count] = weight.P95
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'weight' and is_gender == '女':
+        standard = WeightGirlStandard.query.filter()[:11]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '女':
+        standard = HeightGirlStandard.query.filter()[:11]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '男':
+        standard = HeightBoyStandard.query.filter()[:11]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '女':
+        standard = HeadSurroundGirlStandard.query.filter()[:11]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '男':
+        standard = HeadSurroundBoyStandard.query.filter()[:11]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
 
