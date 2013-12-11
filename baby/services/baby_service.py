@@ -18,18 +18,18 @@ def format_baby(baby, resp_suc):
     """
     if baby:
         baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
-        childbirth_style = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.complication_id).first()
-        complication_id_list = baby.complication_id.split(',')
+        #childbirth_style = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.complication_id).first()
+        #complication_id_list = baby.complication_id.split(',')
         baby_pic = flatten(baby)
-        get_complication(complication_id_list, baby_pic)
+        #get_complication(complication_id_list, baby_pic)
         if baby.born_birthday:
             baby_birthday = baby.born_birthday
             baby_pic['time'] = time_diff(baby_birthday)
         if baby_picture:
             if baby_picture.rel_path and baby_picture.picture_name:
                 baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
-        if childbirth_style:
-            baby_pic['childbirth'] = childbirth_style.name
+        #if childbirth_style:
+        #    baby_pic['childbirth'] = childbirth_style.name
         resp_suc['baby_list'].append(baby_pic)
 
 

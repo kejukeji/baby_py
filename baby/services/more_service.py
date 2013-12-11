@@ -212,7 +212,7 @@ def get_who_standard(id, types):
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        standard = WeightBoyStandard.query.filter()[:12]
+        standard = WeightBoyStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -222,7 +222,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'weight' and is_gender == '女':
-        standard = WeightGirlStandard.query.filter()[:12]
+        standard = WeightGirlStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -232,7 +232,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '女':
-        standard = HeightGirlStandard.query.filter()[:12]
+        standard = HeightGirlStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -242,7 +242,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '男':
-        standard = HeightBoyStandard.query.filter()[:12]
+        standard = HeightBoyStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -252,7 +252,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '女':
-        standard = HeadSurroundGirlStandard.query.filter()[:12]
+        standard = HeadSurroundGirlStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -262,7 +262,81 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '男':
-        standard = HeadSurroundBoyStandard.query.filter()[:12]
+        standard = HeadSurroundBoyStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+
+
+def get_who_standard_test(id, types):
+    """
+    获取who标准数据
+    """
+    baby = Baby.query.filter(Baby.id == id).first()
+    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    is_gender = ''
+    if baby:
+        is_gender = baby.gender
+    if types == 'weight' and is_gender == '男':
+        standard = WeightBoyStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'weight' and is_gender == '女':
+        standard = WeightGirlStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '女':
+        standard = HeightGirlStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '男':
+        standard = HeightBoyStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '女':
+        standard = HeadSurroundGirlStandardWeek.query.filter()[:12]
+        count = 0
+        for s in standard:
+            grow_p3[count] = s.P3
+            grow_p15[count] = s.P15
+            grow_p75[count] = s.P75
+            grow_p95[count] = s.P95
+            count = count + 1
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '男':
+        standard = HeadSurroundBoyStandardWeek.query.filter()[:12]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -461,8 +535,8 @@ def get_baby_by_id(baby_id):
     if baby.id <= 9999 and baby.id >= 1000:
         baby.id = '1' + str(baby.id)
 #    childbirth = ChildbirthStyle.query.filter(ChildbirthStyle.id == baby.childbirth_style_id).first()
-    complication = Complication.query.filter(Complication.id == baby.complication_id).first()
-    baby.complication = complication.name
+    #complication = Complication.query.filter(Complication.id == baby.complication_id).first()
+    #baby.complication = complication.name
     #baby.childbirth_style = childbirth.name
     if baby.due_date:
         baby.due_date = str(baby.due_date)[:10]
@@ -472,7 +546,7 @@ def get_baby_by_id(baby_id):
 #    """
 #       录入who标准数据
 #    """
-#    read_file = open('/Users/K/Documents/User Data/baby Data/lhfa_girls_p_exp.txt')
+#    read_file = open('/Users/K/Dropbox/婴儿app/text—data/WHO_weight_gril_0-5age.txt')
 #    result = {}
 #    count = 0
 #    for line in read_file:
@@ -485,7 +559,7 @@ def get_baby_by_id(baby_id):
 #    result.pop('0')
 #    for keys in result.keys():
 #        #print result[str(count)][0].__len__()
-#        weight_boy_standard = HeadSurroundGirlStandard(age=result[str(count)][0][0], L=result[str(count)][0][1],
+#        weight_boy_standard = WeightGirlStandardYear(age=result[str(count)][0][0], L=result[str(count)][0][1],
 #                                                M=result[str(count)][0][2], S=result[str(count)][0][3],
 #                                                P01=result[str(count)][0][4], P1=result[str(count)][0][5],
 #                                                P3=result[str(count)][0][6], P5=result[str(count)][0][7],
