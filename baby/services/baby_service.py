@@ -28,8 +28,8 @@ def format_baby(baby, resp_suc):
         if baby_picture:
             if baby_picture.rel_path and baby_picture.picture_name:
                 baby_pic['picture_path'] = baby_picture.rel_path + '/' + baby_picture.picture_name
-            else:
-                baby_pic['picture_path'] = ""
+        else:
+            baby_pic['picture_path'] = ""
         #if childbirth_style:
         #    baby_pic['childbirth'] = childbirth_style.name
         resp_suc['baby_list'].append(baby_pic)
