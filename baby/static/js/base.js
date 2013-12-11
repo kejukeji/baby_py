@@ -828,10 +828,12 @@ MZ.app = {
 		var protein = $(ele).find('#l-protein');
 		var carbohydrates = $(ele).find('#l-carbohydrates');
 		var fat = $(ele).find('#l-fat');
+		
+		var checkedFun = function(){ return this.checked; }
 
 		subBtn.bind('click', function() {
-			var location = $(ele).find('input[type="radio"][name="location"]:checked').val();
-			var brand = $(ele).find('input[type="radio"][name="brand"]:checked').val();
+			var location = $(ele).find('input[type="radio"][name="location"]').filter(checkedFun).val();
+			var brand = $(ele).find('input[type="radio"][name="brand"]').filter(checkedFun).val();
 			var checkKind = MZ.app.checkField(kind)
 			var checkEnergy = MZ.app.checkField(energy)
 			var checkProtein = MZ.app.checkField(protein)
