@@ -25,4 +25,10 @@ def close_data_base(exception=None):
     if db is not None:
         db.remove()
 
+
+@app.teardown_request
+def teardown_request(exception=None):
+    if db is not None:
+        db.remove()
+
 import urls

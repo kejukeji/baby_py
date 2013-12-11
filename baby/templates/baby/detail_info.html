@@ -13,7 +13,11 @@
 
            <div class="baby-img">
               <a href="#">
-                <img src="{{ baby.picture_path }}" alt="" />
+                {% if baby.picture_path %}
+                  <img src="{{ baby.picture_path }}" alt="" />
+                {% else %}
+                  <img src="/static/img/system/head_picture/71X71.png" />
+                {% endif %}
               </a>
            </div>
 
@@ -21,7 +25,7 @@
             <ul>
               <li>
                     <span>婴儿ID</span>
-                    <span class="f-r">{{ baby.id }}</span>
+                    <span class="f-r">{{ baby.patriarch_tel }}</span>
               </li>
               <li>
                        <span>婴儿名</span>

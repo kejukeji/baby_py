@@ -27,7 +27,7 @@
                                         {% if count == 1 %}
                                            <a href="/html/formula.html"><div class="iradio"><input type="radio" name="location" id="two" value="{{ c.id }}" checked></div></a>
                                         {% else %}
-                                           <a href="/html/formula/out.html"><div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}" checked></div></a>
+                                           <a href="/html/formula/out.html"><div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}"></div></a>
                                         {% endif %}
                                     </li>
                                    {% set count = count + 1 %}
@@ -53,7 +53,7 @@
                                     <li>
                                         <label for="y-in">{{ b.name }}</label>
                                         {% if count > 1 %}
-                                            <div class="iradio"><input type="radio" name="brand" value="{{ b.id }}" checked></div>
+                                            <div class="iradio"><input type="radio" name="brand" value="{{ b.id }}"></div>
                                         {% else %}
                                             <div class="iradio checked"><input type="radio" name="brand" value="{{ b.id }}" checked></div>
                                         {% endif %}
