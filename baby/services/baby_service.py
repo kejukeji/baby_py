@@ -229,8 +229,11 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight
             else:
                 picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
                 baby_picture = BabyPicture(baby_id=baby_id, base_path=base_path, rel_path='/static/img/system/head_picture', picture_name=picture_name)
-                db.add(baby_picture)
-                db.commit()
+                try:
+                    db.add(baby_picture)
+                    db.commit()
+                except:
+                    pass
                 upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', picture_name))
             try:
                 os.remove(old_picture)
