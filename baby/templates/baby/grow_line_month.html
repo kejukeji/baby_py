@@ -10,9 +10,9 @@
 <script type="text/javascript">
 
     window.weightObj = {
-        'xAxis': ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"],  // 横坐标的范围（月份建议01...12）
+        'xAxis': ["0","01","02","03","04","05","06","07","08","09","10","11","1","01","02","03","04","05","06","07","08","09","10","11","2"],  // 横坐标的范围（月份建议01...12）
         'yStart': 0, // 这个数值是y轴最小值
-        'yEnd': 10, // 这个数值是y轴最大值,
+        'yEnd': 15, // 这个数值是y轴最大值,
         'ySpace': 1, // y值刻度差范围
         'data': [{
             name: '3rd',
@@ -51,9 +51,9 @@
     <section>
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a class="current" href="/html/grow_line.html/{{ user_id }}?type=weight&way=week" id="weight">体     重</a>
-                    <a href="/html/grow_line.html/{{ user_id }}?type=height&way=week" id="height">身     长</a>
-                    <a href="/html/grow_line.html/{{ user_id }}?type=head&way=week" id="head">头     围</a>
+                    <a class="current" href="/html/grow_line.html/{{ user_id }}?type=weight&way=month" id="weight">体     重</a>
+                    <a href="/html/grow_line.html/{{ user_id }}?type=height&way=month" id="height">身     长</a>
+                    <a href="/html/grow_line.html/{{ user_id }}?type=head&way=month" id="head">头     围</a>
                 </div>
                 <h3 class="chart-y" id="mark">体              重</h3>
 
@@ -61,7 +61,7 @@
                         <div id="canvasDiv"></div>
                 </div>
 
-                <h3 class="chart-x">周龄</h3>
+                <h3 class="chart-x">月龄</h3>
             </div>
 
             <ul class="select-block clearfix">

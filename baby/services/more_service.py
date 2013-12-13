@@ -170,30 +170,29 @@ def get_tracking(id, types):
     获得随访记录_身长，体重，头围
     """
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
-    grow_line = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_line = []
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        result = 0
         for tracking in tracking_result:
-            result = is_null(tracking.measure_date)
-            if result:
+            if result >= 0 or result >= 12:
                 if types == 'weight':
-                    grow_line[result] = int(tracking.weight)
+                    grow_line.append(int(tracking.weight))
                 if types == 'height':
-                    grow_line[result] = int(tracking.height)
+                    grow_line.append(int(tracking.height))
                 if types == 'head':
-                    grow_line[result] = int(tracking.head_wai)
+                    grow_line.append(int(tracking.head_wai))
+            result = result + 1
         return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
-            result = is_null(tracking.measure_date)
-            if result:
-                if types == 'weight':
-                    grow_line[result] = int(tracking.weight)
-                if types == 'height':
-                    grow_line[result] = int(tracking.height)
-                if types == 'head':
-                    grow_line[result] = int(tracking.head_wai)
+            if types == 'weight':
+                grow_line[0] = int(tracking.weight)
+            if types == 'height':
+                grow_line[0] = int(tracking.height)
+            if types == 'head':
+                grow_line[0] = int(tracking.head_wai)
         return grow_line
     else:
         return grow_line
@@ -204,15 +203,15 @@ def get_who_standard(id, types):
     获取who标准数据
     """
     baby = Baby.query.filter(Baby.id == id).first()
-    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0,0]
     is_gender = ''
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        standard = WeightBoyStandardWeek.query.filter()[:12]
+        standard = WeightBoyStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -222,7 +221,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'weight' and is_gender == '女':
-        standard = WeightGirlStandardWeek.query.filter()[:12]
+        standard = WeightGirlStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -232,7 +231,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '女':
-        standard = HeightGirlStandardWeek.query.filter()[:12]
+        standard = HeightGirlStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -242,7 +241,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '男':
-        standard = HeightBoyStandardWeek.query.filter()[:12]
+        standard = HeightBoyStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -252,7 +251,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '女':
-        standard = HeadSurroundGirlStandardWeek.query.filter()[:12]
+        standard = HeadSurroundGirlStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -262,7 +261,7 @@ def get_who_standard(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '男':
-        standard = HeadSurroundBoyStandardWeek.query.filter()[:12]
+        standard = HeadSurroundBoyStandardWeek.query.filter()[:13]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -273,20 +272,20 @@ def get_who_standard(id, types):
         return grow_p3, grow_p15, grow_p75, grow_p95
 
 
-def get_who_standard_test(id, types):
+def get_who_standard_month(id, types):
     """
     获取who标准数据
     """
     baby = Baby.query.filter(Baby.id == id).first()
-    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0]
-    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p3 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p15 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p75 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    grow_p95 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     is_gender = ''
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        standard = WeightBoyStandardWeek.query.filter()[:12]
+        standard = WeightBoyStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -296,7 +295,7 @@ def get_who_standard_test(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'weight' and is_gender == '女':
-        standard = WeightGirlStandardWeek.query.filter()[:12]
+        standard = WeightGirlStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -306,7 +305,7 @@ def get_who_standard_test(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '女':
-        standard = HeightGirlStandardWeek.query.filter()[:12]
+        standard = HeightGirlStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -316,7 +315,7 @@ def get_who_standard_test(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'height' and is_gender == '男':
-        standard = HeightBoyStandardWeek.query.filter()[:12]
+        standard = HeightBoyStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -326,7 +325,7 @@ def get_who_standard_test(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '女':
-        standard = HeadSurroundGirlStandardWeek.query.filter()[:12]
+        standard = HeadSurroundGirlStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -336,7 +335,7 @@ def get_who_standard_test(id, types):
             count = count + 1
         return grow_p3, grow_p15, grow_p75, grow_p95
     elif types == 'head' and is_gender == '男':
-        standard = HeadSurroundBoyStandardWeek.query.filter()[:12]
+        standard = HeadSurroundBoyStandardYear.query.filter()[:25]
         count = 0
         for s in standard:
             grow_p3[count] = s.P3
@@ -398,12 +397,12 @@ def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, b
     return True
 
 
-def get_visit_record(id):
+def get_visit_record(baby_id):
     """
     根据baby_id获取随访记录
     """
-    tracking, tracking_count = get_tracking_model(Tracking, id)
-    baby = Baby.query.filter(Baby.id == id).first()
+    tracking, tracking_count = get_tracking_model(Tracking, baby_id)
+    baby = Baby.query.filter(Baby.id == baby_id).first()
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
     baby_nutrition_feeding_protein = 0
@@ -456,6 +455,21 @@ def get_visit_record(id):
             return 0,0, baby
         else:
             return 0,0,0
+
+
+def check_baby_is_week_or_month(baby):
+    """
+    根据baby的生日来判断显示周，还是月数据
+    """
+    days = 13 * 7
+    if baby:
+        baby_birthday = baby.born_birthday
+        now_date = datetime.datetime.now()
+        difference_date = (now_date - baby_birthday).days
+        if difference_date <= days:
+            return 'week'
+        else:
+            return 'month'
 
 
 def get_analysis_data(id):

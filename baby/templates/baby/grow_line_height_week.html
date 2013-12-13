@@ -12,8 +12,8 @@
     window.weightObj = {
         'xAxis': ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"],  // 横坐标的范围（月份建议01...12）
         'yStart': 0, // 这个数值是y轴最小值
-        'yEnd': 10, // 这个数值是y轴最大值,
-        'ySpace': 1, // y值刻度差范围
+        'yEnd': 60, // 这个数值是y轴最大值,
+        'ySpace': 10, // y值刻度差范围
         'data': [{
             name: '3rd',
             value: {{ grow_p3 }},
@@ -51,11 +51,11 @@
     <section>
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a class="current" href="/html/grow_line.html/{{ user_id }}?type=weight&way=week" id="weight">体     重</a>
-                    <a href="/html/grow_line.html/{{ user_id }}?type=height&way=week" id="height">身     长</a>
+                    <a href="/html/grow_line.html/{{ user_id }}?type=weight&way=week" id="weight">体     重</a>
+                    <a class="current" href="/html/grow_line.html/{{ user_id }}?type=height&way=week" id="height">身     长</a>
                     <a href="/html/grow_line.html/{{ user_id }}?type=head&way=week" id="head">头     围</a>
                 </div>
-                <h3 class="chart-y" id="mark">体              重</h3>
+                <h3 class="chart-y" id="mark">身              长</h3>
 
                 <div class="chart-stage" id="linechart">
                         <div id="canvasDiv"></div>

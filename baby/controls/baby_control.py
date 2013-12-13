@@ -5,19 +5,80 @@ from baby.util.others import set_session_user, get_session
 
 def to_grow_line(baby_id):
     record, record_count, baby = get_visit_record(baby_id)
+    show_data_way = check_baby_is_week_or_month(baby)
     types = request.args.get('type', 'weight')
+    way = request.args.get('way', 'week')
     tracking = get_tracking(baby_id, types)
     grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard(baby_id, types)
-    return render_template('baby/grow_line.html',
-                           tracking=tracking,
-                           types=types,
-                           user_id=get_session('baby_id'),
-                           entrance=get_session('entrance'),
-                           baby=baby,
-                           grow_p3=grow_p3,
-                           grow_p15=grow_p15,
-                           grow_p75=grow_p75,
-                           grow_p95=grow_p95)
+    if show_data_way == 'week':
+        if types == 'weight':
+            return render_template('baby/grow_line.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
+        if types == 'height':
+            return render_template('baby/grow_line_height_week.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
+        if types == 'head':
+            return render_template('baby/grow_line_head_week.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
+    else:
+        grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard_month(baby_id, types)
+        if types == 'weight':
+            return render_template('baby/grow_line_month.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
+        if types == 'height':
+            return render_template('baby/grow_line_height_month.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
+        if types == 'head':
+            return render_template('baby/grow_line_head_month.html',
+                                   tracking=tracking,
+                                   types=types,
+                                   user_id=get_session('baby_id'),
+                                   entrance=get_session('entrance'),
+                                   baby=baby,
+                                   grow_p3=grow_p3,
+                                   grow_p15=grow_p15,
+                                   grow_p75=grow_p75,
+                                   grow_p95=grow_p95)
 
 
 def to_grow_bar(baby_id):
