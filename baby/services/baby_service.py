@@ -218,11 +218,20 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight
             if not allowed_file_extension(upload_image.stream.filename, HEAD_PICTURE_ALLOWED_EXTENSION):
                 return False
             baby_picture = BabyPicture.query.filter(BabyPicture.baby_id == baby.id).first()
+            old_picture = ''
             base_path = HEAD_PICTURE_BASE_PATH
-            old_picture = base_path + str(baby_picture.rel_path) + '/' + str(baby_picture.picture_name)
-            baby_picture.rel_path = HEAD_PICTURE_UPLOAD_FOLDER
-            baby_picture.picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
-            upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', baby_picture.picture_name))
+            if baby_picture:
+                if baby_picture:
+                    old_picture = base_path + str(baby_picture.rel_path) + '/' + str(baby_picture.picture_name)
+                baby_picture.rel_path = HEAD_PICTURE_UPLOAD_FOLDER
+                baby_picture.picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
+                upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', baby_picture.picture_name))
+            else:
+                picture_name = time_file_name(secure_filename(upload_image.stream.filename), sign=baby.id)
+                baby_picture = BabyPicture(baby_id=baby_id, base_path=base_path, rel_path='/static/img/system/head_picture', picture_name=picture_name)
+                db.add(baby_picture)
+                db.commit()
+                upload_image.save(os.path.join(base_path + baby_picture.rel_path+'/', picture_name))
             try:
                 os.remove(old_picture)
             except:

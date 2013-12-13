@@ -175,14 +175,12 @@ def get_tracking(id, types):
         tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
         result = 0
         for tracking in tracking_result:
-            if result >= 0 or result >= 12:
-                if types == 'weight':
-                    grow_line.append(int(tracking.weight))
-                if types == 'height':
-                    grow_line.append(int(tracking.height))
-                if types == 'head':
-                    grow_line.append(int(tracking.head_wai))
-            result = result + 1
+            if types == 'weight':
+                grow_line.append(int(tracking.weight))
+            if types == 'height':
+                grow_line.append(int(tracking.height))
+            if types == 'head':
+                grow_line.append(int(tracking.head_wai))
         return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
