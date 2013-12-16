@@ -25,9 +25,9 @@
                                     <li>
                                         <label for="y-in">{{ c.type }}</label>
                                         {% if count == 1 %}
-                                           <a href="/html/formula.html"><div class="iradio"><input type="radio" name="location" id="two" value="{{ c.id }}" checked></div></a>
+                                           <a href="/html/formula.html"><div class="iradio"><input type="radio" name="location" id="two" value="{{ c.id }}"></div></a>
                                         {% else %}
-                                           <a href="/html/formula/out.html"><div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}"></div></a>
+                                           <a href="/html/formula/out.html"><div class="iradio checked"><input type="radio" name="location" id="one" value="{{ c.id }}" checked></div></a>
                                         {% endif %}
                                     </li>
                                    {% set count = count + 1 %}
@@ -116,8 +116,8 @@
           <script type="text/javascript" src="/static/js/base.js"></script>
 	<script>
 		$(function(){
-			MZ.app.checkRadioOut('.iradio');
-			MZ.app.formulaSubmitOut('#formula-form-out');
+			MZ.app.checkRadio('.iradio');
+			MZ.app.formulaSubmit('#formula-form-out');
 		})
 	</script>
 

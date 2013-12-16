@@ -9,9 +9,8 @@ from ..util.baby_doctor_commonality import format_baby, search_pickler, system_m
 from ..services.baby_service import baby_collect_list, baby_list, search_by_keyword_time
 from ..services.doctor_service import doctor_info, get_meeting_message, update_doctor, doctor_pickler
 from ..services.search_history_service import search_history_list, delete_all_search
-from ..services.academic_abstract_service import get_academic_abstract
 from ..services.collect_service import insert_or_cancel_collects
-from ..services.academic_abstract_service import get_abstract_by_id
+from ..services.academic_abstract_service import *
 import werkzeug
 
 
@@ -69,16 +68,12 @@ class BabyCollect(restful.Resource):
         resp_suc = success_dic().dic
         fail = fail_dic().dic
         resp_suc['baby_list'] = []
-        baby_collect = baby_collect_list(page, doctor_id)
-        if baby_collect:
-            if type(baby_collect) is list:
-                for baby_c in baby_collect:
-                    format_baby(baby_c, resp_suc)
-            else:
-                format_baby(baby_collect, resp_suc)
+        is_true = baby_collect_list(page, doctor_id, resp_suc)
+        if is_true:
             return resp_suc
         else:
-            return fail
+            resp_suc['message'] = '没有数据'
+            return resp_suc
 
 
 class DoctorInfo(restful.Resource):
@@ -296,6 +291,36 @@ class AbstractInfo(restful.Resource):
             return success
         else:
             return fail
+
+
+class CollectAbstract(restful.Resource):
+    """
+    医生我的收藏学士文摘
+    """
+    @staticmethod
+    def get():
+        """
+        doctor_id: 医生id
+        """
+        parser = reqparse.RequestParser()
+        parser.add_argument('doctor_id', type=str, required=True, help=u'doctor_id 必须')
+        parser.add_argument('page', type=str, required=True, help=u'page 必须')
+
+        args = parser.parse_args()
+
+        success = success_dic().dic
+        fail = fail_dic().dic
+
+        doctor_id = args['doctor_id']
+        page = int(args['page'])
+
+        is_true = get_collect_abstract(doctor_id, page, success)
+        if is_true:
+            return success
+        else:
+            success['message'] = '没有找到数据'
+            return success
+
 
 
 class DoctorCollect(restful.Resource):

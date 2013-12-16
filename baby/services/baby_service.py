@@ -105,29 +105,51 @@ def baby_list(page, doctor_id):
         return baby
 
 
-def baby_collect_list(page, doctor_id):
+def baby_collect_list(page, doctor_id, success):
     """
         得到医生收藏婴儿列表
             page: 分页，当前页
             doctor_id: 医生的id
     """
-    result_count = db.query(Baby). \
-        filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
+    collect_count = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
     temp_page = page
-    page, per_page = page_utils(result_count, page)
-    if result_count > 1:
-        results = db.query(Baby).\
-            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(int(temp_page)-1):per_page*int(temp_page)]
-        for result in results:
-            get_picture_by_id(result.id, result)
-            result.is_collect = 0
-        return results
+    page, per_page = page_utils(collect_count, page)
+    if collect_count > 1:
+        collect_result = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+        if collect_result:
+            for collect in collect_result:
+                baby = Baby.query.filter(Baby.id == collect.type_id).first()
+                baby.is_collect = 0
+                format_baby(baby, success)
+            return True
+        else:
+            return False
     else:
-        result = db.query(Baby).\
-            filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
-        get_picture_by_id(result.id, result)
-        result.is_collect = 0
-        return result
+        collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
+        if collect:
+            baby = Baby.query.filter(Baby.id == collect.type_id).first()
+            baby.is_collect = 0
+            format_baby(baby, success)
+            return True
+        else:
+            return False
+    #result_count = db.query(Baby). \
+    #    filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
+    #temp_page = page
+    #page, per_page = page_utils(result_count, page)
+    #if result_count > 1:
+    #    results = db.query(Baby).\
+    #        filter(Collect.doctor_id == doctor_id, Collect.type == 'baby')[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+    #    for result in results:
+    #        get_picture_by_id(result.id, result)
+    #        result.is_collect = 0
+    #    return results
+    #else:
+    #    result = db.query(Baby).\
+    #        filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
+    #    get_picture_by_id(result.id, result)
+    #    result.is_collect = 0
+    #    return result
 
 
 def search_by_keyword_time(keyword, time):

@@ -104,3 +104,37 @@ def get_abstract_by_id(id, doctor_id, success):
         return True
     else:
         return False
+
+
+def get_collect_abstract(doctor_id, page, success):
+    """
+    获取医生收藏文摘
+    """
+    success['academic'] = []
+    abstract = AcademicAbstract.query.filter().all()
+    collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
+    temp_page = page
+    page, per_page = page_utils(collect_count, page, per_page=3)
+    if collect_count > 1:
+        collect_result = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract')[per_page * (temp_page - 1): per_page * page]
+        if collect_result:
+            for collect in collect_result:
+                for a in abstract:
+                    if a.id == collect.type_id:
+                        a.is_collect = True
+                        a_pic = flatten(a)
+                        success['academic'].append(a_pic)
+            return True
+        else:
+            return False
+    else:
+        collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract').first()
+        if collect:
+            for a in abstract:
+                if a.id == collect.type_id:
+                    a.is_collect = True
+                    a_pic = flatten(a)
+                    success['academic'].append(a_pic)
+            return True
+        else:
+            return False
