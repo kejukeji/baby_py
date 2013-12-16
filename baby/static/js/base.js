@@ -641,7 +641,7 @@ MZ.app = {
 		var rePassword = $('#L-re-password')
 		var saveBtn = $('#L-save')
 
-		saveBtn.bind('tap', function() {
+		saveBtn.bind('click', function() {
 			var checkOldPwd = MZ.app.checkField(oldPassword)
 			var checkNewPwd = MZ.app.checkField(newPassword)
 			var checkRePwd = MZ.app.checkField(rePassword)
@@ -708,7 +708,7 @@ MZ.app = {
 		var tel = $('#tel')
 		var registerBtn = $('#register-btn')
 
-		registerBtn.bind('tap', function() {
+		registerBtn.bind('click', function() {
 			var checkUserName = MZ.app.checkField(user_name)
 			var checkNewPwd = MZ.app.checkField(user_pass)
 			var checkConfirm = MZ.app.checkField(confirm_pass)
@@ -974,7 +974,7 @@ MZ.app = {
 		var height = $(ele).find('#z-height');
 		var head = $(ele).find('#z-head');
 
-		subBtn.bind('tap', function() {
+		subBtn.bind('click', function() {
 			var checkPatriarch = MZ.app.checkField(patriarch);
 			var checkBabyName = MZ.app.checkField(babyName);
 			var checkPassword = MZ.app.checkField(password);
