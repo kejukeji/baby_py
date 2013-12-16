@@ -165,7 +165,7 @@ def check_is_type(result, remember, return_success):
         return False
 
 
-def get_tracking(id, types):
+def get_tracking(id, types, show_date_way):
     """
     获得随访记录_身长，体重，头围
     """
@@ -555,6 +555,37 @@ def get_baby_by_id(baby_id):
     if baby.due_date:
         baby.due_date = str(baby.due_date)[:10]
     return baby
+
+
+def get_tracking_test(id, types, show_date_way):
+    """
+    获得随访记录_身长，体重，头围
+    """
+    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    grow_line = []
+    if tracking_count > 1:
+        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        result = 0
+        count = 1
+        weight = 0
+        height = 0
+        head = 0
+        temp_date = 0
+        for tracking in tracking_result:
+            temp_date = str(tracking.measure_date)[5:7]
+            
+    elif tracking_count == 1:
+        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        if tracking:
+            if types == 'weight':
+                grow_line.append(int(tracking.weight))
+            if types == 'height':
+                grow_line.append(int(tracking.height))
+            if types == 'head':
+                grow_line.append(int(tracking.head_wai))
+        return 0
+    else:
+        return 0
 
 #def entering_who():
 #    """

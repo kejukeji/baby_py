@@ -8,7 +8,7 @@ def to_grow_line(baby_id):
     show_data_way = check_baby_is_week_or_month(baby)
     types = request.args.get('type', 'weight')
     way = request.args.get('way', 'week')
-    tracking = get_tracking(baby_id, types)
+    tracking = get_tracking(baby_id, types, show_data_way)
     grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard(baby_id, types)
     if show_data_way == 'week':
         if types == 'weight':
@@ -93,6 +93,7 @@ def to_grow_bar(baby_id):
 
 
 def to_raise():
+    #get_tracking_test(1, 'weight', 'week')
     return render_template('baby/raise.html')
 
 
