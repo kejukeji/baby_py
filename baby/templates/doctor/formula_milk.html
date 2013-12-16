@@ -86,30 +86,30 @@
            </div>
          </li>
          <div id="div-display">
-         <li class="clearfix">
-           <label class="f-l">能量：</label>
-           <div class="input-wrap f-r">
-             <input type="text" id="l-energy"/>
-           </div>
-         </li>
-         <li class="clearfix">
-           <label class="f-l">蛋白质：</label>
-           <div class="input-wrap f-r">
-             <input type="text" id="l-protein" />
-           </div>
-         </li>
-         <li class="clearfix">
-           <label class="f-l">碳水化合物：</label>
-           <div class="input-wrap f-r">
-             <input type="text" id="l-carbohydrates" />
-           </div>
-         </li>
-         <li class="clearfix">
-           <label class="f-l">脂肪：</label>
-           <div class="input-wrap f-r">
-             <input type="text" id="l-fat" />
-           </div>
-         </li>
+             <li class="clearfix">
+               <label class="f-l">能量：</label>
+               <div class="input-wrap f-r">
+                 <input type="text" id="l-energy"/>
+               </div>
+             </li>
+             <li class="clearfix">
+               <label class="f-l">蛋白质：</label>
+               <div class="input-wrap f-r">
+                 <input type="text" id="l-protein" />
+               </div>
+             </li>
+             <li class="clearfix">
+               <label class="f-l">碳水化合物：</label>
+               <div class="input-wrap f-r">
+                 <input type="text" id="l-carbohydrates" />
+               </div>
+             </li>
+             <li class="clearfix">
+               <label class="f-l">脂肪：</label>
+               <div class="input-wrap f-r">
+                 <input type="text" id="l-fat" />
+               </div>
+             </li>
          </div>
          <li class="clearfix">
            <label class="f-l">&nbsp;</label>
@@ -124,20 +124,7 @@
  </section>
    <script type="text/javascript" src="/static/js/zepto.min.js"></script>
    <script type="text/javascript" src="/static/js/base.js"></script>
-   <script type="text/javascript">
-       $(function(){
-           var brand = $("#brand li .iradio")
-           var divDisplay = $("#divDisplay")
-           brand.bind("click", function(){
-               var brandVal = $(this).parent().find("label").html()
-               if (brandVal == "其他"){
-                   divDisplay.className = "hide"
-               }else{
-                   divDisplay.className = "show"
-               }
-           })
-       })
-   </script>
+   <script type="text/javascript" src="/static/js/extend/record.js"></script>
    <script>
      $(function(){
        MZ.app.checkRadio('.iradio');

@@ -26,10 +26,10 @@ class AddFormula(restful.Resource):
         parser.add_argument('court_id', type=str, required=True, help=u'court_id 必须')
         parser.add_argument('brand_id', type=str, required=True, help=u'brand_id 必须')
         parser.add_argument('kind', type=str, required=True, help=u'type 必须')
-        parser.add_argument('energy', type=str, required=True, help=u'energy 必须')
-        parser.add_argument('protein', type=str, required=True, help=u'protein 必须')
-        parser.add_argument('carbohydrates', type=str, required=True, help=u'carbon_compound 必须')
-        parser.add_argument('fat', type=str, required=True, help=u'axunge 必须')
+        parser.add_argument('energy', type=str, required=False, help=u'energy 必须')
+        parser.add_argument('protein', type=str, required=False, help=u'protein 必须')
+        parser.add_argument('carbohydrates', type=str, required=False, help=u'carbon_compound 必须')
+        parser.add_argument('fat', type=str, required=False, help=u'axunge 必须')
 
         args = parser.parse_args()
 

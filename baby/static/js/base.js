@@ -839,26 +839,34 @@ MZ.app = {
 			var checkProtein = MZ.app.checkField(protein)
 			var checkTshhw = MZ.app.checkField(carbohydrates)
 			var checkFat = MZ.app.checkField(fat)
-			if (!checkKind) {
-				window.Notification.simple(MZ.constant.KIND_EMPTY, 2000)
-				return
-			}
-			if (!checkEnergy) {
-				window.Notification.simple(MZ.constant.ENERGY_EMPTY, 2000)
-				return
-			}
-			if (!checkProtein) {
-				window.Notification.simple(MZ.constant.PROTEIN_EMPTY, 2000)
-				return
-			}
-			if (!checkTshhw) {
-				window.Notification.simple(MZ.constant.TSHHEW_EMPTY, 2000)
-				return
-			}
-			if (!checkFat) {
-				window.Notification.simple(MZ.constant.FAT_EMPTY, 2000)
-				return
-			}
+            var divDisplayObj = $("#div-display")
+            if (divDisplayObj.hide()){
+                if (!checkKind) {
+                    window.Notification.simple(MZ.constant.KIND_EMPTY, 2000)
+                    return
+                }
+            } else{
+                if (!checkKind) {
+                    window.Notification.simple(MZ.constant.KIND_EMPTY, 2000)
+                    return
+                }
+                if (!checkEnergy) {
+                    window.Notification.simple(MZ.constant.ENERGY_EMPTY, 2000)
+                    return
+                }
+                if (!checkProtein) {
+                    window.Notification.simple(MZ.constant.PROTEIN_EMPTY, 2000)
+                    return
+                }
+                if (!checkTshhw) {
+                    window.Notification.simple(MZ.constant.TSHHEW_EMPTY, 2000)
+                    return
+                }
+                if (!checkFat) {
+                    window.Notification.simple(MZ.constant.FAT_EMPTY, 2000)
+                    return
+                }
+            }
 			var params = {
 				'court_id': location,
 				'brand_id': brand,
