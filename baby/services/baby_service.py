@@ -63,9 +63,9 @@ def baby_list(page, doctor_id):
     baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
         babys = Baby.query.filter().order_by(Baby.system_message_time.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
-        baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
+        baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
         if baby_collect_count > 1:
-            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
+            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
             for baby in babys:
                 for baby_collect in baby_collects:
                     if baby.id == baby_collect.type_id:
@@ -73,7 +73,7 @@ def baby_list(page, doctor_id):
                     else:
                         baby.is_collect = 1
         else:
-            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
+            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
             if baby_collect:
                  for baby in babys:
                     if baby.id == baby_collect.type_id:
@@ -87,14 +87,14 @@ def baby_list(page, doctor_id):
     else:
         baby = Baby.query.filter().first()
         if baby_collect_count > 1:
-            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id).all()
+            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
             for baby_collect in baby_collects:
                 if baby.id == baby_collect.type_id:
                     baby.is_collect = 0
                 else:
                     baby.is_collect = 1
         else:
-            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id).first()
+            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
             if baby_collect:
                 if baby.id == baby_collect.type_id:
                     baby.is_collect = 0
