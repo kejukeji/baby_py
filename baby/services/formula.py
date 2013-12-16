@@ -145,7 +145,7 @@ def div_data(success):
             if brand.court_id == court.id:
                 brand_pic = flatten(brand)
                 court_pic['sub_brand'].append(brand_pic)
-                brand_pic['sub_kind'] = []
+            brand_pic['sub_kind'] = []
             for kind in kind_list:
                 if brand.id == kind.brand_id:
                     kind_pic = flatten(kind)
