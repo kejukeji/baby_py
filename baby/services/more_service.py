@@ -177,21 +177,21 @@ def get_tracking(id, types, show_date_way):
         result = 0
         for tracking in tracking_result:
             if types == 'weight':
-                grow_line.append(int(tracking.weight))
+                grow_line.append(tracking.weight)
             if types == 'height':
-                grow_line.append(int(tracking.height))
+                grow_line.append(tracking.height)
             if types == 'head':
-                grow_line.append(int(tracking.head_wai))
+                grow_line.append(tracking.head_wai)
         return grow_line
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.baby_id == id).first()
         if tracking:
             if types == 'weight':
-                grow_line.append(int(tracking.weight))
+                grow_line.append(tracking.weight)
             if types == 'height':
-                grow_line.append(int(tracking.height))
+                grow_line.append(tracking.height)
             if types == 'head':
-                grow_line.append(int(tracking.head_wai))
+                grow_line.append(tracking.head_wai)
         return grow_line
     else:
         return grow_line
