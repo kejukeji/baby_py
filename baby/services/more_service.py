@@ -173,7 +173,7 @@ def get_tracking(id, types, show_date_way):
     tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
     grow_line = []
     if tracking_count > 1:
-        tracking_result = Tracking.query.filter(Tracking.baby_id == id).all()
+        tracking_result = Tracking.query.filter(Tracking.baby_id == id).order_by(Tracking.measure_date).all()
         result = 0
         for tracking in tracking_result:
             if types == 'weight':
