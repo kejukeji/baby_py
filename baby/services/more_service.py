@@ -10,6 +10,7 @@ from .tracking_service import get_tracking_model
 from .baby_service import get_picture_by_id
 from .formula import *
 from baby.models.standard import *
+from baby.models.nine_standard import *
 import datetime
 
 
@@ -350,21 +351,21 @@ def get_tracking_bar(id, types):
     获得随访记录——配方奶
     """
     tracking_count = Tracking.query.filter(Tracking.id == id).count()
-    grow_bar_breastfeeding = [0,0,0,0,0]
-    grow_bar_formula_feeding = [0,0,0,0,0]
+    grow_bar_breastfeeding = []
+    grow_bar_formula_feeding = []
     count = 0
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.id == id).all()
         for tracking in tracking_result[:5]:
-            grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
-            grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
+            grow_bar_breastfeeding.append(int(tracking.breast_milk_amount))
+            grow_bar_formula_feeding.append(int(tracking.formula_feed_measure))
             count = count + 1
         return grow_bar_breastfeeding, grow_bar_formula_feeding
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.id == id).first()
         if tracking:
-            grow_bar_breastfeeding[count] = int(tracking.breast_milk_amount)
-            grow_bar_formula_feeding[count] = int(tracking.formula_feed_measure)
+            grow_bar_breastfeeding.append(int(tracking.breast_milk_amount))
+            grow_bar_formula_feeding.append(int(tracking.formula_feed_measure))
         return grow_bar_breastfeeding, grow_bar_formula_feeding
     else:
         return grow_bar_breastfeeding, grow_bar_formula_feeding
@@ -476,6 +477,8 @@ def get_analysis_data(id):
     """
     analysis_data = Tracking.query.filter(Tracking.id == id).first()
     baby = Baby.query.filter(Baby.id == analysis_data.baby_id).first()
+    if analysis_data.measure_date:
+        analysis_data.measure_date = str(analysis_data.measure_date)[2:10]
     if analysis_data:
         if baby:
             analysis_data.baby_name = baby.baby_name
@@ -591,29 +594,23 @@ def get_tracking_test(id, types, show_date_way):
 #    """
 #       录入who标准数据
 #    """
-#    read_file = open('/Users/K/Dropbox/婴儿app/text—data/WHO_weight_gril_0-5age.txt')
+#    read_file = open('/Users/K/Documents/User Data/baby Data/NINE_head_girl.txt')
 #    result = {}
 #    count = 0
 #    for line in read_file:
 #        ''''''
 #        result[str(count)] = []
-#        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+#        result[str(count)].append(line.replace('\n','').replace('\r','').split('    '))
 #        count = count + 1
-#    count = 1
+#    count = 0
 #    length = result.__len__() - 1
-#    result.pop('0')
+#    # result.pop('0')
 #    for keys in result.keys():
 #        #print result[str(count)][0].__len__()
-#        weight_boy_standard = WeightGirlStandardYear(age=result[str(count)][0][0], L=result[str(count)][0][1],
-#                                                M=result[str(count)][0][2], S=result[str(count)][0][3],
-#                                                P01=result[str(count)][0][4], P1=result[str(count)][0][5],
-#                                                P3=result[str(count)][0][6], P5=result[str(count)][0][7],
-#                                                P10=result[str(count)][0][8], P15=result[str(count)][0][9],
-#                                                P25=result[str(count)][0][10], P50=result[str(count)][0][11],
-#                                                P75=result[str(count)][0][12], P85=result[str(count)][0][13],
-#                                                P90=result[str(count)][0][14], P95=result[str(count)][0][15],
-#                                                P97=result[str(count)][0][16], P99=result[str(count)][0][17],
-#                                                P999=result[str(count)][0][18])
+#        weight_boy_standard = NineHeadGirl(month=result[str(count)][0][0], negative3=result[str(count)][0][1],
+#                                                negative2=result[str(count)][0][2], negative1=result[str(count)][0][3],
+#                                                zero=result[str(count)][0][4], positive1=result[str(count)][0][5],
+#                                                positive2=result[str(count)][0][6], positive3=result[str(count)][0][7])
 #        db.add(weight_boy_standard)
 #        db.commit()
 #        count = count + 1

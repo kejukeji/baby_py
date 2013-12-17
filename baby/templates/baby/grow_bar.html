@@ -13,7 +13,7 @@
 </style>
 <script type="text/javascript">
     window.growObj = {
-        'xAxis': ['0', '0.5', '1', '2', '3'],
+        'xAxis': ['{{ analysis.measure_date }}'],
         'yStart': 0,
         'yEnd': 1000,
         'ySpace': 200,
@@ -45,17 +45,17 @@
                 <ul>
                     <li>
                         <span>母乳</span>
-                        <span class="f-r">按实际发生显示</span>
+                        <span class="f-r"></span>
                         <span class="f-r">{{ analysis.breast_milk_amount }}（毫升/天）</span>
                     </li>
                     <li>
                         <span>早产儿院内专用配方奶</span>
-                        <span class="f-r">按实际发生显示</span>
+                        <span class="f-r"></span>
                         <span class="f-r">{{ analysis.formula_feed_measure }}（毫升/天）</span>
                     </li>
                     <li>
                         <span>早产儿出院后专用配方奶</span>
-                        <span class="f-r">按实际发生显示</span>
+                        <span class="f-r"></span>
                         <span class="f-r">{{ analysis.formula_feed_measure }}（毫升/天）</span>
                     </li>
                 </ul>
@@ -70,12 +70,12 @@
                 </li>
                 <li>
                     <span>纯母乳喂养</span>
-                    <span class="f-r">按实际发生显示</span>
+                    <span class="f-r"></span>
                     <span class="f-r">{{ analysis.breast_milk_amount }}（毫升/天）</span>
                 </li>
                 <li>
                     <span>早产儿院内专用配方奶</span>
-                    <span class="f-r">按实际发生显示</span>
+                    <span class="f-r"></span>
                     <span class="f-r">{{ analysis.formula_feed_measure }}（毫升/天）</span>
                 </li>
             </ul>
