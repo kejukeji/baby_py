@@ -13,17 +13,17 @@
 </style>
 <script type="text/javascript">
     window.growObj = {
-        'xAxis': ['{{ analysis.measure_date }}'],
+        'xAxis': ['{{ analysis.measure_date }}','13-12-10','13-12-11','13-12-12','13-12-13'],
         'yStart': 0,
         'yEnd': 1000,
         'ySpace': 200,
         'data': [{
             name: '母乳',
-            value: {{ breastfeeding}},
+            value: [133, 122, 143, 145, 155],
             color: '#08c'
         }, {
             name: '配方奶',
-            value: {{ formula_feeding }},
+            value: [155, 144, 130, 145, 155],
             color: '#c12c44'
         }]
     };
