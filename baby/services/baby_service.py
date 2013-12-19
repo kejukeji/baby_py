@@ -67,11 +67,10 @@ def baby_list(page, doctor_id):
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
             for baby in babys:
+                baby.is_collect = 1
                 for baby_collect in baby_collects:
                     if baby.id == baby_collect.type_id:
                         baby.is_collect = 0
-                    else:
-                        baby.is_collect = 1
         else:
             baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
             if baby_collect:
