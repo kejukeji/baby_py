@@ -271,6 +271,68 @@ def get_who_standard(id, types):
         return grow_p3, grow_p15, grow_p75, grow_p95
 
 
+def get_nine_standard(id, types):
+    """
+    获取who标准数据
+    """
+    baby = Baby.query.filter(Baby.id == id).first()
+    grow_p3 = []
+    grow_p15 = []
+    grow_p75 = []
+    grow_p95 = []
+    is_gender = ''
+    if baby:
+        is_gender = baby.gender
+    if types == 'weight' and is_gender == '男':
+        standard = NineWeightBoy.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'weight' and is_gender == '女':
+        standard = NineWeightGirl.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '女':
+        standard = NineHeightGirl.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'height' and is_gender == '男':
+        standard = NineHeightBoy.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '女':
+        standard = NineHeadGirl.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+    elif types == 'head' and is_gender == '男':
+        standard = NineHeadBoy.query.filter().all()
+        for s in standard:
+            grow_p3.append(s.zero)
+            grow_p15.append(s.positive1)
+            grow_p75.append(s.positive2)
+            grow_p95.append(s.positive3)
+        return grow_p3, grow_p15, grow_p75, grow_p95
+
+
 def get_who_standard_month(id, types):
     """
     获取who标准数据
