@@ -87,7 +87,7 @@ def to_nine_grow_line(baby_id):
     types = request.args.get('type', 'weight')
     way = request.args.get('way', 'week')
     tracking = get_tracking(baby_id, types, show_data_way)
-    grow_p3, grow_p15, grow_p75, grow_p95 = get_nine_standard(baby_id, types)
+    grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3, grow_negative2, grow_negative1 = get_nine_standard(baby_id, types)
     if types == 'weight':
             return render_template('baby/grow_line_nine.html',
                                    tracking=tracking,
@@ -98,7 +98,10 @@ def to_nine_grow_line(baby_id):
                                    grow_p3=grow_p3,
                                    grow_p15=grow_p15,
                                    grow_p75=grow_p75,
-                               grow_p95=grow_p95)
+                                   grow_p95=grow_p95,
+                                   grow_negative3=grow_negative3,
+                                   grow_negative2=grow_negative2,
+                                   grow_negative1=grow_negative1)
     if types == 'height':
         return render_template('baby/grow_line_nine_height.html',
                                tracking=tracking,
@@ -109,7 +112,10 @@ def to_nine_grow_line(baby_id):
                                grow_p3=grow_p3,
                                grow_p15=grow_p15,
                                grow_p75=grow_p75,
-                               grow_p95=grow_p95)
+                               grow_p95=grow_p95,
+                               grow_negative3=grow_negative3,
+                               grow_negative2=grow_negative2,
+                               grow_negative1=grow_negative1)
     if types == 'head':
         return render_template('baby/grow_line_nine_head.html',
                                tracking=tracking,
@@ -120,8 +126,10 @@ def to_nine_grow_line(baby_id):
                                grow_p3=grow_p3,
                                grow_p15=grow_p15,
                                grow_p75=grow_p75,
-                               grow_p95=grow_p95)
-
+                               grow_p95=grow_p95,
+                               grow_negative3=grow_negative3,
+                               grow_negative2=grow_negative2,
+                               grow_negative1=grow_negative1)
 
 def to_grow_bar(baby_id):
     analysis = get_analysis_data(baby_id)

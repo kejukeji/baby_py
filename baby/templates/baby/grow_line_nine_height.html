@@ -14,7 +14,26 @@
         'yStart': 0, // 这个数值是y轴最小值
         'yEnd': 60, // 这个数值是y轴最大值,
         'ySpace': 10, // y值刻度差范围
-        'data': [{
+        'data': [
+         {
+            name: '-3SD',
+            value: {{ grow_negative3 }},
+            color: '#EBEBEB',
+            line_width: 1
+        },
+        {
+            name: '-2SD',
+            value: {{ grow_negative2 }},
+            color: '#DDEB86',
+            line_width: 1
+        },
+        {
+            name: '-1SD',
+            value: {{ grow_negative1 }},
+            color: '#85EBE5',
+            line_width: 1
+        },
+        {
             name: '0SD',
             value: {{ grow_p3 }},
             color: 'black',
