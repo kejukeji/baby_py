@@ -529,6 +529,7 @@ MZ.constant = {
 	'DATE_EMPTY': '测量日期不能为空',
 	'FEEDING_EMPTY': '母乳喂养不能为空',
 	'OLD_PASSWORD_ERROR': '旧密码不正确',
+    'PLEASE_CHECKED': '请确认注册协议',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/forget/password',
 	'REGISTER_URL': '/restful/html/do/register',
@@ -707,6 +708,7 @@ MZ.app = {
 		var email = $('#email')
 		var tel = $('#tel')
 		var registerBtn = $('#register-btn')
+        var registerAgree = $("#register-agree")
 
 		registerBtn.bind('click', function() {
 			var checkUserName = MZ.app.checkField(user_name)
@@ -739,6 +741,10 @@ MZ.app = {
 				window.Notification.simple(MZ.constant.TEL_EMPTY, 2000)
 				return
 			}
+            if (!registerAgree.is(":checked")){
+                window.Notification.simple(MZ.constant.PLEASE_CHECKED, 2000)
+                return
+            }
 			var userNameValue = $.trim(user_name.val())
 			var userPassValue = $.trim(user_pass.val())
 			var rePwdValue = $.trim(confirm_pass.val())
