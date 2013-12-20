@@ -268,13 +268,17 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight
 
 
 def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head, childbirth_style_id,
-                complication_id):
+                complication_id, growth_standard):
     baby = Baby.query.filter(Baby.patriarch_tel == patriarch_tel).first()
     if baby:
         return 1
     else:
-        baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
-                    born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id)
+        if growth_standard:
+            baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id, growth_standard=growth_standard)
+        else:
+            baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id)
         try:
             db.add(baby)
             db.commit()
