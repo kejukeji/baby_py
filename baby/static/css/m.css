@@ -556,7 +556,7 @@ body {
   padding-bottom: 10px;
 }
 .chart-frame {
-  margin: 30px 10px;
+  margin: 10px 10px;
   background: #FFF;
   border: 1px solid #ada8a3;
   box-shadow: 0px 0px 2px #e4e0d9;
@@ -577,7 +577,7 @@ body {
   width: 33.33%;
   box-sizing: border-box;
   text-align: center;
-  line-height: 45px;
+  line-height: 35px;
   border-right: 1px solid #cdbf95;
   box-shadow: 1px 0px 0px #FFF;
   border-bottom: 1px solid #cdbf95;
