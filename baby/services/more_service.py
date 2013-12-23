@@ -574,7 +574,7 @@ def get_visit_record(baby_id):
                     milk_date[count] = temp_milk
                 count = count + 1
                 kind = get_kind_by_id(t.type_of_milk_id)
-                if kind:
+                if kind and kind.energy and kind.protein:
                     baby_nutrition_feeding_energy = baby_nutrition_feeding_energy + int(kind.energy)
                     baby_nutrition_feeding_protein = baby_nutrition_feeding_protein + int(kind.protein)
                 t.birthday_time = time_birthday_time_compare(t.measure_date, baby)
