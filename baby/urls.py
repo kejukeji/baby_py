@@ -44,6 +44,7 @@ app.add_url_rule('/html/grow_rate.html/<int:baby_id>', 'to_grow_rate', to_grow_r
 app.add_url_rule('/html/formula/out.html', 'to_formula_out', to_formula_out, methods={'GET', 'POST'})
 app.add_url_rule('/html/mummy/login.html', 'to_mummy_login', to_mummy_login, methods={'GET', 'POST'})
 app.add_url_rule('/html/grow_line_nine.html/<int:baby_id>', 'to_grow_line_nine', to_nine_grow_line, methods={'GET', 'POST'})
+app.add_url_rule('/html/grow_line_fen_tong.html/<int:baby_id>', 'to_grow_fen_tong_line', to_fen_tong_grow_line, methods={'GET', 'POST'})
 
 # 接口访问路径
 api = restful.Api(app)

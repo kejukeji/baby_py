@@ -131,6 +131,52 @@ def to_nine_grow_line(baby_id):
                                grow_negative2=grow_negative2,
                                grow_negative1=grow_negative1)
 
+
+def to_fen_tong_grow_line(baby_id):
+    record, record_count, baby = get_visit_record(baby_id)
+    show_data_way = check_baby_is_week_or_month(baby)
+    types = request.args.get('type', 'weight')
+    way = request.args.get('way', 'week')
+    tracking = get_tracking(baby_id, types, show_data_way)
+    grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3 = get_fen_tong_standard(baby_id, types)
+    if types == 'weight':
+        return render_template('baby/grow_line_fentong_weight.html',
+                               tracking=tracking,
+                               types=types,
+                               user_id=get_session('baby_id'),
+                               entrance=get_session('entrance'),
+                               baby=baby,
+                               grow_p3=grow_p3,
+                               grow_p15=grow_p15,
+                               grow_p75=grow_p75,
+                               grow_p95=grow_p95,
+                               grow_negative3=grow_negative3)
+    if types == 'height':
+        return render_template('baby/grow_line_fentong_height.html',
+                               tracking=tracking,
+                               types=types,
+                               user_id=get_session('baby_id'),
+                               entrance=get_session('entrance'),
+                               baby=baby,
+                               grow_p3=grow_p3,
+                               grow_p15=grow_p15,
+                               grow_p75=grow_p75,
+                               grow_p95=grow_p95,
+                               grow_negative3=grow_negative3)
+    if types == 'head':
+        return render_template('baby/grow_line_fentong_head.html',
+                               tracking=tracking,
+                               types=types,
+                               user_id=get_session('baby_id'),
+                               entrance=get_session('entrance'),
+                               baby=baby,
+                               grow_p3=grow_p3,
+                               grow_p15=grow_p15,
+                               grow_p75=grow_p75,
+                               grow_p95=grow_p95,
+                               grow_negative3=grow_negative3)
+
+
 def to_grow_bar(baby_id):
     analysis = get_analysis_data(baby_id)
     breastfeeding, formula_feeding  = get_tracking_bar(baby_id, None)

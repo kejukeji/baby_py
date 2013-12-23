@@ -10,9 +10,9 @@
 <script type="text/javascript">
 
     window.weightObj = {
-        'xAxis': ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"],  // 横坐标的范围（月份建议01...12）
+        'xAxis': ["22","","24","","26","","28","","30","","32","","34","","36","","38","","40","","42","","44","","46","","48","","50"],  // 横坐标的范围（月份建议01...12）
         'yStart': 0, // 这个数值是y轴最小值
-        'yEnd': 10, // 这个数值是y轴最大值,
+        'yEnd': 6, // 这个数值是y轴最大值,
         'ySpace': 1, // y值刻度差范围
         'data': [{
             name: '3rd',
@@ -21,20 +21,26 @@
             line_width: 1
         },
         {
-            name: '15th',
+            name: '10th',
             value: {{ grow_p15 }},
             color: '#0000FF',
             line_width: 1
         },
         {
-            name: '75th',
+            name: '50th',
             value: {{ grow_p75 }},
             color: '#FF0000',
             line_width: 1
         },
         {
-            name: '95th',
+            name: '90th',
             value: {{ grow_p95 }},
+            color: '#0d8ecf',
+            line_width: 1
+        },
+        {
+            name: '95th',
+            value: {{ grow_negative3 }},
             color: '#0d8ecf',
             line_width: 1
         },
@@ -51,9 +57,9 @@
     <section>
             <div class="chart-frame">
                 <div class="chart-tab">
-                    <a class="current" href="/html/grow_line.html/{{ user_id }}?type=weight&way=week" id="weight">体     重</a>
-                    <a href="/html/grow_line.html/{{ user_id }}?type=height&way=week" id="height">身     长</a>
-                    <a href="/html/grow_line.html/{{ user_id }}?type=head&way=week" id="head">头     围</a>
+                    <a class="current" href="/html/grow_line_fen_tong.html/{{ user_id }}?type=weight&way=week" id="weight">体     重</a>
+                    <a href="/html/grow_line_fen_tong.html/{{ user_id }}?type=height&way=week" id="height">身     长</a>
+                    <a href="/html/grow_line_fen_tong.html/{{ user_id }}?type=head&way=week" id="head">头     围</a>
                 </div>
                 <!--<h3 class="chart-y" id="mark">体              重</h3>-->
 
@@ -67,15 +73,15 @@
             <ul class="select-block clearfix">
                      <ul>
                                <li>
-                                    <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="0" checked></div></a>
+                                    <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="0" checked></div></a>
                                     <label for="y-in">WHO</label>
                                 </li>
                                 <li>
                                     <a href="/html/grow_line_nine.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="1" checked></div></a>
                                     <label for="y-in">九城</label>
                                 </li>
-                                <li>
-                                    <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="1" ></div></a>
+                               <li>
+                                    <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
                                     <label for="y-in">FenTong</label>
                                 </li>
                      </ul>

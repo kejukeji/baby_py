@@ -11,6 +11,7 @@ from .baby_service import get_picture_by_id
 from .formula import *
 from baby.models.standard import *
 from baby.models.nine_standard import *
+from baby.models.fentong_standard import *
 import datetime
 
 
@@ -23,6 +24,7 @@ def check_login(login_name, login_pass, login_type):
         baby = Baby.query.filter(Baby.patriarch_tel == login_name, Baby.baby_pass == login_pass).first()
         if baby != None:
             set_session_user('user', baby.login_name, 'user_id', baby.id)
+            set_session_user('login_type', login_type, '','')
             return baby
         else:
             return None
@@ -30,6 +32,7 @@ def check_login(login_name, login_pass, login_type):
         doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
         if doctor != None:
             set_session_user('user', doctor.doctor_name, 'user_id', doctor.id)
+            set_session_user('login_type', login_type, '','')
             return doctor
         else:
             return None
@@ -354,6 +357,75 @@ def get_nine_standard(id, types):
         return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3, grow_negative2, grow_negative1
 
 
+def get_fen_tong_standard(id, types):
+    """
+    获取who标准数据
+    """
+    baby = Baby.query.filter(Baby.id == id).first()
+    grow_p3 = []
+    grow_p15 = []
+    grow_p75 = []
+    grow_p95 = []
+    grow_negative3 = []
+    is_gender = ''
+    if baby:
+        is_gender = baby.gender
+    if types == 'weight' and is_gender == '男':
+        standard = FenTongWeightBoy.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+    elif types == 'weight' and is_gender == '女':
+        standard = FenTongWeightGirl.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+    elif types == 'height' and is_gender == '女':
+        standard = FenTongHeightGirl.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+    elif types == 'height' and is_gender == '男':
+        standard = FenTongHeightBoy.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+    elif types == 'head' and is_gender == '女':
+        standard = FenTongHeadGirl.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+    elif types == 'head' and is_gender == '男':
+        standard = FenTongHeadBoy.query.filter().all()
+        for s in standard:
+            grow_negative3.append(s.degree_ninety_seven)
+            grow_p3.append(s.degree_three)
+            grow_p15.append(s.degree_ten)
+            grow_p75.append(s.degree_fifty)
+            grow_p95.append(s.degree_ninety)
+        return grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3
+
+
 def get_who_standard_month(id, types):
     """
     获取who标准数据
@@ -517,7 +589,7 @@ def get_visit_record(baby_id):
                 temp_milk = str(tracking.measure_date)[2:10]
             milk_date[0] = temp_milk
             kind = get_kind_by_id(tracking.type_of_milk_id)
-            if kind:
+            if kind and kind.energy and kind.protein:
                 baby_nutrition_feeding_energy = baby_nutrition_feeding_energy + int(kind.energy)
                 baby_nutrition_feeding_protein = baby_nutrition_feeding_protein + int(kind.protein)
             baby.milk = milk
@@ -537,6 +609,13 @@ def get_visit_record(baby_id):
             return 0,0, baby
         else:
             return 0,0,0
+
+
+def check_baby_birthday(baby):
+    """
+    检查baby是否是早产儿
+    """
+    due_date = baby.due_date
 
 
 def check_baby_is_week_or_month(baby):
@@ -673,27 +752,26 @@ def get_tracking_test(id, types, show_date_way):
     else:
         return 0
 
-#def entering_who():
-#    """
-#       录入who标准数据
-#    """
-#    read_file = open('/Users/K/Documents/User Data/baby Data/NINE_head_girl.txt')
-#    result = {}
-#    count = 0
-#    for line in read_file:
-#        ''''''
-#        result[str(count)] = []
-#        result[str(count)].append(line.replace('\n','').replace('\r','').split('    '))
-#        count = count + 1
-#    count = 0
-#    length = result.__len__() - 1
-#    # result.pop('0')
-#    for keys in result.keys():
-#        #print result[str(count)][0].__len__()
-#        weight_boy_standard = NineHeadGirl(month=result[str(count)][0][0], negative3=result[str(count)][0][1],
-#                                                negative2=result[str(count)][0][2], negative1=result[str(count)][0][3],
-#                                                zero=result[str(count)][0][4], positive1=result[str(count)][0][5],
-#                                                positive2=result[str(count)][0][6], positive3=result[str(count)][0][7])
-#        db.add(weight_boy_standard)
-#        db.commit()
-#        count = count + 1
+def entering_who():
+    """
+       录入who标准数据
+    """
+    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_weight_girl.txt')
+    result = {}
+    count = 0
+    for line in read_file:
+        ''''''
+        result[str(count)] = []
+        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+        count = count + 1
+    count = 0
+    length = result.__len__() - 1
+    # result.pop('0')
+    for keys in result.keys():
+        #print result[str(count)][0].__len__()
+        weight_boy_standard = FenTongWeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
+                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
+                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
+        db.add(weight_boy_standard)
+        db.commit()
+        count = count + 1
