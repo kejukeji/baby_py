@@ -575,6 +575,8 @@ def get_visit_record(baby_id):
                     is_compare = 45
             elif birthday < due_date:
                 is_compare = 40
+            else:
+                is_compare = 45
             baby.is_compare = is_compare
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
