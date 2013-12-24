@@ -10,7 +10,7 @@
 <script type="text/javascript">
 
     window.weightObj = {
-        'xAxis': ["22","","24","","26","","28","","30","","32","","34","","36","","38","","40","","42","","44","","46","","48","","50"],  // 横坐标的范围（月份建议01...12）
+        'xAxis': ["23","24","","26","","28","","30","","32","","34","","36","","38","","40","","42","","44","","46","","48","","50"],  // 横坐标的范围（月份建议01...12）
         'yStart': 0, // 这个数值是y轴最小值
         'yEnd': 6, // 这个数值是y轴最大值,
         'ySpace': 1, // y值刻度差范围
@@ -72,6 +72,12 @@
 
             <ul class="select-block clearfix">
                      <ul>
+                         {% if baby.is_compare == 40 %}
+                               <li>
+                                    <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
+                                    <label for="y-in">FenTong</label>
+                                </li>
+                         {% else %}
                                <li>
                                     <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="0" checked></div></a>
                                     <label for="y-in">WHO</label>
@@ -84,6 +90,7 @@
                                     <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
                                     <label for="y-in">FenTong</label>
                                 </li>
+                         {% endif %}
                      </ul>
             </ul>
 

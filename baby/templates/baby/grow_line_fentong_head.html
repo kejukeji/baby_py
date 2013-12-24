@@ -72,6 +72,12 @@
 
             <ul class="select-block clearfix">
                      <ul>
+                       {% if baby.is_compare == 40 %}
+                               <li>
+                                    <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
+                                    <label for="y-in">FenTong</label>
+                                </li>
+                         {% else %}
                                <li>
                                     <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="0" checked></div></a>
                                     <label for="y-in">WHO</label>
@@ -84,6 +90,7 @@
                                     <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
                                     <label for="y-in">FenTong</label>
                                 </li>
+                         {% endif %}
                      </ul>
             </ul>
 

@@ -567,9 +567,15 @@ def get_visit_record(baby_id):
             birthday = baby.born_birthday
             is_compare = ''
             if birthday > due_date:
-                is_compare = '40周后'
+                s = int((birthday - due_date).total_seconds())
+                week = s / 3600 / 24 / 7
+                if week > 10:
+                    is_compare = 50
+                else:
+                    is_compare = 45
             elif birthday < due_date:
-                is_compare = '40周前'
+                is_compare = 40
+            baby.is_compare = is_compare
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
     baby_nutrition_feeding_protein = 0

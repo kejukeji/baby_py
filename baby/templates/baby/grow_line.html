@@ -66,6 +66,8 @@
 
             <ul class="select-block clearfix">
                      <ul>
+                         {% if baby.is_compare == 45 %}
+                            {%if baby.select_type == 'doctor' %}
                                <li>
                                     <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="0" checked></div></a>
                                     <label for="y-in">WHO</label>
@@ -75,9 +77,46 @@
                                     <label for="y-in">九城</label>
                                 </li>
                                 <li>
-                                    <a href="/html/grow_line_fentong.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="1" ></div></a>
+                                    <a href="/html/grow_line_fen_tong.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="1" ></div></a>
                                     <label for="y-in">FenTong</label>
                                 </li>
+                             {% else %}
+                                   {% if baby.growth_standard == 'WHO' %}
+                                    <li>
+                                        <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="0"></div></a>
+                                        <label for="y-in">WHO</label>
+                                    </li>
+                                   {% else %}
+                                    <li>
+                                        <a href="/html/grow_line_nine.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
+                                        <label for="y-in">九城</label>
+                                    </li>
+                                   {% endif %}
+                             {% endif %}
+                         {% elif baby.is_compare == 50 %}
+                           {% if baby.select_type == 'doctor' %}
+                                <li>
+                                    <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="0" checked></div></a>
+                                    <label for="y-in">WHO</label>
+                                </li>
+                                <li>
+                                    <a href="/html/grow_line_nine.html/{{ baby.id }}"><div class="iradio"><input type="radio" class="test" name="place" value="1" checked></div></a>
+                                    <label for="y-in">九城</label>
+                                </li>
+                           {% else %}
+                                {% if baby.growth_standard == 'WHO' %}
+                                    <li>
+                                        <a href="/html/grow_line.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="0" checked></div></a>
+                                        <label for="y-in">WHO</label>
+                                    </li>
+                                   {% else %}
+                                    <li>
+                                        <a href="/html/grow_line_nine.html/{{ baby.id }}"><div class="iradio checked"><input type="radio" class="test" name="place" value="1" checked></div></a>
+                                        <label for="y-in">九城</label>
+                                    </li>
+                                   {% endif %}
+                           {% endif %}
+                         {% endif %}
                      </ul>
             </ul>
 
