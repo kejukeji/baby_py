@@ -31,6 +31,7 @@
                         <li class="clearfix">
                             <div class="dark-line"></div>
                             <a href="/html/grow_bar.html/{{ r.id }}">
+                            {% if r.add_type == 'baby' %}
                             <div class="visit-dialog">
                                 <p class="t">{{ r.measure_date }}  {{ r.birthday_time }} </p>
                                 <p>身长：{{ r.height }} cm（x%）</p>
@@ -39,6 +40,16 @@
                                 <p>母乳喂养量：{{ r.formula_feed_measure }} ml（z%）</p>
                                 <p>低出生体重儿院内专用配方奶喂养量</p>
                             </div>
+                            {% else %}
+                                <div class="visit-dialog_bgcolor">
+                                <p class="t">{{ r.measure_date }}  {{ r.birthday_time }} </p>
+                                <p>身长：{{ r.height }} cm（x%）</p>
+                                <p>体重：{{ r.weight }} g（y%）</p>
+                                <p>头围：{{ r.head_wai }} cm（z%）</p>
+                                <p>母乳喂养量：{{ r.formula_feed_measure }} ml（z%）</p>
+                                <p>低出生体重儿院内专用配方奶喂养量</p>
+                            </div>
+                            {% endif %}
                             </a>
                         </li>
                     {% endfor %}
@@ -46,6 +57,7 @@
                     <li class="clearfix">
                         <div class="dark-line"></div>
                         <a href="/html/grow_bar.html/{{ record.id }}">
+                        {% if record.add_type == 'baby' %}
                         <div class="visit-dialog">
                             <p class="t">{{ record.measure_date }}  {{ record.birthday_time }} </p>
                             <p>身长：{{ record.height }} cm（x%）</p>
@@ -54,6 +66,16 @@
                             <p>母乳喂养量：{{ record.formula_feed_measure }} ml（z%）</p>
                             <p>低出生体重儿院内专用配方奶喂养量</p>
                         </div>
+                        {% else %}
+                            <div class="visit-dialog_bgcolor">
+                            <p class="t">{{ record.measure_date }}  {{ record.birthday_time }} </p>
+                            <p>身长：{{ record.height }} cm（x%）</p>
+                            <p>体重：{{ record.weight }} g（y%）</p>
+                            <p>头围：{{ record.head_wai }} cm（z%）</p>
+                            <p>母乳喂养量：{{ record.formula_feed_measure }} ml（z%）</p>
+                            <p>低出生体重儿院内专用配方奶喂养量</p>
+                        </div>
+                        {% endif %}
                         </a>
                     </li>
                 {% endif %}

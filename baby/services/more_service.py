@@ -561,12 +561,15 @@ def get_visit_record(baby_id):
     """
     tracking, tracking_count = get_tracking_model(Tracking, baby_id)
     baby = Baby.query.filter(Baby.id == baby_id).first()
-    #if baby:
-    #    if baby.due_date and baby.born_birthday:
-    #        due_date = baby.due_date
-    #        birthday = baby.born_birthday
-    #        s = int((birthday - due_date).total_seconds())
-    #        result = s / 3600 / 24 / 7
+    if baby:
+        if baby.due_date and baby.born_birthday:
+            due_date = baby.due_date
+            birthday = baby.born_birthday
+            is_compare = ''
+            if birthday > due_date:
+                is_compare = '40周后'
+            elif birthday < due_date:
+                is_compare = '40周前'
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
     baby_nutrition_feeding_protein = 0
