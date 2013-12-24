@@ -535,14 +535,18 @@ def is_null(measure_date):
     return None
 
 
-def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition):
+def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition, add_type):
     """
     新增随访记录
     """
-    tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
-                        court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
-                        formula_feed_measure=nutrition)
-
+    if add_type:
+        tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
+                            court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
+                            formula_feed_measure=nutrition, add_type=add_type)
+    else:
+        tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
+                            court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
+                            formula_feed_measure=nutrition)
     try:
         db.add(tracking)
         db.commit()
@@ -557,6 +561,12 @@ def get_visit_record(baby_id):
     """
     tracking, tracking_count = get_tracking_model(Tracking, baby_id)
     baby = Baby.query.filter(Baby.id == baby_id).first()
+    #if baby:
+    #    if baby.due_date and baby.born_birthday:
+    #        due_date = baby.due_date
+    #        birthday = baby.born_birthday
+    #        s = int((birthday - due_date).total_seconds())
+    #        result = s / 3600 / 24 / 7
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
     baby_nutrition_feeding_protein = 0
@@ -752,26 +762,26 @@ def get_tracking_test(id, types, show_date_way):
     else:
         return 0
 
-def entering_who():
-    """
-       录入who标准数据
-    """
-    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_weight_girl.txt')
-    result = {}
-    count = 0
-    for line in read_file:
-        ''''''
-        result[str(count)] = []
-        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
-        count = count + 1
-    count = 0
-    length = result.__len__() - 1
-    # result.pop('0')
-    for keys in result.keys():
-        #print result[str(count)][0].__len__()
-        weight_boy_standard = FenTongWeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
-                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
-                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
-        db.add(weight_boy_standard)
-        db.commit()
-        count = count + 1
+#def entering_who():
+#    """
+#       录入who标准数据
+#    """
+#    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_weight_girl.txt')
+#    result = {}
+#    count = 0
+#    for line in read_file:
+#        ''''''
+#        result[str(count)] = []
+#        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+#        count = count + 1
+#    count = 0
+#    length = result.__len__() - 1
+#    # result.pop('0')
+#    for keys in result.keys():
+#        #print result[str(count)][0].__len__()
+#        weight_boy_standard = FenTongWeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
+#                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
+#                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
+#        db.add(weight_boy_standard)
+#        db.commit()
+#        count = count + 1

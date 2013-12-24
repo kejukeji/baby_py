@@ -84,6 +84,7 @@ class AddVisitRecord(restful.Resource):
         parser.add_argument('brand', type=str, required=True, help=u'brand 必须')
         parser.add_argument('kind', type=str, required=True, help=u'kind 必须')
         parser.add_argument('nutrition', type=str, required=True, help=u'nutrition 必须')
+        parser.add_argument('add_type', type=str, required=False)
 
         args = parser.parse_args()
 
@@ -100,9 +101,10 @@ class AddVisitRecord(restful.Resource):
         brand = args['brand']
         kind = args['kind']
         nutrition = args['nutrition']
+        add_type = args['add_type']
 
         is_ture = insert_visit_record(baby_id, measure_date, weight, height, head, location, brand,
-                                      breastfeeding, kind, nutrition)
+                                      breastfeeding, kind, nutrition, add_type)
         if is_ture:
             success['msg'] = '添加成功'
             return success

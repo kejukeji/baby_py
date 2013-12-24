@@ -119,6 +119,7 @@ class Tracking(Base):
     type_of_milk_id = Column(Integer, ForeignKey(TypeOfMilk.id, ondelete='cascade', onupdate='cascade'),
                              nullable=False)
     formula_feed_measure = Column(String(20), nullable=True)
+    add_type = Column(String(10), nullable=True, server_default='doctor')
 
     def __init__(self, **kwargs):
         self.baby_id = kwargs.pop('baby_id')
@@ -131,6 +132,7 @@ class Tracking(Base):
         self.breast_milk_amount = kwargs.pop('breast_milk_amount')
         self.type_of_milk_id = kwargs.pop('type_of_milk_id')
         self.formula_feed_measure = kwargs.pop('formula_feed_measure')
+        self.add_type = kwargs.pop('add_type', 'doctor')
 
 
 class AcademicAbstract(Base):
