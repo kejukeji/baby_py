@@ -138,12 +138,11 @@ class ForgetPassword(restful.Resource):
 
         is_true = by_id_alter_password(user_id, old_password, new_password)
         if is_true:
-            return_success['msg'] = '修改密码成功'
+            return_success['message'] = '修改密码成功'
             return return_success
         else:
-            return_fail.pop('message')
-            return_fail['message'] = '旧密码不正确!'
-            return return_fail
+            return_success['message'] = '旧密码不正确'
+            return return_success
 
 
 class CreateBabyAccount(restful.Resource):

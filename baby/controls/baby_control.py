@@ -12,11 +12,12 @@ def to_grow_line(baby_id):
     if baby:
         baby.select_type = select_type
     way = request.args.get('way', 'week')
-    tracking = get_tracking(baby_id, types, show_data_way)
+    tracking = get_tracking(baby_id, types, show_data_way, None)
     grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard(baby_id, types)
     if show_data_way == 'week' and way == 'week':
         if types == 'weight':
             if baby.is_compare == 40:
+                tracking = get_tracking(baby_id, types, show_data_way, 'fen_tong')
                 grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3 = get_fen_tong_standard(baby_id, types)
                 return render_template('baby/grow_line_fentong_weight.html',
                                tracking=tracking,
@@ -65,6 +66,7 @@ def to_grow_line(baby_id):
         grow_p3, grow_p15, grow_p75, grow_p95 = get_who_standard_month(baby_id, types)
         if types == 'weight':
             if baby.is_compare == 40:
+                tracking = get_tracking(baby_id, types, show_data_way, 'fen_tong')
                 grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3 = get_fen_tong_standard(baby_id, types)
                 return render_template('baby/grow_line_fentong_weight.html',
                                tracking=tracking,
@@ -119,7 +121,7 @@ def to_nine_grow_line(baby_id):
     select_type = get_session('select_type')
     if baby:
         baby.select_type = select_type
-    tracking = get_tracking(baby_id, types, show_data_way)
+    tracking = get_tracking(baby_id, types, show_data_way, None)
     grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3, grow_negative2, grow_negative1 = get_nine_standard(baby_id, types)
     if types == 'weight':
             return render_template('baby/grow_line_nine.html',
@@ -173,7 +175,7 @@ def to_fen_tong_grow_line(baby_id):
     select_type = select_type = get_session('select_type')
     if baby:
         baby.select_type = select_type
-    tracking = get_tracking(baby_id, types, show_data_way)
+    tracking = get_tracking(baby_id, types, show_data_way, 'fen_tong')
     grow_p3, grow_p15, grow_p75, grow_p95, grow_negative3 = get_fen_tong_standard(baby_id, types)
     if types == 'weight':
         return render_template('baby/grow_line_fentong_weight.html',
@@ -225,6 +227,7 @@ def to_grow_bar(baby_id):
 
 
 def to_raise():
+    # entering_who()
     #get_tracking_test(1, 'weight', 'week')
     return render_template('baby/raise.html')
 

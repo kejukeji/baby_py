@@ -13,6 +13,7 @@ from baby.models.standard import *
 from baby.models.nine_standard import *
 from baby.models.fentong_standard import *
 import datetime
+import math
 
 
 def check_login(login_name, login_pass, login_type):
@@ -169,25 +170,95 @@ def check_is_type(result, remember, return_success):
         return False
 
 
-def get_tracking(id, types, show_date_way):
+def dynamic_create_list(week, record_count):
+    is_true = True
+    count = 1
+    app_list = []
+    app_count = 18
+    abs_week = int(math.fabs(week))
+    app_count = app_count - abs_week + record_count
+    while is_true:
+        if count >= app_count:
+            is_true = False
+        app_list.append(0)
+        count = count + 1
+    return app_list
+
+
+def dynamic_create(week, record_count):
+    is_true = True
+    count = 1
+    app_list = []
+    app_count = 18
+    app_count = app_count + int(math.fabs(week)) + record_count
+    while is_true:
+        if count >= app_count:
+            is_true = False
+        app_list.append(0)
+        count = count + 1
+    return app_list
+
+
+def get_tracking(baby_id, types, show_date_way, data_type):
     """
     获得随访记录_身长，体重，头围
     """
-    tracking_count = Tracking.query.filter(Tracking.baby_id == id).count()
+    tracking_count = Tracking.query.filter(Tracking.baby_id == baby_id).count()
     grow_line = []
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    week = 0
+    size = True
+    if baby:
+        if baby.due_date and baby.born_birthday:
+            due_date = baby.due_date
+            birthday = baby.born_birthday
+            is_compare = ''
+            s = int((birthday - due_date).total_seconds())
+            week = s / 3600 / 24 / 7
+            if birthday > due_date:
+                if week > 10:
+                    is_compare = 50
+                else:
+                    is_compare = 45
+            elif birthday < due_date:
+                is_compare = 40
+                size = False
+            else:
+                is_compare = 45
+            baby.is_compare = is_compare
     if tracking_count > 1:
-        tracking_result = Tracking.query.filter(Tracking.baby_id == id).order_by(Tracking.measure_date).all()
+        tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
         result = 0
+        median = 18
+        if data_type:
+            if size:
+                grow_line = dynamic_create(week, tracking_count)
+            else:
+                grow_line = dynamic_create_list(week, tracking_count)
         for tracking in tracking_result:
             if types == 'weight':
-                grow_line.append(tracking.weight)
+                if data_type:
+                    if median > 28:
+                        pass
+                    elif size:
+                        grow_line[(median + int(math.fabs(week)))] = tracking.weight
+                    else:
+                        grow_line[(median - int(math.fabs(week)))] = tracking.weight
+                    median = median + 1
+                else:
+                    grow_line.append(tracking.weight)
             if types == 'height':
                 grow_line.append(tracking.height)
             if types == 'head':
                 grow_line.append(tracking.head_wai)
         return grow_line
     elif tracking_count == 1:
-        tracking = Tracking.query.filter(Tracking.baby_id == id).first()
+        tracking = Tracking.query.filter(Tracking.baby_id == baby_id).first()
+        if data_type:
+            if size:
+                grow_line = dynamic_create(week, tracking_count)
+            else:
+                grow_line = dynamic_create_list(week, tracking_count)
         if tracking:
             if types == 'weight':
                 grow_line.append(tracking.weight)
@@ -566,9 +637,9 @@ def get_visit_record(baby_id):
             due_date = baby.due_date
             birthday = baby.born_birthday
             is_compare = ''
+            s = int((birthday - due_date).total_seconds())
+            week = s / 3600 / 24 / 7
             if birthday > due_date:
-                s = int((birthday - due_date).total_seconds())
-                week = s / 3600 / 24 / 7
                 if week > 10:
                     is_compare = 50
                 else:
@@ -680,14 +751,14 @@ def time_birthday_time_compare(dt, baby):
             s = int((dt - birthday).total_seconds())
             result = 0
             # day_diff > 365, use year
-            if s / 3600 / 24 >= 365:
+            if math.fabs(s / 3600 / 24) >= 365:
                 result = s / 3600 / 24 / 365
                 return str(s / 3600 / 24 / 365) + " 年"
-            elif s / 3600 / 24 >= 30:  # day_diff > 30, use month
+            elif math.fabs(s / 3600 / 24) >= 30:  # day_diff > 30, use month
                 result = s / 3600 / 24 / 30
                 return str(s / 3600 / 24 / 30) + " 个月"
-            elif s / 3600 / 24 / 7 <= 7:  # day_diff > 7, use week
-                result = s / 3600 / 24 / 7
+            elif math.fabs(s / 3600 / 24 / 7) >= 7:  # day_diff > 7, use week
+                result = math.fabs(s / 3600 / 24 / 7)
                 if result == 0:
                     return "1周"
                 return str(s / 3600 / 24 / 7) + "周"
@@ -773,26 +844,26 @@ def get_tracking_test(id, types, show_date_way):
     else:
         return 0
 
-#def entering_who():
-#    """
-#       录入who标准数据
-#    """
-#    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_weight_girl.txt')
-#    result = {}
-#    count = 0
-#    for line in read_file:
-#        ''''''
-#        result[str(count)] = []
-#        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
-#        count = count + 1
-#    count = 0
-#    length = result.__len__() - 1
-#    # result.pop('0')
-#    for keys in result.keys():
-#        #print result[str(count)][0].__len__()
-#        weight_boy_standard = FenTongWeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
-#                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
-#                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
-#        db.add(weight_boy_standard)
-#        db.commit()
-#        count = count + 1
+def entering_who():
+    """
+       录入who标准数据
+    """
+    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_height_girl.txt')
+    result = {}
+    count = 0
+    for line in read_file:
+        ''''''
+        result[str(count)] = []
+        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+        count = count + 1
+    count = 0
+    length = result.__len__() - 1
+    # result.pop('0')
+    for keys in result.keys():
+        #print result[str(count)][0].__len__()
+        weight_boy_standard = FenTongHeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
+                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
+                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
+        db.add(weight_boy_standard)
+        db.commit()
+        count = count + 1

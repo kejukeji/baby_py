@@ -501,6 +501,9 @@ MZ.namespace('app');
 MZ.constant = {
 	'USERNAME_EMPTY': '用户名不能为空',
 	'PASSWORD_EMPTY': '密码不能为空',
+    'PASSWORD_LENGTH': '密码不能少于6位或大于11位',
+    'TEL_PATTERN_ERROR': '请输入正确的手机号',
+    'EMAIL_PATTERN_ERROR': '请输入正确邮箱',
 	'OLDPWD_EMPTY': '旧密码不能为空',
 	'NEWPWD_EMPTY': '新密码不能为空',
 	'REPWD_EMPTY': '确认密码不能为空',
@@ -666,6 +669,14 @@ MZ.app = {
 				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
 				return
 			}
+            if (oldPwdValue.length < 6 || oldPwdValue.length > 11){
+                window.Notification.simple(MZ.constant.PASSWORD_LENGTH, 2000)
+                return
+            }
+            if (newPwdValue.length < 6 || newPwdValue.length > 11){
+                window.Notification.simple(MZ.constant.PASSWORD_LENGTH, 2000)
+                return
+            }
 			var params = {
 				'old_password': oldPwdValue,
 				'new_password': newPwdValue
@@ -709,6 +720,8 @@ MZ.app = {
 		var tel = $('#tel')
 		var registerBtn = $('#register-btn')
         var registerAgree = $("#register-agree")
+        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+        var tel_reg = /^1[3|4|5|8][0-9]\d{4,8}$/;
 
 		registerBtn.bind('click', function() {
 			var checkUserName = MZ.app.checkField(user_name)
@@ -760,6 +773,19 @@ MZ.app = {
 				window.Notification.simple(MZ.constant.PWD_EQUEL, 2000)
 				return
 			}
+            if (userPassValue.length < 6 || userPassValue.length > 11){
+                window.Notification.simple(MZ.constant.PASSWORD_LENGTH, 2000)
+                return
+            }
+            if (!reg.test(emailValue)){
+                window.Notification.simple(MZ.constant.EMAIL_PATTERN_ERROR, 2000)
+                return
+            }
+            if (!tel_reg.test(telValue)){
+                window.Notification.simple(MZ.constant.TEL_PATTERN_ERROR, 2000)
+                return
+            }
+
 			var params = {
 				'login_name': userNameValue,
 				'login_pass': userPassValue,
