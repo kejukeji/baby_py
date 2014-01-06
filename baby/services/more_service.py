@@ -442,7 +442,7 @@ def get_fen_tong_standard(id, types):
     if baby:
         is_gender = baby.gender
     if types == 'weight' and is_gender == '男':
-        standard = FenTongWeightBoy.query.filter().all()
+        standard = FenTongWeightBoy.query.filter().order_by(FenTongWeightBoy.id).all()
         for s in standard:
             grow_negative3.append(s.degree_ninety_seven)
             grow_p3.append(s.degree_three)
