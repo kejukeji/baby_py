@@ -143,7 +143,9 @@ class Search(restful.Resource):
         """
         parser = reqparse.RequestParser()
         parser.add_argument('keyword', type=str, required=True, help=u'keyword关键字必须。')
-        parser.add_argument('birthday_time', type=str, required=False)
+        parser.add_argument('start_birthday_time', type=str, required=False)
+        parser.add_argument('end_birthday_time', type=str, required=False)
+        parser.add_argument('page', type=str, required=False)
 
         args = parser.parse_args()
 
@@ -152,13 +154,20 @@ class Search(restful.Resource):
         success['baby_list'] = []
 
         keyword = args['keyword']
-        birthday_time = args['birthday_time']
-        baby = search_by_keyword_time(keyword, birthday_time)
+        birthday_time = args['start_birthday_time']
+        end_birthday_time = args.get('end_birthday_time', None)
+        page = args.get('page', '1')
+        baby = search_by_keyword_time(keyword, birthday_time, end_birthday_time, page)
         if baby:
-            format_baby(baby, success)
+            if type(baby) is list:
+                for b in baby:
+                    format_baby(b, success)
+            else:
+                format_baby(baby, success)
             return success
         else:
-            return fail
+            success['message'] = '没有数据'
+            return success
 
 
 class Search_View(restful.Resource):

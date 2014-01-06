@@ -860,7 +860,6 @@ MZ.app = {
 		var protein = $(ele).find('#l-protein');
 		var carbohydrates = $(ele).find('#l-carbohydrates');
 		var fat = $(ele).find('#l-fat');
-		
 		var checkedFun = function(){ return this.checked; }
 
 		subBtn.bind('click', function() {
@@ -872,7 +871,8 @@ MZ.app = {
 			var checkTshhw = MZ.app.checkField(carbohydrates)
 			var checkFat = MZ.app.checkField(fat)
             var divDisplayObj = $("#div-display")
-            if (divDisplayObj.hide()){
+
+            if (divDisplayObj.display = 'none'){
                 if (!checkKind) {
                     window.Notification.simple(MZ.constant.KIND_EMPTY, 2000)
                     return
@@ -899,6 +899,8 @@ MZ.app = {
                     return
                 }
             }
+
+
 			var params = {
 				'court_id': location,
 				'brand_id': brand,

@@ -116,15 +116,17 @@ class ForgetPassword(restful.Resource):
     @staticmethod
     def post():
         parser = reqparse.RequestParser()
-        # parser.add_argument('user_id', type=str, required=True, help=u'user_id 必须')
+        parser.add_argument('user_id', type=str, required=False, help=u'user_id 必须')
         parser.add_argument('old_password', type=str, required=True, help=u'old_password 必须')
         parser.add_argument('new_password', type=str, required=True, help=u'new_password 必须')
+        parser.add_argument('type', type=str, required=False, help=u'type 必须')
 
         args = parser.parse_args()
 
         old_password = args['old_password']
         new_password = args['new_password']
-        # user_id = args['user_id']
+        user_id = args['user_id']
+        type = args['type']
 
         return_success = success_dic().dic
         return_fail = fail_dic().dic
@@ -153,8 +155,9 @@ class CreateBabyAccount(restful.Resource):
     def post():
         """
         参数：
+        patriarch_tel   家长手机号
         baby_name	    婴儿名
-        login_name      婴儿登陆
+        baby_pass       婴儿登录密码
         gender		    性别
         due_date	    预产期
         born_birthday	出生日期
@@ -163,8 +166,7 @@ class CreateBabyAccount(restful.Resource):
         born_head		出生头围
         childbirth_style	分娩方式
         complication_id	合并症(可以多选，实用逗号隔开)
-        restore_day		恢复出生体重天数
-        apgar_score		Apgar评分
+        growth_standard		生长标准
         """
         parser = reqparse.RequestParser()
         parser.add_argument('patriarch_tel', type=str, required=True, help=u'patriarch_tel 必须')

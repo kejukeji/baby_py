@@ -9,6 +9,7 @@ from ..models.feature_model import Collect
 from werkzeug import secure_filename
 from baby.setting.server import *
 from baby.util.ex_file import *
+from sqlalchemy import or_
 import os
 
 
@@ -151,17 +152,85 @@ def baby_collect_list(page, doctor_id, success):
     #    return result
 
 
-def search_by_keyword_time(keyword, time):
+def search_by_keyword_time(keyword, time, end_time, page):
     """
         根据关键字或者时间来搜索
         关键字时间一起搜索
     """
+    if page:
+        temp_page = page
+    else:
+        temp_page = 1
+    if keyword and time and end_time:
+        s = '%' + keyword + '%'
+        baby_count = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time, Baby.born_birthday <= end_time).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time, Baby.born_birthday <= end_time)[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            search_history = SearchHistory(keyword=keyword)
+            db.add(search_history)
+            db.commit()
+            return baby
+        else:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time, Baby.born_birthday <= end_time).first()
+            search_history = SearchHistory(keyword=keyword)
+            db.add(search_history)
+            db.commit()
+            return baby
+    if keyword and time:
+        s = '%' + keyword + '%'
+        baby_count = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time)[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            s = SearchHistory.query.filter(SearchHistory.keyword == keyword).first()
+            if s:
+                pass
+            else:
+                search_history = SearchHistory(keyword=keyword)
+                db.add(search_history)
+                db.commit()
+            return baby
+        else:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)), Baby.born_birthday >= time).first()
+            search_history = SearchHistory(keyword=keyword)
+            db.add(search_history)
+            db.commit()
+            return baby
+    if time and end_time:
+        baby_count = Baby.query.filter(Baby.born_birthday >= time, Baby.born_birthday <= end_time).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(Baby.born_birthday >= time, Baby.born_birthday <= end_time)[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            return baby
+        else:
+            baby = Baby.query.filter(Baby.born_birthday >= time, Baby.born_birthday <= end_time).first()
+            return baby
     if keyword:
-        baby = Baby.query.filter(Baby.baby_name.like('%' + keyword + '%')).first()
-        search_history = SearchHistory(keyword=keyword)
-        db.add(search_history)
-        db.commit()
-        return baby
+        s = '%' + keyword + '%'
+        baby_count = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s))).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s)))[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            search_history = SearchHistory(keyword=keyword)
+            db.add(search_history)
+            db.commit()
+            return baby
+        else:
+            baby = Baby.query.filter(or_(Baby.baby_name.like(s), Baby.childbirth_style.like(s))).first()
+            search_history = SearchHistory(keyword=keyword)
+            db.add(search_history)
+            db.commit()
+            return baby
+    if time:
+        baby_count = Baby.query.filter(Baby.born_birthday >= time).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(Baby.born_birthday >= time)[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            return baby
+        else:
+            baby = Baby.query.filter(Baby.born_birthday >= time).first()
+            return baby
     #if time:
     #    baby = Baby.quer.filter().first()
     #    return baby
