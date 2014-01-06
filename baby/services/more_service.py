@@ -227,7 +227,7 @@ def get_tracking(baby_id, types, show_date_way, data_type):
                 is_compare = 45
             baby.is_compare = is_compare
     if tracking_count > 1:
-        tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).all()
+        tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
         result = 0
         median = 18
         if data_type:
