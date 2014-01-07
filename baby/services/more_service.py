@@ -5,7 +5,7 @@ from baby.models.hospital_model import Doctor, Province, Hospital, Department, P
 from baby.util.others import set_session_user, time_diff, flatten, get_session, page_utils
 from baby.models.feature_model import Tracking
 from baby.models.baby_model import Complication, ChildbirthStyle
-from baby.models.database import db
+from baby.models.database import db, engine
 from .tracking_service import get_tracking_model
 from .baby_service import get_picture_by_id
 from .formula import *
@@ -199,6 +199,15 @@ def dynamic_create(week, record_count):
     return app_list
 
 
+def add_is_compare(is_compare, due_time, baby):
+    now_time = str(datetime.datetime.now()).replace('-','')[:8]
+    temp_time = due_time
+    temp_time = str(temp_time).replace('-','')[:8]
+    if int(now_time) >= int(temp_time):
+        is_compare = 45
+    baby.is_compare = is_compare
+
+
 def get_tracking(baby_id, types, show_date_way, data_type):
     """
     获得随访记录_身长，体重，头围
@@ -211,11 +220,8 @@ def get_tracking(baby_id, types, show_date_way, data_type):
     # sums = session.query(func.sum(Irterm.n).label('a1')).group_by(Irterm.item_id)
     # average = session.query(func.avg(sums.subquery().columns.a1)).scalar()
     # label('address_count')).\    group_by(Address.user_id).subquery()
-    #subresult = engine.execute("""SELECT count(*) FROM (SELECT * FROM tracking where baby_id = 29 ORDER BY measure_date DESC) as t GROUP BY t.common ORDER BY t.measure_date""")
-    #for number in subresult:
-    #    print number
-    #count = db.query(func.count(Tracking).label('al')).filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date)
-    #r = db.query(func.count(count.subquery().columns.al)).scalar()
+    # subresult = engine.execute("""SELECT count(*) FROM (SELECT * FROM tracking where baby_id = 29 ORDER BY measure_date DESC) as t GROUP BY t.common ORDER BY t.measure_date""")
+    # sub = db.query(Tracking.label('al'))
     grow_line = []
     baby = Baby.query.filter(Baby.id == baby_id).first()
     week = 0
@@ -237,7 +243,7 @@ def get_tracking(baby_id, types, show_date_way, data_type):
                 size = False
             else:
                 is_compare = 45
-            baby.is_compare = is_compare
+            add_is_compare(is_compare, due_date, baby)
     if tracking_count > 1:
         # tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
         tracking_result = db.query(Tracking).\
@@ -690,7 +696,7 @@ def get_visit_record(baby_id):
                 is_compare = 40
             else:
                 is_compare = 45
-            baby.is_compare = is_compare
+            add_is_compare(is_compare, due_date, baby)
     time_birthday_week(baby)
     baby_nutrition_feeding_energy = 0
     baby_nutrition_feeding_protein = 0
