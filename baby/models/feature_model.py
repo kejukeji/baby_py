@@ -120,6 +120,7 @@ class Tracking(Base):
                              nullable=False)
     formula_feed_measure = Column(String(20), nullable=True)
     add_type = Column(String(10), nullable=True, server_default='doctor')
+    common = Column(String(20), nullable=True, server_default='0')
 
     def __init__(self, **kwargs):
         self.baby_id = kwargs.pop('baby_id')
@@ -133,6 +134,7 @@ class Tracking(Base):
         self.type_of_milk_id = kwargs.pop('type_of_milk_id')
         self.formula_feed_measure = kwargs.pop('formula_feed_measure')
         self.add_type = kwargs.pop('add_type', 'doctor')
+        self.common = kwargs.pop('common')
 
 
 class AcademicAbstract(Base):
