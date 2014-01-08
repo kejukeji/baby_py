@@ -16,3 +16,11 @@ def todayfstr(format_str='%Y-%m-%d %H:%M:%S'):
     """
 
     return datetime.datetime.now().strftime(format_str)
+
+
+def string_convert_to_time(string_time):
+    try:
+        date = datetime.datetime.strptime(string_time, '%Y-%m-%d %H:%M:%S')
+    except:
+        date = datetime.datetime.strptime(string_time, '%Y-%m-%d')
+    return date

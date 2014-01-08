@@ -12,6 +12,7 @@ from .formula import *
 from baby.models.standard import *
 from baby.models.nine_standard import *
 from baby.models.fentong_standard import *
+from baby.util.ex_time import *
 import datetime
 import math
 
@@ -208,20 +209,13 @@ def add_is_compare(is_compare, due_time, baby):
     baby.is_compare = is_compare
 
 
-def get_tracking(baby_id, types, show_date_way, data_type):
-    """
-    获得随访记录_身长，体重，头围
-    """
+def get_tracking_week(baby_id, types, show_date_way, data_type):
     tracking_count = db.query(Tracking).\
-            filter(Tracking.baby_id == baby_id).\
-            order_by(Tracking.measure_date).\
-            group_by(Tracking.common).count()
-    # session.query(Address.user_id, func.count('*').\
-    # sums = session.query(func.sum(Irterm.n).label('a1')).group_by(Irterm.item_id)
-    # average = session.query(func.avg(sums.subquery().columns.a1)).scalar()
-    # label('address_count')).\    group_by(Address.user_id).subquery()
-    # subresult = engine.execute("""SELECT count(*) FROM (SELECT * FROM tracking where baby_id = 29 ORDER BY measure_date DESC) as t GROUP BY t.common ORDER BY t.measure_date""")
-    # sub = db.query(Tracking.label('al'))
+        filter(Tracking.baby_id == baby_id).\
+        order_by(Tracking.measure_date).\
+        group_by(Tracking.week).count()
+    tracking_result = db.execute("select * from (select * from tracking where baby_id = "+str(baby_id)+" order by measure_date desc) as a group by a.week")
+    tracking_count = tracking_result.rowcount
     grow_line = []
     baby = Baby.query.filter(Baby.id == baby_id).first()
     week = 0
@@ -244,13 +238,13 @@ def get_tracking(baby_id, types, show_date_way, data_type):
             else:
                 is_compare = 45
             add_is_compare(is_compare, due_date, baby)
+    result = []
     if tracking_count > 1:
         # tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
-        tracking_result = db.query(Tracking).\
-            filter(Tracking.baby_id == baby_id).\
-            order_by(Tracking.measure_date).\
-            group_by(Tracking.common).all()
-        result = 0
+        #tracking_result = db.query(Tracking).\
+        #        filter(Tracking.baby_id == baby_id).\
+        #        order_by(Tracking.measure_date).\
+        #        group_by(Tracking.week).all()
         median = 18
         if data_type:
             if size:
@@ -258,7 +252,116 @@ def get_tracking(baby_id, types, show_date_way, data_type):
             else:
                 grow_line = dynamic_create_list(week, tracking_count)
         for tracking in tracking_result:
-            t = Tracking.query.filter(Tracking.measure_date == tracking.measure_date).first()
+            result.append(tracking)
+        for tracking in result:
+            if types == 'weight':
+                if data_type:
+                    if median > 28:
+                        pass
+                    elif size:
+                        grow_line[(median + int(math.fabs(week)))] = tracking.weight
+                    else:
+                        grow_line[(median - int(math.fabs(week)))] = tracking.weight
+                    median = median + 1
+                else:
+                    grow_line.append(tracking.weight)
+            if types == 'height':
+                if data_type:
+                    if median > 28:
+                        pass
+                    elif size:
+                        grow_line[(median + int(math.fabs(week)))] = tracking.height
+                    else:
+                        grow_line[(median - int(math.fabs(week)))] = tracking.height
+                    median = median + 1
+                else:
+                    grow_line.append(tracking.height)
+            if types == 'head':
+                if data_type:
+                    if median > 28:
+                        pass
+                    elif size:
+                        grow_line[(median + int(math.fabs(week)))] = tracking.head_wai
+                    else:
+                        grow_line[(median - int(math.fabs(week)))] = tracking.head_wai
+                    median = median + 1
+                else:
+                    grow_line.append(tracking.head_wai)
+        return grow_line
+    elif tracking_count == 1:
+        tracking = Tracking.query.filter(Tracking.baby_id == baby_id).first()
+        for tracking in tracking_result:
+            result.append(tracking)
+        if data_type:
+            if size:
+                grow_line = dynamic_create(week, tracking_count)
+            else:
+                grow_line = dynamic_create_list(week, tracking_count)
+        if tracking:
+            if types == 'weight':
+                grow_line.append(result[0].weight)
+            if types == 'height':
+                grow_line.append(result[0].height)
+            if types == 'head':
+                grow_line.append(result[0].head_wai)
+        return grow_line
+    else:
+        return grow_line
+
+
+def get_tracking(baby_id, types, show_date_way, data_type):
+    """
+    获得随访记录_身长，体重，头围
+    """
+    tracking_count = db.query(Tracking).\
+            filter(Tracking.baby_id == baby_id).\
+            order_by(Tracking.measure_date).\
+            group_by(Tracking.common).count()
+    # session.query(Address.user_id, func.count('*').\
+    # sums = session.query(func.sum(Irterm.n).label('a1')).group_by(Irterm.item_id)
+    # average = session.query(func.avg(sums.subquery().columns.a1)).scalar()
+    # label('address_count')).\    group_by(Address.user_id).subquery()
+    # subresult = engine.execute("""SELECT count(*) FROM (SELECT * FROM tracking where baby_id = 29 ORDER BY measure_date DESC) as t GROUP BY t.common ORDER BY t.measure_date""")
+    # sub = db.query(Tracking.label('al'))
+    tracking_result = db.execute("select * from (select * from tracking where baby_id = "+str(baby_id)+" order by measure_date desc) as a group by a.common")
+    grow_line = []
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    week = 0
+    size = True
+    if baby:
+        if baby.due_date and baby.born_birthday:
+            due_date = baby.due_date
+            birthday = baby.born_birthday
+            is_compare = ''
+            s = int((birthday - due_date).total_seconds())
+            week = s / 3600 / 24 / 7
+            if birthday > due_date:
+                if week > 10:
+                    is_compare = 50
+                else:
+                    is_compare = 45
+            elif birthday < due_date:
+                is_compare = 40
+                size = False
+            else:
+                is_compare = 45
+            add_is_compare(is_compare, due_date, baby)
+    result = []
+    if tracking_count > 1:
+        # tracking_result = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
+        tracking_result = db.query(Tracking).\
+            filter(Tracking.baby_id == baby_id).\
+            order_by(Tracking.measure_date).\
+            group_by(Tracking.common).all()
+        median = 18
+        if data_type:
+            if size:
+                grow_line = dynamic_create(week, tracking_count)
+            else:
+                grow_line = dynamic_create_list(week, tracking_count)
+        for tracking in tracking_result:
+            result.append(tracking)
+        for tracking in result:
             if types == 'weight':
                 if data_type:
                     if median > 28:
@@ -300,13 +403,15 @@ def get_tracking(baby_id, types, show_date_way, data_type):
                 grow_line = dynamic_create(week, tracking_count)
             else:
                 grow_line = dynamic_create_list(week, tracking_count)
+        for tracking in tracking_result:
+            result.append(tracking)
         if tracking:
             if types == 'weight':
-                grow_line.append(tracking.weight)
+                grow_line.append(result[0].weight)
             if types == 'height':
-                grow_line.append(tracking.height)
+                grow_line.append(result[0].height)
             if types == 'head':
-                grow_line.append(tracking.head_wai)
+                grow_line.append(result[0].head_wai)
         return grow_line
     else:
         return grow_line
@@ -647,25 +752,63 @@ def is_null(measure_date):
     return None
 
 
+def check_week(measure_date, tracking):
+    '''判断是否是同一周时间'''
+    dt = string_convert_to_time(measure_date)
+    tracking_dt = tracking.measure_date
+    dt_seconds = 1
+    s = int((dt - tracking_dt).total_seconds())
+    w = s / 3600 / 24 / 7
+    #tracking_week = tracking_dt.isoweekday() # 得到是星期几
+    #seconds = tracking_dt.microseconds # 得到秒数
+    #min_time = seconds - tracking_week * 3600 * 24 # 一周开始时间
+    #max_time = seconds + (7 - tracking_week) * 3600 * 24 # 一周结束时间
+    #if dt_seconds >= min_time and dt_seconds <= max_time: # true：是相同一周
+    #    week = tracking.week # 是同一周，week就等于tracking.week
+    #else:
+    #    week = int(tracking.week) + 1 # 不是同一周，就等于tracking.week 加1 周
+    #return week
+    if w == 0: # 同一周
+        week = tracking.week
+    elif w > 0: # 不是同一周
+        week = int(tracking.week) + 1
+    return week
+
+
+def check_is_week(week, baby_id, measure_date):
+    tracking_count = Tracking.query.filter(Tracking.baby_id == baby_id).count()
+    if tracking_count == 0: # 如果是第一次记录那么周肯定是第一周
+        week = 1
+    elif tracking_count > 1: # 如果不是第一次记录，取出最近一条记录
+        tracking = Tracking.query.filter(Tracking.baby_id == baby_id)[-1] # 得到最后一条
+        week = check_week(measure_date, tracking)
+    else:
+        tracking = Tracking.query.filter(Tracking.baby_id == baby_id).first()
+        week = check_week(measure_date, tracking)
+    return week
+
+
 def insert_visit_record(baby_id, measure_date, weight, height, head, court_id, brand_id, breastfeeding, kind, nutrition, add_type):
     """
     新增随访记录
     """
     common = 0
+    week = 0
     try:
         temp = measure_date
         temp = temp.replace('-','')
         common = temp[:6]
+        week = check_is_week(week, baby_id, measure_date)
     except:
         pass
     if add_type:
         tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
                             court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
-                            formula_feed_measure=nutrition, add_type=add_type, common=common)
+                            formula_feed_measure=nutrition, add_type=add_type, common=common, week=week)
     else:
         tracking = Tracking(baby_id=baby_id, measure_date=measure_date, weight=weight, height=height, head_wai=head,
                             court_id=court_id, brand_id=brand_id, breast_milk_amount=breastfeeding, type_of_milk_id=kind,
-                            formula_feed_measure=nutrition, common=common)
+                            formula_feed_measure=nutrition, common=common, week=week)
     try:
         db.add(tracking)
         db.commit()
