@@ -769,7 +769,14 @@ def check_week(measure_date, tracking):
     #    week = int(tracking.week) + 1 # 不是同一周，就等于tracking.week 加1 周
     #return week
     if w == 0: # 同一周
-        week = tracking.week
+        t = Tracking.query.filter(Tracking.week == tracking.week).order_by(Tracking.measure_date).first()
+        tracking_dt = t.measure_date
+        s = int((dt - tracking_dt).total_seconds())
+        w = s / 3600 / 24 / 7
+        if w == 0:
+            week = t.week
+        else:
+            week = int(t.week) + 1
     elif w > 0: # 不是同一周
         week = int(tracking.week) + 1
     return week
