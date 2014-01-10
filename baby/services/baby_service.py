@@ -231,6 +231,15 @@ def search_by_keyword_time(keyword, time, end_time, page):
         else:
             baby = Baby.query.filter(Baby.born_birthday >= time).first()
             return baby
+    if end_time:
+        baby_count = Baby.query.filter(Baby.born_birthday <= end_time).count()
+        page, per_page = page_utils(baby_count, page)
+        if baby_count > 1:
+            baby = Baby.query.filter(Baby.born_birthday <= end_time)[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+            return baby
+        else:
+            baby = Baby.query.filter(Baby.born_birthday <= end_time).first()
+            return baby
     #if time:
     #    baby = Baby.quer.filter().first()
     #    return baby
