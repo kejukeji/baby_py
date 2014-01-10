@@ -182,6 +182,7 @@ class CreateBabyAccount(restful.Resource):
         parser.add_argument('childbirth_style', type=str, required=True, help=u'childbirth_style 必须')
         parser.add_argument('complication_id', type=str, required=True, help=u'complication_id 必须')
         parser.add_argument('growth_standard', type=str, required=False)
+        parser.add_argument('doctor_id', type=str, required=False)
         # parser.add_argument('restore_day', type=str, required=True, help=u'restore_day 必须')
         # parser.add_argument('apgar_score', type=str, required=True, help=u'apgar_score 必须')
 
@@ -203,10 +204,11 @@ class CreateBabyAccount(restful.Resource):
         childbirth_style = args['childbirth_style']
         complication_id = args['complication_id']
         growth_standard = args['growth_standard']
+        doctor_id = args['doctor_id']
         # restore_day = args['restore_day']
         # apgar_score = args['apgar_score']
         is_ture = create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head,
-                              childbirth_style, complication_id, growth_standard)
+                              childbirth_style, complication_id, growth_standard, doctor_id)
         if is_ture != 0:
             success['baby_id'] = is_ture
             success['msg'] = '创建账户成功'

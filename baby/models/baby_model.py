@@ -3,6 +3,7 @@
 from sqlalchemy import Column, String, Integer, DATETIME, Float, Sequence, ForeignKey
 from baby.models.database import Base
 from baby.util.ex_time import todayfstr
+from .hospital_model import Doctor
 
 
 BABY_TABLE = 'baby'
@@ -75,6 +76,7 @@ class Baby(Base):
     growth_standard = Column(String(100), nullable=True)
     system_message_time = Column(DATETIME, nullable=False, server_default=None)
     login_type = Column(String(10), nullable=False)
+    belong_doctor_id = Column(Integer, nullable=False)
 
     def __init__(self, **kwargs):
         self.patriarch_tel = kwargs.pop('patriarch_tel')
@@ -95,6 +97,7 @@ class Baby(Base):
         self.system_message_time = kwargs.pop('system_message_time', todayfstr())
         self.login_name = kwargs.pop('login_name', '')
         self.login_type = kwargs.pop('login_type', 'baby')
+        self.belong_doctor_id = kwargs.pop('belong_doctor_id', '0')
 
     def update(self, **kwargs):
         self.patriarch_tel = kwargs.pop('patriarch_tel')

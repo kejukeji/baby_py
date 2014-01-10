@@ -58,12 +58,12 @@ def baby_list(page, doctor_id):
         全部婴儿列表
     """
     set_session_user('', '', 'user_id', doctor_id)
-    baby_count = Baby.query.filter().count()
+    baby_count = Baby.query.filter(Baby.belong_doctor_id == doctor_id).count()
     temp_page = page
     page, per_page = page_utils(baby_count, page)
     baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
     if baby_count > 1:
-        babys = Baby.query.filter().order_by(Baby.system_message_time.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
+        babys = Baby.query.filter(Baby.belong_doctor_id == doctor_id).order_by(Baby.system_message_time.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
@@ -85,7 +85,7 @@ def baby_list(page, doctor_id):
                     baby.is_collect = 1
         return babys
     else:
-        baby = Baby.query.filter().first()
+        baby = Baby.query.filter(Baby.belong_doctor_id == doctor_id).first()
         if baby_collect_count > 1:
             baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
             for baby_collect in baby_collects:
@@ -346,7 +346,7 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight
 
 
 def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head, childbirth_style_id,
-                complication_id, growth_standard):
+                complication_id, growth_standard, doctor_id):
     baby = Baby.query.filter(Baby.patriarch_tel == patriarch_tel).first()
     if baby:
         return 1
@@ -354,8 +354,20 @@ def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birt
         if growth_standard:
             baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
                         born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id, growth_standard=growth_standard)
+            if doctor_id:
+                baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id, growth_standard=growth_standard, belong_doctor_id=doctor_id)
+            else:
+                baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id, growth_standard=growth_standard)
         else:
             baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id)
+            if doctor_id:
+                baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
+                        born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id, belong_doctor_id=doctor_id)
+            else:
+                baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
                         born_height=born_height, born_head=born_head, childbirth_style=childbirth_style_id, complication=complication_id)
         try:
             db.add(baby)
