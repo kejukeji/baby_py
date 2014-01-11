@@ -532,6 +532,7 @@ MZ.constant = {
 	'DATE_EMPTY': '测量日期不能为空',
 	'FEEDING_EMPTY': '母乳喂养不能为空',
 	'OLD_PASSWORD_ERROR': '旧密码不正确',
+    'CHANGE_PASSWORD_SUCCESS': '修改密码成功',
     'PLEASE_CHECKED': '请确认注册协议',
 	'LOGIN_URL': '/restful/html/do/login',
 	'FORGET_PWD': '/restful/html/forget/password',
@@ -699,7 +700,7 @@ MZ.app = {
 					window.Notification.simple(MZ.constant.OLD_PASSWORD_ERROR, 2000)
 					return
 				} else {
-					window.Notification.simple(json.msg, 2000)
+					window.Notification.simple(MZ.constant.CHANGE_PASSWORD_SUCCESS, 2000)
 					return
 				}
 			})
