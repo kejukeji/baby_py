@@ -808,7 +808,7 @@ MZ.app = {
 				if (code === 200) {
 					setTimeout(function() {
 						// 调用java方法
-						window.app.webviewRegister(json.code)
+						window.app.webviewRegister(json.code, json.doctor_id)
 						// where to go ?
 					}, 2000)
 					window.Notification.simple(MZ.constant.REGISTER_SUCCESS, 2000)

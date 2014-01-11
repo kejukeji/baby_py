@@ -72,6 +72,7 @@ class AddVisitRecord(restful.Resource):
         brand: 品牌
         kind: 种类
         nutrition: 配方奶营养量
+        add_type: 添加类型(baby,doctor如果时妈妈端登陆添加的就是baby，医生端登陆添加的就是doctor)
         """
         parser = reqparse.RequestParser()
         parser.add_argument('baby_id', type=str, required=True, help=u'baby_id 必须')
