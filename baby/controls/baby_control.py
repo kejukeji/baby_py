@@ -218,13 +218,14 @@ def to_fen_tong_grow_line(baby_id):
 
 def to_grow_bar(baby_id):
     analysis = get_analysis_data(baby_id)
-    breastfeeding, formula_feeding  = get_tracking_bar(baby_id, None)
+    breastfeeding, formula_feeding, grow_time  = get_tracking_bar(baby_id, None)
     return render_template('baby/grow_bar.html',
                            user_id=get_session('baby_id'),
                            entrance=get_session('entrance'),
                            analysis=analysis,
                            breastfeeding=breastfeeding,
-                           formula_feeding=formula_feeding)
+                           formula_feeding=formula_feeding,
+                           grow_time=grow_time)
 
 
 def to_raise():
@@ -264,7 +265,10 @@ def to_baby_detail(baby_id):
 
 
 def to_grow_rate(baby_id):
-    record, record_count, baby = get_visit_record(baby_id)
+    # record, record_count, baby = get_visit_record(baby_id)
+    grow_time, grow_rate, baby = get_record_time_and_rate(baby_id)
     return render_template('baby/grow_rate.html',
                            user_id=get_session('baby_id'),
-                           baby=baby)
+                           baby=baby,
+                           grow_time=grow_time,
+                           grow_rate=grow_rate)

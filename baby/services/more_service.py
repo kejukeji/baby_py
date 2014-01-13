@@ -725,22 +725,26 @@ def get_tracking_bar(id, types):
     tracking_count = Tracking.query.filter(Tracking.id == id).count()
     grow_bar_breastfeeding = []
     grow_bar_formula_feeding = []
+    grow_time = []
     count = 0
     if tracking_count > 1:
         tracking_result = Tracking.query.filter(Tracking.id == id).all()
         for tracking in tracking_result[:5]:
+            temp_time = str(tracking.measure_date)
+            grow_time.append(temp_time)
             grow_bar_breastfeeding.append(int(tracking.breast_milk_amount))
             grow_bar_formula_feeding.append(int(tracking.formula_feed_measure))
             count = count + 1
-        return grow_bar_breastfeeding, grow_bar_formula_feeding
     elif tracking_count == 1:
         tracking = Tracking.query.filter(Tracking.id == id).first()
         if tracking:
+            temp_time = str(tracking.measure_date)
+            grow_time.append(temp_time)
             grow_bar_breastfeeding.append(int(tracking.breast_milk_amount))
             grow_bar_formula_feeding.append(int(tracking.formula_feed_measure))
-        return grow_bar_breastfeeding, grow_bar_formula_feeding
     else:
-        return grow_bar_breastfeeding, grow_bar_formula_feeding
+        pass
+    return grow_bar_breastfeeding, grow_bar_formula_feeding, grow_time
 
 
 def is_null(measure_date):
@@ -1042,26 +1046,77 @@ def get_tracking_test(id, types, show_date_way):
     else:
         return 0
 
-def entering_who():
-    """
-       录入who标准数据
-    """
-    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_height_girl.txt')
-    result = {}
-    count = 0
-    for line in read_file:
-        ''''''
-        result[str(count)] = []
-        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
-        count = count + 1
-    count = 0
-    length = result.__len__() - 1
-    # result.pop('0')
-    for keys in result.keys():
-        #print result[str(count)][0].__len__()
-        weight_boy_standard = FenTongHeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
-                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
-                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
-        db.add(weight_boy_standard)
-        db.commit()
-        count = count + 1
+
+def get_record_time_and_rate(baby_id):
+    tracking_count = Tracking.query.filter(Tracking.baby_id == baby_id).count()
+    baby = Baby.query.filter(Baby.id == baby_id).first()
+    grow_time = []
+    grow_rate = []
+    if baby.due_date and baby.born_birthday:
+        due_date = baby.due_date
+        birthday = baby.born_birthday
+        s = int((birthday - due_date).total_seconds())
+        week = s / 3600 / 24 / 7 # 得到早产多少周
+        count = 1
+        if tracking_count > 1:
+            tracking = Tracking.query.filter(Tracking.baby_id == baby_id).order_by(Tracking.measure_date).all()
+            for t in tracking:
+                get_energy_protein(baby, t)
+                get_rate(grow_time, grow_rate, t, baby, week, count)
+                count = count + 1 # 多次记录
+        else:
+            tracking = Tracking.query.filter(Tracking.baby_id == baby_id).first()
+            if tracking:
+                get_energy_protein(baby, tracking)
+                get_rate(grow_time, grow_rate, tracking, baby, week, count)
+    else:
+        pass
+    return grow_time, grow_rate, baby
+
+
+def get_rate(grow_time, grow_rate, t, baby, week, count):
+    temp_time = str(t.measure_date)[2:10] # 得到添加随访记录时间,进行截取
+    grow_time.append(temp_time)
+    birthday = baby.born_birthday
+    age_s = int((birthday - t.measure_date).total_seconds())
+    actual_age = age_s / 3600 / 24 / 7 # 得到实际年龄
+    #if math.fabs(actual_age) < math.fabs(week):
+    #    baby.s = '您的宝宝还没有足月'
+    #redress_age = math.fabs(actual_age) - math.fabs(week) # 得到矫正年龄
+    rate = (t.weight * count) / (math.fabs(actual_age) * count) # 得到速率,x * n / t * n(x体重，n记录次数,t矫正年龄)
+    grow_rate.append(float('%0.2f'%rate))
+
+
+def get_energy_protein(baby, tracking):
+    kind = TypeOfMilk.query.filter(TypeOfMilk.id == tracking.type_of_milk_id).first()
+    energy = 0
+    protein = 0
+    energy = energy + float(kind.energy)
+    protein = protein + float(kind.protein)
+    baby.energy = energy
+    baby.protein = protein
+
+
+#def entering_who():
+#    """
+#       录入who标准数据
+#    """
+#    read_file = open('/Users/K/Documents/User Data/baby Data/fentong_height_girl.txt')
+#    result = {}
+#    count = 0
+#    for line in read_file:
+#        ''''''
+#        result[str(count)] = []
+#        result[str(count)].append(line.replace('\n','').replace('\r','').split('\t'))
+#        count = count + 1
+#    count = 0
+#    length = result.__len__() - 1
+#    # result.pop('0')
+#    for keys in result.keys():
+#        #print result[str(count)][0].__len__()
+#        weight_boy_standard = FenTongHeightGirl(week=result[str(count)][0][0], degree_three=result[str(count)][0][1],
+#                                                degree_ten=result[str(count)][0][2], degree_fifty=result[str(count)][0][3],
+#                                                degree_ninety=result[str(count)][0][4], degree_ninety_seven=result[str(count)][0][5])
+#        db.add(weight_boy_standard)
+#        db.commit()
+#        count = count + 1

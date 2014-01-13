@@ -9,11 +9,11 @@
 <link rel="stylesheet" href="/static/css/m.min.css" type="text/css">
 <script type="text/javascript">
     window.growObj = {
-        'xAxis': ['13-02-05', '13-06-05', '13-10-05', '13-12-05', '14-02-05'],
+        'xAxis': {{ grow_time | safe}},
         'yStart': 0,
         'yEnd': 5,
         'ySpace': 1,
-        'data': [3,4,5,4]
+        'data': {{ grow_rate }}
     };
 </script>
 </head>
