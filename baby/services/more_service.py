@@ -1083,7 +1083,11 @@ def get_rate(grow_time, grow_rate, t, baby, week, count):
     #if math.fabs(actual_age) < math.fabs(week):
     #    baby.s = '您的宝宝还没有足月'
     #redress_age = math.fabs(actual_age) - math.fabs(week) # 得到矫正年龄
-    rate = (t.weight * count) / (math.fabs(actual_age) * count) # 得到速率,x * n / t * n(x体重，n记录次数,t矫正年龄)
+    rate = 0
+    try:
+        rate = (t.weight * count) / (math.fabs(actual_age) * count) # 得到速率,x * n / t * n(x体重，n记录次数,t矫正年龄)
+    except:
+        pass
     grow_rate.append(float('%0.2f'%rate))
 
 
