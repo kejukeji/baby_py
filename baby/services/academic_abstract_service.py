@@ -18,20 +18,7 @@ def get_academic_abstract(page, doctor_id, success):
             collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract').all()
             academic_result = AcademicAbstract.query.filter().all()[per_page * (temp_page - 1): per_page * page]
             if academic_result:
-                if collects:
-                    for c in collects:
-                        for academic in academic_result:
-                            if c.type_id == academic.id:
-                                academic.is_collect = True
-                            else:
-                                academic.is_collect = False
-                            academic_pic = flatten(academic)
-                            success['academic_list'].append(academic_pic)
-                else:
-                    for academic in academic_result:
-                        academic.is_collect = False
-                        academic_pic = flatten(academic)
-                        success['academic_list'].append(academic_pic)
+                check_abstract_list(academic_result, collects, success)
                 return True
             else:
                 return False
@@ -39,16 +26,7 @@ def get_academic_abstract(page, doctor_id, success):
             collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract').first()
             academic_result = AcademicAbstract.query.filter().all()[per_page * (temp_page - 1): per_page * page]
             if academic_result:
-                for academic in academic_result:
-                    if collects:
-                        if collects.type_id == academic.id:
-                            academic.is_collect = True
-                        else:
-                            academic.is_collect = False
-                    else:
-                        academic.is_collect = False
-                    academic_pic = flatten(academic)
-                    success['academic_list'].append(academic_pic)
+                check_abstract_list(academic_result, collects, success)
                 return True
             else:
                 return False
@@ -57,16 +35,7 @@ def get_academic_abstract(page, doctor_id, success):
             collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract').all()
             academic_result = AcademicAbstract.query.filter().first()
             if academic_result:
-                if collects:
-                    for c in collects:
-                        if c.type_id == academic_result.id:
-                            academic_result.is_collect = True
-                        else:
-                            academic_result.is_collect = False
-                else:
-                    academic_result.is_collect = False
-                academic_pic = flatten(academic_result)
-                success['academic_list'].append(academic_pic)
+                check_abstract_list(academic_result, collects, success)
                 return True
             else:
                 return False
@@ -74,18 +43,66 @@ def get_academic_abstract(page, doctor_id, success):
             collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'abstract').first()
             academic_result = AcademicAbstract.query.filter().first()
             if academic_result:
-                if collects:
-                    if collects.type_id == academic_result.id:
-                        academic_result.is_collect = True
-                    else:
-                        academic_result.is_collect = False
-                else:
-                    academic_result.is_collect = False
-                academic_pic = flatten(academic_result)
-                success['academic_list'].append(academic_pic)
+                check_abstract_list(academic_result, collects, success)
                 return True
             else:
                 return False
+
+
+def collect_abstract(academic_result, success):
+    '''序列化json对象'''
+    academic_pic = flatten(academic_result)
+    success['academic_list'].append(academic_pic)
+
+
+def check_abstract_list(abstract, collect, success):
+    if type(abstract) is list:
+        abstract_is_list(abstract, collect, success)
+    else:
+        abstract_is_object(abstract, collect, success)
+
+
+def abstract_is_list(abstract, collect, success):
+    if type(collect) is list:
+        for p in abstract:
+            for c in collect:
+                if p.id == c.type_id:
+                    p.is_collect = True
+                    break
+                else:
+                    p.is_collect = False
+            collect_abstract(p, success)
+    elif type(collect) is Collect:
+        for p in abstract:
+            if p.id == collect.type_id:
+                p.is_collect = True
+            else:
+                p.is_collect = False
+            collect_abstract(p, success)
+    else:
+        for p in abstract:
+            p.is_collect = False
+            collect_abstract(p, success)
+
+
+def abstract_is_object(abstract, collect, success):
+    if type(collect) is list:
+        for c in collect:
+            if abstract.id == c.type_id:
+                abstract.is_collect = True
+                break
+            else:
+                abstract.is_collect = False
+        collect_abstract(abstract, success)
+    elif type(collect) is Collect:
+        if abstract.id == collect.type_id:
+            abstract.is_collect = True
+        else:
+            abstract.is_collect = False
+        collect_abstract(abstract, success)
+    else:
+        abstract.is_collect = False
+        collect_abstract(abstract, success)
 
 
 def get_abstract_by_id(id, doctor_id, success):
