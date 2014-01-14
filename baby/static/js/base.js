@@ -691,6 +691,7 @@ MZ.app = {
 					'text': json.msg
 				}).flash(2000)
 				if (code === 200) {
+                    window.Notification.simple(MZ.constant.CHANGE_PASSWORD_SUCCESS)
 					setTimeout(function() {
 						// 调用java方法
 						window.app.webviewPassword(json.code)
@@ -698,9 +699,6 @@ MZ.app = {
 					}, 2000)
 				} else if (code === 500) {
 					window.Notification.simple(MZ.constant.OLD_PASSWORD_ERROR, 2000)
-					return
-				} else {
-					window.Notification.simple(MZ.constant.CHANGE_PASSWORD_SUCCESS, 2000)
 					return
 				}
 			})
