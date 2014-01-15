@@ -130,7 +130,7 @@ class ForgetPassword(restful.Resource):
 
         return_success = success_dic().dic
         return_fail = fail_dic().dic
-        user_id = get_session('user_id')
+        # user_id = get_session('user_id')
         if user_id is None:
             return_fail.pop('message')
             return_fail['msg'] = '请先登录!'
@@ -138,7 +138,7 @@ class ForgetPassword(restful.Resource):
             return_fail['code'] = 404
             return return_fail
 
-        is_true = by_id_alter_password(user_id, old_password, new_password)
+        is_true = by_id_alter_password(user_id, old_password, new_password, type)
         if is_true:
             return_success['message'] = '修改密码成功'
             return return_success

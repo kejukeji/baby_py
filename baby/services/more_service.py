@@ -99,14 +99,14 @@ def get_position():
     return position, position_count
 
 
-def by_id_alter_password(user_id, old_password, new_password):
+def by_id_alter_password(user_id, old_password, new_password, type):
     """
        通过user_id来获取信息
           判断old_password是否正确
              修改密码
     """
     entrance = get_session('entrance')
-    if entrance == 'baby':
+    if type == 'baby':
         baby = Baby.query.filter(Baby.id == user_id).first()
         if baby:
             if baby.baby_pass == old_password:
@@ -118,7 +118,7 @@ def by_id_alter_password(user_id, old_password, new_password):
                 return True
             else:
                 return False
-    elif entrance is None or entrance == 'doctor':
+    elif type is None or type == 'doctor':
         doctor = Doctor.query.filter(Doctor.id == user_id).first()
         if doctor:
             if doctor.doctor_pass == old_password:
