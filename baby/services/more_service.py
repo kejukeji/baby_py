@@ -1,5 +1,6 @@
 # coding: UTF-8
 
+from sqlalchemy import or_, and_
 from baby.models.baby_model import Baby, BabyPicture
 from baby.models.hospital_model import Doctor, Province, Hospital, Department, Position
 from baby.util.others import set_session_user, time_diff, flatten, get_session, page_utils
@@ -31,7 +32,7 @@ def check_login(login_name, login_pass, login_type):
         else:
             return None
     if login_type == 'doctor':
-        doctor = Doctor.query.filter(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass).first()
+        doctor = Doctor.query.filter(or_(and_(Doctor.doctor_name == login_name, Doctor.doctor_pass == login_pass), and_(Doctor.email == login_name, Doctor.doctor_pass == login_pass))).first()
         if doctor != None:
             set_session_user('user', doctor.doctor_name, 'user_id', doctor.id)
             set_session_user('login_type', login_type, '','')
