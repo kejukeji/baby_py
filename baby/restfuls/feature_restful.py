@@ -13,12 +13,11 @@ class AddFormula(restful.Resource):
     增加配方奶
        court_id： 院内，院外
        bran_id： 品牌
-       type： 种类
+       kind： 种类
        energy: 能量
        protein: 蛋白质
-       carbon_compound: 碳化合物
-       axunge: 脂肪
-       name: 配方奶名称
+       carbohydrates: 碳化合物
+       fat: 脂肪
     """
     @staticmethod
     def post():

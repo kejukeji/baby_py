@@ -35,6 +35,7 @@ class Department(Base):
      __tablename__ = DEPARTMENT
      id = Column(Integer, primary_key=True)
      name = Column(String(255), nullable=True)
+     belong_hospital = Column(Integer, nullable=True)
 
 
 class Position(Base):
