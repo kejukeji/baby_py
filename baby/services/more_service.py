@@ -1096,8 +1096,9 @@ def get_energy_protein(baby, tracking):
     kind = TypeOfMilk.query.filter(TypeOfMilk.id == tracking.type_of_milk_id).first()
     energy = 0
     protein = 0
-    energy = energy + float(kind.energy)
-    protein = protein + float(kind.protein)
+    if kind and kind.energy and kind.protein:
+        energy = energy + float(kind.energy)
+        protein = protein + float(kind.protein)
     baby.energy = energy
     baby.protein = protein
 
