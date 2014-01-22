@@ -349,7 +349,7 @@ def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birt
                 complication_id, growth_standard, doctor_id):
     baby = Baby.query.filter(Baby.patriarch_tel == patriarch_tel).first()
     if baby:
-        return 1
+        return -1
     else:
         if growth_standard:
             baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
