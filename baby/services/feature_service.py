@@ -3,6 +3,7 @@
 from baby.models.feature_model import TypeOfMilk, Court, Brand
 from baby.services.base_service import get_model
 from baby.services.more_service import *
+from baby.models.recently_modified import *
 from baby.util.others import flatten
 from baby import db
 
@@ -82,3 +83,12 @@ def format_province_hospital(success):
                                     position_pic = flatten(po)
                                     department_pic['sub_position'].append(position_pic)
             success['total'].append(p_pic)
+
+
+def get_recent_modified():
+    '''获取最近更新时间'''
+    recent = RecentlyModified.query.filter().first()
+    if recent:
+        recent_pic = flatten(recent)
+        return recent_pic
+    return 'None'

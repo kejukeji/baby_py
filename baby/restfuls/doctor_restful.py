@@ -11,6 +11,7 @@ from ..services.doctor_service import doctor_info, get_meeting_message, update_d
 from ..services.search_history_service import search_history_list, delete_all_search
 from ..services.collect_service import insert_or_cancel_collects
 from ..services.academic_abstract_service import *
+from ..services.feature_service import *
 import werkzeug
 
 
@@ -36,7 +37,12 @@ class BabyList(restful.Resource):
         resp_suc = success_dic().dic
         fail = fail_dic().dic
         resp_suc['baby_list'] = []
-        baby = baby_list(page, int(doctor_id))
+        recent = get_recent_modified()
+        resp_suc['recent_modified_time'] = ''
+        if recent != 'None':
+            resp_suc['recent_modified_time'] = recent['update_time']
+        baby, baby_count = baby_list(page, int(doctor_id))
+        resp_suc['baby_count'] =baby_count
         if baby:
             if type(baby) is list:
                 for bb in baby:
