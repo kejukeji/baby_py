@@ -40,7 +40,8 @@ class DoLogin(restful.Resource):
         if is_true:
             return return_success
         else:
-            return return_fail
+            return_success['message'] = '登陆失败'
+            return return_success
 
 
 class DoRegisterDoctor(restful.Resource):
@@ -209,12 +210,11 @@ class CreateBabyAccount(restful.Resource):
         # apgar_score = args['apgar_score']
         is_ture = create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head,
                               childbirth_style, complication_id, growth_standard, doctor_id)
-        if is_ture != 0:
-            success['baby_id'] = is_ture
-            success['msg'] = '创建账户成功'
-            return success
-        elif is_ture == 1:
-            fail['message'] = '账户已经存在'
+        if is_ture == -1:
+            success['message'] = '账户已存在'
+        elif is_ture == 0:
+            success['message'] = '创建账户失败!系统内部错误'
         else:
-            fail['message'] = '创建账户失败!系统内部错误'
-            return fail
+            success['baby_id'] = is_ture
+            success['message'] = '创建账户成功'
+        return success

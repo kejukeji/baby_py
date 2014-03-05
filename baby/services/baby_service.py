@@ -6,9 +6,11 @@ from ..models.feature_model import Collect, SearchHistory, SystemMessage
 from ..util.seesion_query import *
 from ..util.others import page_utils, flatten, time_diff, set_session_user
 from ..models.feature_model import Collect
+from ..models.recently_modified import *
 from werkzeug import secure_filename
 from baby.setting.server import *
 from baby.util.ex_file import *
+from baby.util.ex_time import *
 from sqlalchemy import or_
 import os
 
@@ -61,7 +63,7 @@ def baby_list(page, doctor_id):
     baby_count = Baby.query.filter(Baby.belong_doctor_id == doctor_id).count()
     temp_page = page
     page, per_page = page_utils(baby_count, page)
-    baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id).count()
+    baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
     if baby_count > 1:
         babys = Baby.query.filter(Baby.belong_doctor_id == doctor_id).order_by(Baby.system_message_time.desc()).all()[per_page*(int(temp_page)-1):per_page*int(temp_page)]
         baby_collect_count = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').count()
@@ -83,26 +85,27 @@ def baby_list(page, doctor_id):
             else:
                 for baby in babys:
                     baby.is_collect = 1
-        return babys
+        return babys, baby_count
     else:
         baby = Baby.query.filter(Baby.belong_doctor_id == doctor_id).first()
-        if baby_collect_count > 1:
-            baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
-            for baby_collect in baby_collects:
-                if baby.id == baby_collect.type_id:
-                    baby.is_collect = 0
-                else:
-                    baby.is_collect = 1
-        else:
-            baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
-            if baby_collect:
-                if baby.id == baby_collect.type_id:
-                    baby.is_collect = 0
-                else:
-                    baby.is_collect = 1
+        if baby:
+            if baby_collect_count > 1:
+                baby_collects = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').all()
+                for baby_collect in baby_collects:
+                    if baby.id == baby_collect.type_id:
+                        baby.is_collect = 0
+                    else:
+                        baby.is_collect = 1
             else:
-                baby.is_collect = 1
-        return baby
+                baby_collect = Collect.query.filter(Collect.doctor_id == doctor_id, Collect.type == 'baby').first()
+                if baby_collect:
+                    if baby.id == baby_collect.type_id:
+                        baby.is_collect = 0
+                    else:
+                        baby.is_collect = 1
+                else:
+                    baby.is_collect = 1
+        return baby, baby_count
 
 
 def baby_collect_list(page, doctor_id, success):
@@ -339,7 +342,19 @@ def update_baby(baby_id, patriarch_tel, baby_name, due_date, gender, born_weight
             except:
                 pass
         format_baby(baby, success)
-        db.commit()
+        try:
+            db.commit()
+            result = RecentlyModified.query.filter().first()
+            if result:
+                result.update_time = todayfstr()
+                db.commit()
+            else:
+                recent = RecentlyModified()
+                recent.update_time = todayfstr()
+                db.add(recent)
+                db.commit()
+        except:
+            pass
         return True
     else:
         return False
@@ -349,7 +364,7 @@ def create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birt
                 complication_id, growth_standard, doctor_id):
     baby = Baby.query.filter(Baby.patriarch_tel == patriarch_tel).first()
     if baby:
-        return 1
+        return -1
     else:
         if growth_standard:
             baby = Baby(patriarch_tel=patriarch_tel, baby_name=baby_name, baby_pass=baby_pass, gender=gender, due_date=due_date, born_birthday=born_birthday, born_weight=born_weight,
