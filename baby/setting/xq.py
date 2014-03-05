@@ -8,13 +8,9 @@ SECRET_KEY = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT^&556gh/ghj~hj/kh'  # session相关�
 
 # models模块需要的配置参数
 # ===============================================================
-<<<<<<< HEAD
-SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1:3306/doctor_baby?charset=utf8'  # 连接的数据库
 # SQLALCHEMY_DATABASE_URI = 'mysql://root:root@42.121.108.142:3306/doctor_baby?charset=utf8'  # 连接的数据库
-=======
 SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@127.0.0.1:3306/doctor_baby?charset=utf8'  # 连接的数据库
 #SQLALCHEMY_DATABASE_URI = 'mysql://root:root@118.26.238.87:3306/doctor_baby?charset=utf8'  # 连接的数据库
->>>>>>> 4e7bc93a48c6c9398df887778e59b02581108d49
 SQLALCHEMY_ECHO = True  # 是否显示SQL语句
 
 # ===============================================================
