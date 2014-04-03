@@ -7,6 +7,7 @@ from baby.util.ex_file import *
 from baby.setting.server import *
 from werkzeug import secure_filename
 from baby.util.others import flatten, page_utils
+from sqlalchemy import or_
 import os
 
 
@@ -115,7 +116,7 @@ def register_doctor(login_name, login_pass, argument_real_name, argument_provinc
     """
        注册医师
     """
-    doctor_result = Doctor.query.filter(Doctor.doctor_name == login_name).first()
+    doctor_result = Doctor.query.filter(Doctor.doctor_name == login_name, or_(Doctor.email == argument_email, Doctor.tel == argument_tel)).first()
     if doctor_result:
         return 0
     else:
