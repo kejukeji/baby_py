@@ -116,7 +116,7 @@ def register_doctor(login_name, login_pass, argument_real_name, argument_provinc
     """
        注册医师
     """
-    doctor_result = Doctor.query.filter(Doctor.doctor_name == login_name, or_(Doctor.email == argument_email, Doctor.tel == argument_tel)).first()
+    doctor_result = Doctor.query.filter(or_(Doctor.doctor_name == login_name, Doctor.email == argument_email, Doctor.tel == argument_tel)).first()
     if doctor_result:
         return 0
     else:
