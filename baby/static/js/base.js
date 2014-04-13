@@ -813,7 +813,6 @@ MZ.app = {
 					window.Notification.simple(MZ.constant.REGISTER_SUCCESS, 2000)
 				} else {
 					window.Notification.simple(MZ.constant.ACCOUNT_EXIST, 2000)
-					return
 				}
 			})
 		})

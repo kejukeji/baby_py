@@ -7,6 +7,7 @@ from baby.services.more_service import check_login, get_department, get_hospital
 from baby.services.more_service import get_tracking
 from baby.services.feature_service import get_court, get_brand, get_formula
 from baby.services.formula import get_brand_out, get_court, get_brand_in
+from baby.util.others import set_session_user
 
 
 
@@ -46,6 +47,8 @@ def to_update_password():
     """
        to update password
     """
+    user_id = request.args.get('user_id')
+    set_session_user('user_id', user_id, '', '')
     return render_template('user_feature/password.html')
 
 
