@@ -48,7 +48,9 @@ def to_update_password():
        to update password
     """
     user_id = request.args.get('user_id')
+    type = request.args.get('type', 'doctor')
     set_session_user('user_id', user_id, '', '')
+    set_session_user('type', type, '','')
     return render_template('user_feature/password.html')
 
 

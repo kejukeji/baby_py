@@ -127,7 +127,7 @@ class ForgetPassword(restful.Resource):
         old_password = args['old_password']
         new_password = args['new_password']
         user_id = get_session('user_id')
-        type = args['type']
+        type = get_session('type')
 
         return_success = success_dic().dic
         return_fail = fail_dic().dic
