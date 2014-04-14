@@ -211,10 +211,12 @@ class CreateBabyAccount(restful.Resource):
         is_ture = create_baby(patriarch_tel, baby_name, baby_pass, gender, due_date, born_birthday, born_weight, born_height, born_head,
                               childbirth_style, complication_id, growth_standard, doctor_id)
         if is_ture == -1:
-            success['message'] = '账户已存在'
+            fail['message'] = '账户已存在'
+            return fail
         elif is_ture == 0:
-            success['message'] = '创建账户失败!系统内部错误'
+            fail['message'] = '创建账户失败!系统内部错误'
+            return fail
         else:
             success['baby_id'] = is_ture
             success['message'] = '创建账户成功'
-        return success
+            return success
