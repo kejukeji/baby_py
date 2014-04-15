@@ -82,7 +82,7 @@ class DoRegisterDoctor(restful.Resource):
             success['msg'] = '注册成功'
             return success
         else:
-            fail['msg'] = '注册失败'
+            fail['msg'] = '用户已注册'
             return fail
 
 
